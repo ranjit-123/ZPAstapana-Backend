@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MasterDropDownPojo {
-	private Integer value;
-	private String displayText;
+public class MasterQueries {
+	private String type;
+	private String query;
 }

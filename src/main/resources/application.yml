@@ -1,0 +1,36 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /api/v1
+
+spring: 
+  datasource:
+    url:  jdbc:mysql://103.10.234.99:3306/zpastapana?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: zpastapana
+    password: zpastapana@Fixed2022
+
+
+  jpa:
+    hibernate: 
+      ddl-auto: update
+  
+  profiles: default
+  
+  jackson:
+    serialization:
+            fail-on-empty-beans: false
+  application: 
+    name: zpastapana
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+        
+        
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui-custom.html
+    operations-sorter: method 

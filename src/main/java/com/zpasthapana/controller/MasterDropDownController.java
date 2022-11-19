@@ -1,6 +1,7 @@
 package com.zpasthapana.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +22,8 @@ public class MasterDropDownController {
 	private MasterDropDownService masterDropDownService;
 
 	@GetMapping
-	public ResponseEntity<List<MasterDropDownPojo>> getDetails(@RequestParam String type,
-			@RequestParam(required = false) Integer id) {
-		return new ResponseEntity<>(masterDropDownService.getDetails(type, id), HttpStatus.OK);
+	public ResponseEntity<List<MasterDropDownPojo>> getDetails(@RequestParam Map<String, String> queryParam) {
+		return new ResponseEntity<>(masterDropDownService.getDetails(queryParam), HttpStatus.OK);
 	}
 
 }
