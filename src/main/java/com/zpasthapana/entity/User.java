@@ -18,13 +18,68 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "tbluser")
-public class User{
+public class User {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
-	private long userId;
-	private String email;
-	private int userName;
+	@Column(name = "userID")
+	private Long userId;
+
+	@Column(name = "userName")
+	private String userName;
+
+	@Column(name = "password")
 	private String password;
+
+	@Column(name = "IPAddress")
+	private String IPAddress;
+
+	@Column(name = "userType")
+	private String userType;
+
+	@Column(name = "userReferenceID")
+	private Integer userReferenceID;
+
+	@Column(name = "profilePhoto")
+	private String profilePhoto;
+
+	@Column(name = "userFullName")
+	private String userFullName;
+
+	@Column(name = "themeColor")
+	private Integer themeColor;
+
+	@Column(name = "addEditAccessFlag")
+	private Integer addEditAccessFlag;
+
+	@Column(name = "reportAccessFlag")
+	private Integer reportAccessFlag;
+
+	@Column(name = "accessFlag")
+	private Integer accessFlag;
+
+	@Column(name = "divisionID")
+	private Integer divisionID;
+
+	@Column(name = "zillaParishadID")
+	private Integer zillaParishadID;
+
+	@Column(name = "departmentID")
+	private Integer departmentID;
+
+	@Column(name = "talukaID")
+	private Integer talukaID;
+
+	@Column(name = "subDivisionID")
+	private Integer subDivisionID;
+
+	@Column(name = "properOfficeID")
+	private Integer properOfficeID;
+	
+	@Column(name = "isActive")
+	private Integer isActive;
+	
+	@Column(name = "email")
+	private String email;
 
 }

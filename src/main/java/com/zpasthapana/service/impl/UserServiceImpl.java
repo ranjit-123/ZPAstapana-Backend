@@ -23,19 +23,17 @@ public class UserServiceImpl implements UserService {
 	private JwtTokenUtil jwtTokenUtil;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String token) throws UsernameNotFoundException {
 
-//		String userEmail = jwtTokenUtil.getUsernameFromToken(username);
-//
-//		Optional<User> user = userService.findByEmail(userEmail);
-//
-//		if (user.isPresent()) {
-//			return new User(user.get().getEmail(), "", new ArrayList<>());
-//		} else {
-//			throw new UsernameNotFoundException("User not found with username: " + username);
-//		}
+		String userEmail = jwtTokenUtil.getUsernameFromToken(token);
 
-		return new User("", "", new ArrayList<>());
+		Optional<com.zpasthapana.entity.User> user = userRepo.findByUserName(userEmail);
+
+		if (user.isPresent()) {
+			return new User(user.get().getUserName(), "", new ArrayList<>());
+		} else {
+			throw new UsernameNotFoundException("User not found with username: " + userEmail);
+		}
 	}
 
 	@Override

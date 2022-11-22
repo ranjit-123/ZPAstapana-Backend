@@ -14,9 +14,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>zpasthapana</name>
 	<description>ZP Project</description>
-	<properties>
+	<!-- <properties>
 		<java.version>1.8</java.version>
-	</properties>
+	</properties> -->
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

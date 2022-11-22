@@ -26,4 +26,9 @@ public class MasterDropDownController {
 		return new ResponseEntity<>(masterDropDownService.getDetails(queryParam), HttpStatus.OK);
 	}
 
+	@GetMapping("sample")
+	public ResponseEntity<String> test() {
+		return new ResponseEntity<>("hi there", HttpStatus.OK);
+	}
+
 }
