@@ -3,6 +3,8 @@ package com.zpasthapana.service.impl;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -59,6 +61,20 @@ public class UserServiceImpl implements UserService {
 			return Optional.of(objectMapper.convertValue(user.get(), UserPojo.class));
 		}
 		return Optional.empty();
+	}
+
+	@Override
+	@Transactional
+	public Optional<UserPojo> updateUserInfo(UserPojo userReq) {
+		Optional<User> user = userRepo.findById(userReq.getUserId());
+		if (user.isPresent()) {
+			User userToUpdate = user.get();
+			String password = user.get().getPassword();
+			userToUpdate = objectMapper.convertValue(userReq, User.class);
+			userToUpdate.setPassword(password);
+			userRepo.save(userToUpdate);
+		}
+		return Optional.of(userReq);
 	}
 
 }

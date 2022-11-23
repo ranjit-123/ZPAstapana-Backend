@@ -16,6 +16,8 @@ public interface UserService extends UserDetailsService {
 
 	Optional<UserPojo> getUserById(Long id);
 
+	Optional<UserPojo> updateUserInfo(UserPojo user);
+
 
 
 }
