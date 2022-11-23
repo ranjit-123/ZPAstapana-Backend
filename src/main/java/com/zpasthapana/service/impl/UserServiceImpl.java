@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zpasthapana.entity.User;
+import com.zpasthapana.pojo.UserPojo;
 import com.zpasthapana.repo.UserRepo;
 import com.zpasthapana.service.UserService;
 import com.zpasthapana.util.JwtTokenUtil;
@@ -22,29 +24,41 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
+	@Autowired
+	private ObjectMapper objectMapper;
+
 	@Override
 	public UserDetails loadUserByUsername(String token) throws UsernameNotFoundException {
 
 		String userEmail = jwtTokenUtil.getUsernameFromToken(token);
 
-		Optional<com.zpasthapana.entity.User> user = userRepo.findByUserName(userEmail);
+		Optional<User> user = userRepo.findByUserName(userEmail);
 
 		if (user.isPresent()) {
-			return new User(user.get().getUserName(), "", new ArrayList<>());
+			return new org.springframework.security.core.userdetails.User(user.get().getUserName(), "",
+					new ArrayList<>());
 		} else {
 			throw new UsernameNotFoundException("User not found with username: " + userEmail);
 		}
 	}
 
 	@Override
-	public Optional<com.zpasthapana.entity.User> findByUserNameAndPassword(String userName, String password)
-			throws UsernameNotFoundException {
-		Optional<com.zpasthapana.entity.User> user = userRepo.findByUserNameAndPassword(userName, password);
+	public Optional<User> findByUserNameAndPassword(String userName, String password) throws UsernameNotFoundException {
+		Optional<User> user = userRepo.findByUserNameAndPassword(userName, password);
 		if (user.isPresent()) {
 			return user;
 		}
 		throw new UsernameNotFoundException("Not Found");
 
+	}
+
+	@Override
+	public Optional<UserPojo> getUserById(Long id) {
+		Optional<User> user = userRepo.findById(id);
+		if (user.isPresent()) {
+			return Optional.of(objectMapper.convertValue(user.get(), UserPojo.class));
+		}
+		return Optional.empty();
 	}
 
 }

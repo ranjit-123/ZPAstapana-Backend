@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zpasthapana.entity.User;
 import com.zpasthapana.pojo.AuthResponse;
 import com.zpasthapana.pojo.UserPojo;
 import com.zpasthapana.service.UserService;
@@ -28,8 +29,7 @@ public class AuthController {
 
 	@PostMapping
 	public ResponseEntity<AuthResponse> authenticate(@RequestBody UserPojo user) throws UsernameNotFoundException {
-		Optional<com.zpasthapana.entity.User> userResponse = userService.findByUserNameAndPassword(user.getUserName(),
-				user.getPassword());
+		Optional<User> userResponse = userService.findByUserNameAndPassword(user.getUserName(), user.getPassword());
 		if (userResponse.isPresent()) {
 			String token = jwtTokenUtil.generateToken(userResponse.get().getUserName(), "user");
 			return ResponseEntity.ok(new AuthResponse(token, userResponse.get().getUserId()));
