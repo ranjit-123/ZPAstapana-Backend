@@ -24,7 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "employee_worklocation")
-public class EmployeeWorklocation {
+public class EmployeeWorklocation extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeWorklocationId;

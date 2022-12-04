@@ -1,6 +1,5 @@
 package com.zpasthapana.entity;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -25,7 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "employee_cast_details")
-public class EmployeeCastDetails {
+public class EmployeeCastDetails extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeCastDetailsId;
@@ -36,18 +35,18 @@ public class EmployeeCastDetails {
 	private Integer casteCertificateFlag;
 	private Long appointmentCasteCategoryID;
 	private String casteCertificateNumber;
-	private LocalDate casteCertificateDate;
+	private Date casteCertificateDate;
 	private String casteCertificatedIssuedOfficerName;
 	private String casteCertificatePDF;
 	private Integer casteValidityFlag;
 	private String casteValidityNumber;
-	private LocalDate casteValidityDate;
+	private Date casteValidityDate;
 	private String casteValidityPDF;
 	private String casteValidityCommitteeName;
 	private Integer casteCategoryChangedAfterAppointmentFlag;
 	private Integer casteCategoryChangedAfterAppointmentID;
 	private String casteCategoryChangedAfterAppointmentNumber;
-	private LocalDate casteCategoryChangedAfterAppointmentDate;
+	private Date casteCategoryChangedAfterAppointmentDate;
 	private String casteValidityChangedAfterAppointmentPDF;
 	
 	private Long createdBy;

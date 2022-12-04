@@ -2,7 +2,9 @@ package com.zpasthapana.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,8 +24,8 @@ public class EmployeeController {
 	@Autowired
 	EmployeeService employeeService;
 	
-	@PostMapping
-	public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody EmployeeRequest request){
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<EmployeeResponse> createEmployee(@ModelAttribute EmployeeRequest request){
 		EmployeeResponse employeeResponse = employeeService.createEmployee(request);
 		return new ResponseEntity<EmployeeResponse>(
 				employeeResponse, HttpStatus.CREATED);

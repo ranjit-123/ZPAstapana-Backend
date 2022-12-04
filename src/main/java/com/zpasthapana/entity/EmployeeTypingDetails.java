@@ -24,13 +24,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "employee_typing_details")
-public class EmployeeTypingDetails {
+public class EmployeeTypingDetails extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeTypingDetailsId;
 	private Long employeeId;
 	private String typingFlag;
-	private String marathiHindiFlag;
 	private String marathiTypingSpeed;
 	private String marathiTypingSpeedPassoutDate;
 	private String marathiTypingSpeedDiscountDate;

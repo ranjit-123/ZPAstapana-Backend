@@ -22,33 +22,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "employee")
-public class Employee extends BaseEntity{
+@Table(name = "accidental_insurance")
+public class AccidentalInsurance extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "employee_id")
+	private Long id;
+	private String insurancePdf;
+	private Date premiumPaidDate;
+	private double premium;
+	private Integer isRegistedForInsurance;
 	private Long employeeId;
-	
-	private Long employeeBasicDetailsId;
-	private String loginEmail;
-	private String contactNumber;
-	private String alternateContactNumber;
-	private String pancardNumber;
-	private String aadhaarCardNumber;
-	private Date dateOfBirth;
-	private Long religionID;
-	private Integer gender;
-	private Long employeeWorklocationId;
-	private Date retirementDate;
-	private String txtSalaryServiceIDNumber;
-	private String permanentAddress;
-	private String currentAddress;
-	private String declaredScale;
 	
 	@Column(name = "active", nullable = false)
 	@ColumnDefault(value = "true")

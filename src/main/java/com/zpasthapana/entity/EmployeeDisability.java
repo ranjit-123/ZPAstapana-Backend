@@ -1,6 +1,5 @@
 package com.zpasthapana.entity;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -25,7 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "employee_disability_details")
-public class EmployeeDisability {
+public class EmployeeDisability extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeDisabilityId;
@@ -35,7 +34,7 @@ public class EmployeeDisability {
 	private String appointmentDisability;
 	private Integer disabilityID;
 	private String disabilityPercentage;
-	private LocalDate certificateDisabilityDate;
+	private Date certificateDisabilityDate;
 	private String disabilityCertificatePDF;
 	
 	private Long createdBy;

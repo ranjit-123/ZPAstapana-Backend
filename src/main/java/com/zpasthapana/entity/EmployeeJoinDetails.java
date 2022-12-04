@@ -1,6 +1,5 @@
 package com.zpasthapana.entity;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -25,23 +24,23 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "employee_joining_details")
-public class EmployeeJoinDetails {
+public class EmployeeJoinDetails extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeJoinDetailsId;
 	private Long employeeId;
-	private LocalDate joiningData;
+	private Date joiningData;
 	private String appointmentQualificationExamName;
-	private LocalDate dateOfPass;
+	private Date dateOfPass;
 	private String appointmentQualificationPDF;
 	private String characterVerifiedOrderNumber;
-	private LocalDate characterVerifiedOrderDate;
+	private Date characterVerifiedOrderDate;
 	private String characterVerifiedPDF;
 	private String medicalCertificateOrderNumber;
-	private LocalDate medicalCertificateOrderDate;
+	private Date medicalCertificateOrderDate;
 	private String medicalCertificatePDF;
 	private String furtherServiceOrderNumber;
-	private LocalDate furtherServiceOrderDate;
+	private Date furtherServiceOrderDate;
 	private String furtherServicePDF;
 	
 	private Long createdBy;

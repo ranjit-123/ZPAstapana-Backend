@@ -1,6 +1,6 @@
 package com.zpasthapana.pojo;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EmployeeResponse {
+public class EmployeeResponse extends BaseRequest{
 	private Long employeeId;
 	private Long employeeBasicDetailsId;
 	private String loginEmail;
@@ -21,11 +21,11 @@ public class EmployeeResponse {
 	private String alternateContactNumber;
 	private String pancardNumber;
 	private String aadhaarCardNumber;
-	private LocalDate dateOfBirth;
+	private Date dateOfBirth;
 	private Long religionID;
 	private Integer gender;
 	private Long employeeWorklocationId;
-	private LocalDate retirementDate;
+	private Date retirementDate;
 	private String txtSalaryServiceIDNumber;
 	private String permanentAddress;
 	private String currentAddress;
@@ -43,18 +43,18 @@ public class EmployeeResponse {
 	private Integer casteCertificateFlag;
 	private Long appointmentCasteCategoryID;
 	private String casteCertificateNumber;
-	private LocalDate casteCertificateDate;
+	private Date casteCertificateDate;
 	private String casteCertificatedIssuedOfficerName;
 	private String casteCertificatePDF;
 	private Integer casteValidityFlag;
 	private String casteValidityNumber;
-	private LocalDate casteValidityDate;
+	private Date casteValidityDate;
 	private String casteValidityPDF;
 	private String casteValidityCommitteeName;
 	private Integer casteCategoryChangedAfterAppointmentFlag;
 	private Integer casteCategoryChangedAfterAppointmentID;
 	private String casteCategoryChangedAfterAppointmentNumber;
-	private LocalDate casteCategoryChangedAfterAppointmentDate;
+	private Date casteCategoryChangedAfterAppointmentDate;
 	private String casteValidityChangedAfterAppointmentPDF;
 	
 	private String employeeselectioncategory;
@@ -63,12 +63,12 @@ public class EmployeeResponse {
 	private Long qualification;
 	private Long parallelReservationType;
 	private String salaryRange;
-	private LocalDate dateOfAppointed;
+	private Date dateOfAppointed;
 	private String appointedDateFirstPagePDF;
 	private String appointmentOrderPDF;
-	private LocalDate dateOfHumanitySeniority;
+	private Date dateOfHumanitySeniority;
 	private String appointmentOrderNumber;
-	private LocalDate appointmentOrderDate;
+	private Date appointmentOrderDate;
 	private String serviceBookFirstPagePDF;
 	
 	private Integer disabilityFlag;
@@ -76,7 +76,7 @@ public class EmployeeResponse {
 	private String appointmentDisability;
 	private Integer disabilityID;
 	private String disabilityPercentage;
-	private LocalDate certificateDisabilityDate;
+	private Date certificateDisabilityDate;
 	private String disabilityCertificatePDF;
 	
 	private String universityName; 
@@ -89,18 +89,18 @@ public class EmployeeResponse {
 	private Integer medicalCertificateFlag;
 	private Integer characterVerifiedFlag;
 	
-	private LocalDate joiningData;
+	private Date joiningData;
 	private String appointmentQualificationExamName;
-	private LocalDate dateOfPass;
+	private Date dateOfPass;
 	private String appointmentQualificationPDF;
 	private String characterVerifiedOrderNumber;
-	private LocalDate characterVerifiedOrderDate;
+	private Date characterVerifiedOrderDate;
 	private String characterVerifiedPDF;
 	private String medicalCertificateOrderNumber;
-	private LocalDate medicalCertificateOrderDate;
+	private Date medicalCertificateOrderDate;
 	private String medicalCertificatePDF;
 	private String furtherServiceOrderNumber;
-	private LocalDate furtherServiceOrderDate;
+	private Date furtherServiceOrderDate;
 	private String furtherServicePDF;
 	
 	private String typingFlag;
@@ -127,4 +127,76 @@ public class EmployeeResponse {
 	private Long taluka;
 	private Long subDivision;
 	private Long subDepartment;
+	
+	private Integer concessionBrainFlag;
+	private Integer concessionParalysisFlag;
+	private Integer concessionHandicappeFlag;
+	private Integer concessionCardiacSurgeryFlag;
+	private Integer concessionDialysisFlag;
+	private Integer concessionCancerFlag;
+	private Integer concessionSoldierFlag;
+	private Integer concessionWidowFlag;
+	private Integer concessionVestalFlag;
+	private Integer concessionDivorceFlag;
+	private Integer concession53YearCompletedFlag;
+	private Integer concessionHusbandWifeAggregationFlag;
+	private Integer concessionFreedomFighterFlag;
+	private Integer concessionBrainCertificateNumber;
+	private String concessionBrainCertificateDate;
+	private String concessionBrainTransferPeriodFlag;
+	private String concessionBrainValidityDate;
+	private String concessionBrainPDF;
+	private Integer concessionParalysisCertificateNumber;
+	private String concessionParalysisCertificateDate;
+	private String concessionParalysisTransferPeriodFlag;
+	private String concessionParalysisValidityDate;
+	private String concessionParalysisPDF;
+	private Integer concessionHandicappeCertificateNumber;
+	private String concessionHandicappeCertificateDate;
+	private String concessionHandicappeTransferPeriodFlag;
+	private String concessionHandicappeValidityDate;
+	private String concessionHandicappePDF;
+	private Integer concessionCardiacSurgeryCertificateNumber;
+	private String concessionCardiacSurgeryCertificateDate;
+	private String concessionCardiacSurgeryTransferPeriodFlag;
+	private String concessionCardiacSurgeryValidityDate;
+	private String concessionCardiacSurgeryPDF;
+	private Integer concessionDialysisCertificateNumber;
+	private String concessionDialysisCertificateDate;
+	private String concessionDialysisTransferPeriodFlag;
+	private String concessionDialysisValidityDate;
+	private String concessionDialysisPDF;
+	private Integer concessionCancerCertificateNumber;
+	private String concessionCancerCertificateDate;
+	private String concessionCancerTransferPeriodFlag;
+	private String concessionCancerValidityDate;
+	private String concessionCancerPDF;
+	private Integer concessionSoldierCertificateNumber;
+	private String concessionSoldierCertificateDate;
+	private String concessionSoldierTransferPeriodFlag;
+	private String concessionSoldierValidityDate;
+	private String concessionSoldierPDF;
+	private Integer concessionWidowCertificateNumber;
+	private String concessionWidowCertificateDate;
+	private String concessionWidowTransferPeriodFlag;
+	private String concessionWidowValidityDate;
+	private String concessionWidowPDF;
+	private Integer concessionVestalCertificateNumber;
+	private String concessionVestalCertificateDate;
+	private String concessionVestalTransferPeriodFlag;
+	private String concessionVestalValidityDate;
+	private String concessionVestalPDF;
+	private Integer concessionDivorceCertificateNumber;
+	private String concessionDivorceCertificateDate;
+	private String concessionDivorceTransferPeriodFlag;
+	private String concessionDivorceValidityDate;
+	private String concessionDivorcePDF;
+	private String concession53YearCompletedSetFlag;
+	private String concessionHusbandWifeAggregationAppointmentLevelID;
+	private String concessionHusbandWifeAggregationWorkingDate;
+	private String concessionHusbandWifeAggregationPDF;
+	private String concessionFreedomFighterName;
+	private String concessionFreedomFighterRelation;
+	private String concessionFreedomFighterIsLiveFlag;
+	private String concessionFreedomFighterPDF;
 }

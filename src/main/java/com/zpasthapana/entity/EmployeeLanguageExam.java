@@ -18,23 +18,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "employee_basic_details")
-public class EmployeeBasicDetails extends BaseEntity{
+@Table(name = "employee_language_exam")
+public class EmployeeLanguageExam extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long employeeBasicDetailsId;
+	private Long id;
 	private Long employeeId;
-	private String firstName;
-	private String middleName;
-	private String lastName;
-	private String firstNameEng;
-	private String middleNameEng;
-	private String lastNameEng;
+	private Integer marathiHindiFlag;
+	private String marathiOrderNumber;
+	private Integer marathiFlag;
+	private Date marathiOrderDate;
+	private String marathiPDF;
+	private Integer hindiFlag;
+	private String hindiOrderNumber;
+	private Date hindiOrderDate;
+	private String hindiPDF;
+	private Integer marathiHinidCombineFlag;
+	private String marathiHinidCombineOrderNumber;
+	private Date marathiHinidCombineOrderDate;
+	private String marathiHinidCombinePDF;
 	
 	private Long createdBy;
 	private Long modifiedBy;

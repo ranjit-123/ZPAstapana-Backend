@@ -1,6 +1,5 @@
 package com.zpasthapana.entity;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -25,7 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "employee_designation_details")
-public class EmployeeDesiganation {
+public class EmployeeDesiganation extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeDesiganationId;
@@ -36,12 +35,12 @@ public class EmployeeDesiganation {
 	private Long qualification;
 	private Long parallelReservationType;
 	private String salaryRange;
-	private LocalDate dateOfAppointed;
+	private Date dateOfAppointed;
 	private String appointedDateFirstPagePDF;
 	private String appointmentOrderPDF;
-	private LocalDate dateOfHumanitySeniority;
+	private Date dateOfHumanitySeniority;
 	private String appointmentOrderNumber;
-	private LocalDate appointmentOrderDate;
+	private Date appointmentOrderDate;
 	private String serviceBookFirstPagePDF;
 	
 	private Long createdBy;

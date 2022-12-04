@@ -22,33 +22,37 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "employee")
-public class Employee extends BaseEntity{
+@Table(name = "crime")
+public class Crime extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "employee_id")
+	private Long id;
+	private Integer isArrested;
+	private Integer isSuspended;
+	private Integer suspendCase;
+	private String reasonNotSuspended;
+	private Integer indictmentNumber;
+	private Date indictmentDate;
+	private String actualIndictmentNumber;
+	private Date actualIndictmentDate;
+	private String conditionOfCase;
+	private Integer courtResult;
+	private String courtResultReason;
+	private String whatIsActionTaken;
+	private Integer punishmentOrderNo;
+	private String punishmentOrderPdf;
+	private Date punishmentOrderDate;
+	private String resultPdf;
+	private Integer appealedInHigherCourt;
+	private String caseDetails;
+	private Integer appealNumber;
+	private Date appealDate;
 	private Long employeeId;
-	
-	private Long employeeBasicDetailsId;
-	private String loginEmail;
-	private String contactNumber;
-	private String alternateContactNumber;
-	private String pancardNumber;
-	private String aadhaarCardNumber;
-	private Date dateOfBirth;
-	private Long religionID;
-	private Integer gender;
-	private Long employeeWorklocationId;
-	private Date retirementDate;
-	private String txtSalaryServiceIDNumber;
-	private String permanentAddress;
-	private String currentAddress;
-	private String declaredScale;
 	
 	@Column(name = "active", nullable = false)
 	@ColumnDefault(value = "true")

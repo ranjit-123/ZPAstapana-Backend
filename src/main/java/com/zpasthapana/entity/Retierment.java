@@ -17,38 +17,43 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "employee")
-public class Employee extends BaseEntity{
+@Table(name = "retierment")
+public class Retierment extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "employee_id")
-	private Long employeeId;
+	private Long id;
+	private String retirementOrderNumber;
 	
-	private Long employeeBasicDetailsId;
-	private String loginEmail;
-	private String contactNumber;
-	private String alternateContactNumber;
-	private String pancardNumber;
-	private String aadhaarCardNumber;
-	private Date dateOfBirth;
-	private Long religionID;
-	private Integer gender;
-	private Long employeeWorklocationId;
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="Asia/Calcutta")
+	private Date orderDate;
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.sss'Z'", timezone="Asia/Calcutta")
 	private Date retirementDate;
-	private String txtSalaryServiceIDNumber;
-	private String permanentAddress;
-	private String currentAddress;
-	private String declaredScale;
+	private String retirementReason;
+	private Integer isPayAfterRetirement;
+	private Integer isPension;
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.sss'Z'", timezone="Asia/Calcutta")
+	private Date declarationDate;
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.sss'Z'", timezone="Asia/Calcutta")
+	private Date fromDate;
+	private Integer pendingLevel;
+	private String currentCondition;
+	private Boolean homeLoanPending;
+	private Boolean castCertificatePending;
+	private Boolean docsIncomplte;
+	private Boolean amountDue;
+	private Long employeeId;
 	
 	@Column(name = "active", nullable = false)
 	@ColumnDefault(value = "true")
