@@ -100,10 +100,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 			
 			Employee employee = modelMapper.map(employeeRequest, Employee.class);
 			
-			ZPUtility.uploadFiles(employeeRequest, null, employeeRequest.getEmployeeId());
-			
 			employee = employeeRepo.save(employee);
 			employeeRequest.setEmployeeId(employee.getEmployeeId());
+			ZPUtility.uploadFiles(employeeRequest, null, employeeRequest.getEmployeeId());
 			
 			response = modelMapper.map(employee, EmployeeResponse.class);
 			
@@ -124,7 +123,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 			response = modelMapper.map(employeeCastDetails, EmployeeResponse.class);
 			
 			EmployeeDesiganation employeeDesiganation = modelMapper.map(employeeRequest, EmployeeDesiganation.class);
-			ZPUtility.updateFileNames(employeeRequest, employeeCastDetails, fields);
+			ZPUtility.updateFileNames(employeeRequest, employeeDesiganation, fields);
 			employeeDesiganation = employeeDesiganationRepo.save(employeeDesiganation);
 			response = modelMapper.map(employeeDesiganation, EmployeeResponse.class);
 			

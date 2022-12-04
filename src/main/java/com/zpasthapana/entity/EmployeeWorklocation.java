@@ -33,7 +33,6 @@ public class EmployeeWorklocation extends BaseEntity{
 	private Long stateId;
 	private Long divisionId;
 	private Long zpId;
-	private Long subDivisionId;
 	private Long departmentId;
 	private Long designationId;
 	private Long taluka;

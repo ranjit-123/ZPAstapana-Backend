@@ -20,13 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ZPUtility {
 	
-//	private static String homeDirectory = "C:\\Users\\mahes\\Downloads\\";
+	private static String homeDirectory = "D:\\files\\";
 	
-	private static String homeDirectory = "/home/";
+//	private static String homeDirectory = "/home/";
 	
 	public static void uploadFile(MultipartFile file, Long destination) {
 		try {
-			String directory = homeDirectory + destination + "/";
+			String directory = homeDirectory + destination + "\\";
 			String fileName = file.getOriginalFilename();
 			Files.createDirectories(Paths.get(directory));
 			Path path = Paths.get(directory + fileName);

@@ -45,7 +45,7 @@ public class Employee extends BaseEntity{
 	private Integer gender;
 	private Long employeeWorklocationId;
 	private Date retirementDate;
-	private String txtSalaryServiceIDNumber;
+	private String salaryServiceIDNumber;
 	private String permanentAddress;
 	private String currentAddress;
 	private String declaredScale;
