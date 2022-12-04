@@ -13,6 +13,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +26,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "employee_language_exam")
-public class EmployeeLanguageExam extends BaseEntity{
+public class EmployeeLanguageExam extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -32,23 +34,28 @@ public class EmployeeLanguageExam extends BaseEntity{
 	private Integer marathiHindiFlag;
 	private String marathiOrderNumber;
 	private Integer marathiFlag;
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
 	private Date marathiOrderDate;
 	private String marathiPDF;
 	private Integer hindiFlag;
 	private String hindiOrderNumber;
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
 	private Date hindiOrderDate;
 	private String hindiPDF;
 	private Integer marathiHinidCombineFlag;
 	private String marathiHinidCombineOrderNumber;
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
 	private Date marathiHinidCombineOrderDate;
 	private String marathiHinidCombinePDF;
-	
+
 	private Long createdBy;
 	private Long modifiedBy;
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
 	private Date createDate;
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
 	private Date modifyDate;
 }
