@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.zpasthapana.entity.ConcessionDetails;
 import com.zpasthapana.entity.Employee;
-import com.zpasthapana.entity.EmployeeBasicDetails;
 import com.zpasthapana.entity.EmployeeCastDetails;
 import com.zpasthapana.entity.EmployeeDesiganation;
 import com.zpasthapana.entity.EmployeeDisability;
@@ -28,7 +27,6 @@ import com.zpasthapana.entity.EmployeeWorklocation;
 import com.zpasthapana.pojo.EmployeeRequest;
 import com.zpasthapana.pojo.EmployeeResponse;
 import com.zpasthapana.repo.ConcessionDetailsRepo;
-import com.zpasthapana.repo.EmployeeBasicDetailsRepo;
 import com.zpasthapana.repo.EmployeeCastDetailsRepo;
 import com.zpasthapana.repo.EmployeeDesiganationRepo;
 import com.zpasthapana.repo.EmployeeDisabilityRepo;
@@ -51,9 +49,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Autowired
 	EmployeeRepo employeeRepo; 
-	
-	@Autowired
-	EmployeeBasicDetailsRepo employeeBasicDetailsRepo; 
 	
 	@Autowired
 	EmployeeCastDetailsRepo employeeCastDetailsRepo; 
@@ -105,11 +100,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 			ZPUtility.uploadFiles(employeeRequest, null, employeeRequest.getEmployeeId());
 			
 			response = modelMapper.map(employee, EmployeeResponse.class);
-			
-			EmployeeBasicDetails employeeBasicDetails = modelMapper.map(employeeRequest, EmployeeBasicDetails.class);
-			employeeBasicDetails = employeeBasicDetailsRepo.save(employeeBasicDetails);
-			
-			response = modelMapper.map(employeeBasicDetails, EmployeeResponse.class);
 			
 			EmployeeCastDetails employeeCastDetails = modelMapper.map(employeeRequest, EmployeeCastDetails.class);
 			
@@ -196,11 +186,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 		employeeRequest.setEmployeeId(employeeId);
 		response = modelMapper.map(employee, EmployeeResponse.class);
 		
-		EmployeeBasicDetails employeeBasicDetails = modelMapper.map(employeeRequest, EmployeeBasicDetails.class);
-		employeeBasicDetails = employeeBasicDetailsRepo.save(employeeBasicDetails);
-		
-		response = modelMapper.map(employeeBasicDetails, EmployeeResponse.class);
-		
 		EmployeeCastDetails employeeCastDetails = modelMapper.map(employeeRequest, EmployeeCastDetails.class);
 		employeeCastDetails = employeeCastDetailsRepo.save(employeeCastDetails);
 		response = modelMapper.map(employeeCastDetails, EmployeeResponse.class);
@@ -234,6 +219,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 		response = modelMapper.map(employeeWorklocation, EmployeeResponse.class);
 		
 		return response;
+	}
+
+	@Override
+	public List<Employee> getAllEmployee() {
+		return employeeRepo.findAll();
 	}
 
 }

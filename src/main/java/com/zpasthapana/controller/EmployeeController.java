@@ -1,9 +1,12 @@
 package com.zpasthapana.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zpasthapana.entity.Employee;
 import com.zpasthapana.pojo.EmployeeRequest;
 import com.zpasthapana.pojo.EmployeeResponse;
 import com.zpasthapana.service.EmployeeService;
@@ -35,7 +39,13 @@ public class EmployeeController {
 	public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long employeeId, @RequestBody EmployeeRequest request){
 		EmployeeResponse employeeResponse = employeeService.updateEmployee(employeeId, request);
 		return new ResponseEntity<EmployeeResponse>(
-				employeeResponse, HttpStatus.CREATED);
+				employeeResponse, HttpStatus.OK);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<Employee>> getAllEmployee(){
+		return new ResponseEntity<List<Employee>>(
+				employeeService.getAllEmployee(), HttpStatus.OK);
 	}
 
 }

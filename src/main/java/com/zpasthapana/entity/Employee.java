@@ -49,6 +49,12 @@ public class Employee extends BaseEntity{
 	private String permanentAddress;
 	private String currentAddress;
 	private String declaredScale;
+	private String firstName;
+	private String middleName;
+	private String lastName;
+	private String firstNameEng;
+	private String middleNameEng;
+	private String lastNameEng;
 	
 	@Column(name = "active", nullable = false)
 	@ColumnDefault(value = "true")
