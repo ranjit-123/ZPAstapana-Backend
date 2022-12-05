@@ -1,8 +1,10 @@
 package com.zpasthapana;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.AbstractConverter;
@@ -46,8 +48,9 @@ public class ZpasthapanaApplication {
 	        protected Date convert(String source) {
 	        	try {
 	        		Date localDate = new Date();
-	        		if(StringUtils.contains(source, "T")) {
-	        			localDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'").parse(source);
+	        		if(StringUtils.contains(source, "India Standard Time")) {
+	        			DateFormat inputFormat = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss 'GMT'z", Locale.ENGLISH);
+	        			localDate = inputFormat.parse(source);
 	        		} else {
 	        			localDate = new SimpleDateFormat("yyyy-MM-dd").parse(source);
 	        		}
