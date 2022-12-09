@@ -1,32 +1,40 @@
 package com.zpasthapana.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zpasthapana.entity.BaseEntity;
 import com.zpasthapana.pojo.BaseRequest;
+import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.SortField;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ZPUtility {
 	
-//	private static String homeDirectory = "D:\\files\\";
+	private static String homeDirectory = "D:\\files\\";
 	
-	private static String homeDirectory = "/home/";
+//	private static String homeDirectory = "/home/";
 	
 	public static void uploadFile(MultipartFile file, Long destination) {
 		try {
-			String directory = homeDirectory + destination + "/";
+			String directory = homeDirectory + destination + File.pathSeparator;
 			String fileName = file.getOriginalFilename();
 			Files.createDirectories(Paths.get(directory));
 			Path path = Paths.get(directory + fileName);
@@ -70,5 +78,23 @@ public class ZPUtility {
 			}
 		});
 	}
-	  
+	 
+	public static Sort getSort(List<SortField> sortFields) {
+		if(ObjectUtils.isNotEmpty(sortFields)) {
+			List<Order> orders = new ArrayList<Order>();
+			sortFields.forEach(sortField->{
+				Order StartTimeOrder = new Order(Sort.Direction.fromString(sortField.getOrder()), sortField.getFieldName());
+		        orders.add(StartTimeOrder);
+			});
+			return Sort.by(orders);
+		} else {
+			return Sort.unsorted();
+		}
+	}
+	
+	public static <T> ResponsePageDto<T> getPage(Pageable paging, Page<T> page) {
+		ResponsePageDto<T> pageData = new ResponsePageDto<T>(page.getContent(), 0,
+				page.getTotalElements(), page.getTotalElements());
+		return pageData;
+	}
 }

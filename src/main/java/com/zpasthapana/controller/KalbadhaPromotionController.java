@@ -10,61 +10,45 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zpasthapana.entity.Crime;
-import com.zpasthapana.pojo.CrimeRequest;
+import com.zpasthapana.entity.KalbadhaPromotion;
+import com.zpasthapana.pojo.KalbadhaPromotionRequest;
 import com.zpasthapana.pojo.ResponseMessage;
 import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.UIPageRequest;
-import com.zpasthapana.service.CrimeService;
+import com.zpasthapana.service.KalbadhaPromotionService;
 import com.zpasthapana.util.ZPUtility;
 
 @RestController
-@RequestMapping("crimes")
-public class CrimeController {
+@RequestMapping("kalbadha-promotions")
+public class KalbadhaPromotionController {
 
 	@Autowired
-	CrimeService crimeService; 
+	KalbadhaPromotionService kalbadhaPromotionService;
 	
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<ResponseMessage> addCrime(@ModelAttribute CrimeRequest request) {
-		crimeService.addCrime(request);
+	public ResponseEntity<ResponseMessage> addKalbadhaPromotion(@ModelAttribute KalbadhaPromotionRequest request){
+		kalbadhaPromotionService.addKalbadhaPromotion(request);
 		return new ResponseEntity<ResponseMessage>(ResponseMessage.builder().status(HttpStatus.CREATED).build(),
 				HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping
-	public ResponseEntity<List<Crime>> getAllCrime() {
-		return new ResponseEntity<List<Crime>>(crimeService.getAllCrime(),
-				HttpStatus.OK);
-	}
-	
-	@GetMapping("/{employeeId}")
-	public ResponseEntity<List<Crime>> getEmployeeCrime(@PathVariable Long employeeId) {
-		return new ResponseEntity<List<Crime>>(crimeService.getEmployeeCrime(employeeId),
-				HttpStatus.OK);
-	}
-	
-	@PutMapping("/{employeeId}")
-	public ResponseEntity<ResponseMessage> updateCrime(@PathVariable Long employeeId, @RequestBody CrimeRequest request) {
-		crimeService.updateCrime(employeeId, request);
-		return new ResponseEntity<ResponseMessage>(ResponseMessage.builder().status(HttpStatus.OK).build(),
+	public ResponseEntity<List<KalbadhaPromotion>> getAllKalbadhaPromotion() {
+		return new ResponseEntity<List<KalbadhaPromotion>>(kalbadhaPromotionService.getAllPurchasePermission(),
 				HttpStatus.OK);
 	}
 	
 	@PostMapping("/page")
-	public ResponseEntity<ResponsePageDto<Crime>> getAllCourtCase(@RequestBody UIPageRequest pageRequest) {
+	public ResponseEntity<ResponsePageDto<KalbadhaPromotion>> getAllKalbadhaPromotion(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<Crime> pageData = crimeService.getAllCrime(paging);
+		ResponsePageDto<KalbadhaPromotion> pageData = kalbadhaPromotionService.getAllPurchasePermission(paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
-		return new ResponseEntity<ResponsePageDto<Crime>>(pageData,
+		return new ResponseEntity<ResponsePageDto<KalbadhaPromotion>>(pageData,
 				HttpStatus.OK);
 	}
-	
 }

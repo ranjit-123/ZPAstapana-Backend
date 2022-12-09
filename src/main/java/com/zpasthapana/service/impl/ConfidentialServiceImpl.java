@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.zpasthapana.entity.Confidential;
 import com.zpasthapana.pojo.ConfidentialRequest;
+import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.repo.ConfidentialRepo;
 import com.zpasthapana.service.ConfidentialService;
+import com.zpasthapana.util.ZPUtility;
 
 @Service
 public class ConfidentialServiceImpl implements ConfidentialService{
@@ -39,6 +42,11 @@ public class ConfidentialServiceImpl implements ConfidentialService{
 	public void updateConfidential(Long employeeId, ConfidentialRequest request) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ResponsePageDto<Confidential> getAllConfidential(Pageable paging) {
+		return ZPUtility.getPage(paging, confidentialRepo.findAll(paging));
 	}
 
 }
