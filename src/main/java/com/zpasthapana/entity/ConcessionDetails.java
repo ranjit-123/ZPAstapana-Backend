@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -117,4 +119,16 @@ public class ConcessionDetails extends BaseEntity {
 	private String concessionFreedomFighterRelation;
 	private Integer concessionFreedomFighterIsLiveFlag;
 	private String concessionFreedomFighterPDF;
+	
+	@OneToOne
+	@JoinColumn(table = "concession_details", name ="employeeId", insertable = false, updatable = false)
+	private Employee employee;
+	
+	@OneToOne
+	@JoinColumn(table = "concession_details", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeWorklocation employeeWorkLocation;
+	
+	@OneToOne
+	@JoinColumn(table = "concession_details", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeCastDetails employeeCastDetails;
 }

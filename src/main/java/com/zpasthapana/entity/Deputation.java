@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -48,4 +50,16 @@ public class Deputation extends BaseEntity {
 	private Date deputationServiceEndDate;
 	private String dtpDateOfRegularOfficeRejoining;
 	private Long employeeId;
+	
+	@OneToOne
+	@JoinColumn(table = "deputation", name ="employeeId", insertable = false, updatable = false)
+	private Employee employee;
+	
+	@OneToOne
+	@JoinColumn(table = "deputation", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeWorklocation employeeWorkLocation;
+	
+	@OneToOne
+	@JoinColumn(table = "deputation", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeCastDetails employeeCastDetails;
 }

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -54,4 +56,16 @@ public class AccidentalInsurance extends BaseEntity{
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifyDate;
+	
+	@OneToOne
+	@JoinColumn(table = "accidental_insurance", name ="employeeId", insertable = false, updatable = false)
+	private Employee employee;
+	
+	@OneToOne
+	@JoinColumn(table = "accidental_insurance", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeWorklocation employeeWorkLocation;
+	
+	@OneToOne
+	@JoinColumn(table = "accidental_insurance", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeCastDetails employeeCastDetails;
 }

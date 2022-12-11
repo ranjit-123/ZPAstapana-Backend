@@ -1,5 +1,7 @@
 package com.zpasthapana.pojo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AccidentalInsuranceRequest extends BaseRequest{
-	private String insurancePdf;
+	private MultipartFile insurancePdf;
 	private String premiumPaidDate;
 	private double premium;
 	private Integer isRegistedForInsurance;

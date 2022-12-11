@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -35,4 +37,16 @@ public class CourtCase extends BaseEntity{
 	private String whichActionTaken;
 	private Date actionTakenDate;
 	private Long employeeId;
+	
+	@OneToOne
+	@JoinColumn(table = "court_case", name ="employeeId", insertable = false, updatable = false)
+	private Employee employee;
+	
+	@OneToOne
+	@JoinColumn(table = "court_case", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeWorklocation employeeWorkLocation;
+	
+	@OneToOne
+	@JoinColumn(table = "court_case", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeCastDetails employeeCastDetails;
 }

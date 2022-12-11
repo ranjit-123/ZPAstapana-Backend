@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -31,4 +33,16 @@ public class ExtraOrdinaryLeaves extends BaseEntity{
 	private Date endDate;
 	private String leaveDetails;
 	private Long employeeId;
+	
+	@OneToOne
+	@JoinColumn(table = "extra_ordinary_leaves", name ="employeeId", insertable = false, updatable = false)
+	private Employee employee;
+	
+	@OneToOne
+	@JoinColumn(table = "extra_ordinary_leaves", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeWorklocation employeeWorkLocation;
+	
+	@OneToOne
+	@JoinColumn(table = "extra_ordinary_leaves", name ="employeeId", insertable = false, updatable = false)
+	private EmployeeCastDetails employeeCastDetails;
 }
