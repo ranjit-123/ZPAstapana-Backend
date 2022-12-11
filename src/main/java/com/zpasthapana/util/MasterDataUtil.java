@@ -54,6 +54,11 @@ public class MasterDataUtil {
 			masterData.put("castecategory_" + keys.getKeyId(), keys.getKeyName());
 		}
 		
+		date = jdbcTemplate.query("SELECT properOfficeID as keyId, properOfficeName as keyName FROM tblproperoffice", BeanPropertyRowMapper.newInstance(KeyData.class));
+		for (KeyData keys : date) {
+			masterData.put("subdepartment_" + keys.getKeyId(), keys.getKeyName());
+		}
+		
 	}
 
 

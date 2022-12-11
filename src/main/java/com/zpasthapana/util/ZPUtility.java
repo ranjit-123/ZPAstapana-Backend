@@ -170,5 +170,10 @@ public class ZPUtility {
 			fieldSet.setAccessible(true);
 			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("designation_", em.getDesignationId()));
 		}
+		fieldSet = ReflectionUtils.findField(e.getClass(), "subDepartmentName");
+		if(ObjectUtils.isNotEmpty(fieldSet)) {
+			fieldSet.setAccessible(true);
+			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("subdepartment_", em.getSubDepartment()));
+		}
 	}
 }
