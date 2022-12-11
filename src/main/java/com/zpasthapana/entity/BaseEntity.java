@@ -1,5 +1,18 @@
 package com.zpasthapana.entity;
 
-public class BaseEntity {
+import javax.persistence.Transient;
 
+public class BaseEntity {
+	@Transient
+	public String employeeFullName;
+	@Transient
+	public String talukaName;
+	@Transient
+	public String subDivisionName;
+	@Transient
+	public String subDepartmentName;
+	@Transient
+	public String designationName;
+	@Transient
+	public String castCategoryName;
 }

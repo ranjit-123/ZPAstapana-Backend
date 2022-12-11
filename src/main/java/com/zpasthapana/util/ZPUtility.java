@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,6 +20,9 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zpasthapana.entity.BaseEntity;
+import com.zpasthapana.entity.Employee;
+import com.zpasthapana.entity.EmployeeCastDetails;
+import com.zpasthapana.entity.EmployeeWorklocation;
 import com.zpasthapana.pojo.BaseRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.SortField;
@@ -28,9 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ZPUtility {
 	
-	private static String homeDirectory = "D:\\files\\";
+//	private static String homeDirectory = "D:\\files\\";
 	
-//	private static String homeDirectory = "/home/";
+	private static String homeDirectory = "/home/";
 	
 	public static void uploadFile(MultipartFile file, Long destination) {
 		try {
@@ -95,6 +99,76 @@ public class ZPUtility {
 	public static <T> ResponsePageDto<T> getPage(Pageable paging, Page<T> page) {
 		ResponsePageDto<T> pageData = new ResponsePageDto<T>(page.getContent(), 0,
 				page.getTotalElements(), page.getTotalElements());
+		
+		pageData.getData().forEach(e->{
+			try {
+				Field field = ReflectionUtils.findField(e.getClass(), "employee");
+				field.setAccessible(true);
+				if(ObjectUtils.isNotEmpty(field)) {
+					try {
+						Employee em =  (Employee) ReflectionUtils.getField(field, e);
+						setField(e, em, "employeeFullName");
+					} catch (Exception ex) {
+						log.error("Error", ex);
+					}
+					try {
+						Field employeeWorkField = ReflectionUtils.findField(e.getClass(), "employeeWorkLocation");
+						employeeWorkField.setAccessible(true);
+						EmployeeWorklocation employeeWork =  (EmployeeWorklocation) ReflectionUtils.getField(employeeWorkField, e);
+						setWorkField(e, employeeWork);
+					} catch (Exception ex) {
+						log.error("Error", ex);
+					}
+					try {
+						Field employeeCastDetails = ReflectionUtils.findField(e.getClass(), "employeeCastDetails");
+						employeeCastDetails.setAccessible(true);
+						EmployeeCastDetails ecastDetails =  (EmployeeCastDetails) ReflectionUtils.getField(employeeCastDetails, e);
+						setCastField(e, ecastDetails);
+					} catch (Exception ex) {
+						log.error("Error", ex);
+					}
+				}
+			} catch (Exception ex) {
+				log.error("Error", ex);
+			}
+		});
+		
 		return pageData;
+	}
+
+	private static <T> void setCastField(T e, EmployeeCastDetails ecastDetails) {
+		Field fieldSet = ReflectionUtils.findField(e.getClass(), "castCategoryName");
+		if(ObjectUtils.isNotEmpty(fieldSet)) {
+			fieldSet.setAccessible(true);
+			ReflectionUtils.setField(fieldSet, e, ecastDetails.getCastecategory());
+		}
+	}
+
+	private static <T> void setField(T e, Employee em, String fieldName) {
+		Field fieldSet = ReflectionUtils.findField(e.getClass(), fieldName);
+		if(ObjectUtils.isNotEmpty(fieldSet)) {
+			fieldSet.setAccessible(true);
+			if(StringUtils.equalsIgnoreCase(fieldName, fieldName)) {
+				ReflectionUtils.setField(fieldSet, e, em.getFirstName() + " " + em.getMiddleName() + " " + em.getLastName());
+			}
+		}
+	}
+	
+	private static <T> void setWorkField(T e, EmployeeWorklocation em) {
+		Field fieldSet = ReflectionUtils.findField(e.getClass(), "talukaName");
+		if(ObjectUtils.isNotEmpty(fieldSet)) {
+			fieldSet.setAccessible(true);
+			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("taluka_", em.getTaluka()));
+		}
+		fieldSet = ReflectionUtils.findField(e.getClass(), "subDivisionName");
+		if(ObjectUtils.isNotEmpty(fieldSet)) {
+			fieldSet.setAccessible(true);
+			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("subdivision_", em.getSubDivision()));
+		}
+		fieldSet = ReflectionUtils.findField(e.getClass(), "designationName");
+		if(ObjectUtils.isNotEmpty(fieldSet)) {
+			fieldSet.setAccessible(true);
+			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("designation_", em.getDesignationId()));
+		}
 	}
 }
