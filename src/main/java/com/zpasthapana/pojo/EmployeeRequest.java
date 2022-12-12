@@ -39,7 +39,7 @@ public class EmployeeRequest extends BaseRequest{
 	private String lastNameEng;
 	
 	private String caste;
-	private String castecategory;
+	private Integer castecategory;
 	private Integer casteCertificateFlag;
 	private Long appointmentCasteCategoryID;
 	private String casteCertificateNumber;

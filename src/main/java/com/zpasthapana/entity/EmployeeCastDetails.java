@@ -2,6 +2,7 @@ package com.zpasthapana.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,10 +31,10 @@ public class EmployeeCastDetails extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeCastDetailsId;
-
+	@Column(name = "employee_id")
 	private Long employeeId;
 	private String caste;
-	private String castecategory;
+	private Integer castecategory;
 	private Integer casteCertificateFlag;
 	private Long appointmentCasteCategoryID;
 	private String casteCertificateNumber;

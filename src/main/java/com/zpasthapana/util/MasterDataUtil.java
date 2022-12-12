@@ -70,6 +70,10 @@ public class MasterDataUtil {
 		return masterData.get(type + key);
 	}
 	
+	public static String getKeyDate(String type, Integer key) {
+		return masterData.get(type + key);
+	}
+	
 	public static String getKeyDate(String type, String key) {
 		return masterData.get(type + key);
 	}
