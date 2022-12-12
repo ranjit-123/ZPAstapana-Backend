@@ -59,11 +59,4 @@ public class AssetLiability extends BaseEntity{
 	@JoinColumn(table = "assetLiability", name ="employeeId", insertable = false, updatable = false)
 	private Employee employee;
 	
-	@OneToOne
-	@JoinColumn(table = "assetLiability", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeWorklocation employeeWorkLocation;
-	
-	@OneToOne
-	@JoinColumn(table = "assetLiability", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeCastDetails employeeCastDetails;
 }                                           

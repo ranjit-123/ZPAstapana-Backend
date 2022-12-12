@@ -60,12 +60,4 @@ public class AccidentalInsurance extends BaseEntity{
 	@OneToOne
 	@JoinColumn(table = "accidental_insurance", name ="employeeId", insertable = false, updatable = false)
 	private Employee employee;
-	
-	@OneToOne
-	@JoinColumn(table = "accidental_insurance", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeWorklocation employeeWorkLocation;
-	
-	@OneToOne
-	@JoinColumn(table = "accidental_insurance", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeCastDetails employeeCastDetails;
 }

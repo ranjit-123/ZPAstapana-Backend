@@ -82,11 +82,4 @@ public class Crime extends BaseEntity {
 	@JoinColumn(table = "crime", name ="employeeId", insertable = false, updatable = false)
 	private Employee employee;
 	
-	@OneToOne
-	@JoinColumn(table = "crime", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeWorklocation employeeWorkLocation;
-	
-	@OneToOne
-	@JoinColumn(table = "crime", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeCastDetails employeeCastDetails;
 }

@@ -63,13 +63,14 @@ public class Employee extends BaseEntity {
 	private String lastNameEng;
 	
 	private Long employeeDesiganationDetailsId;
+	private Long employeeCastDetailsId;
 	
 	@OneToOne
 	@JoinColumn(table = "employee", name ="employeeWorklocationId", insertable = false, updatable = false)
 	private EmployeeWorklocation employeeWorkLocation;
 	
 	@OneToOne
-	@JoinColumn(table = "employee_cast_details", name ="employee_id", insertable = false, updatable = false)
+	@JoinColumn(table = "employee", name ="employeeCastDetailsId",  insertable = false, updatable = false)
 	private EmployeeCastDetails employeeCastDetails;
 	
 	@OneToOne

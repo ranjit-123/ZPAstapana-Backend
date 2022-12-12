@@ -61,14 +61,6 @@ public class Retierment extends BaseEntity{
 	@JoinColumn(table = "retierment", name ="employeeId", insertable = false, updatable = false)
 	private Employee employee;
 	
-	@OneToOne
-	@JoinColumn(table = "retierment", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeWorklocation employeeWorkLocation;
-	
-	@OneToOne
-	@JoinColumn(table = "retierment", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeCastDetails employeeCastDetails;
-	
 	@Column(name = "active", nullable = false)
 	@ColumnDefault(value = "true")
 	@Generated(GenerationTime.INSERT)

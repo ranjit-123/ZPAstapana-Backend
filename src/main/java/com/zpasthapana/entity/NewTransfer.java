@@ -48,12 +48,4 @@ public class NewTransfer extends BaseEntity{
 	@JoinColumn(table = "new_transfer", name ="employeeId", insertable = false, updatable = false)
 	private Employee employee;
 	
-	@OneToOne
-	@JoinColumn(table = "new_transfer", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeWorklocation employeeWorkLocation;
-	
-	@OneToOne
-	@JoinColumn(table = "new_transfer", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeCastDetails employeeCastDetails;
-
 }

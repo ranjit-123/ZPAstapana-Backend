@@ -42,11 +42,4 @@ public class CourtCase extends BaseEntity{
 	@JoinColumn(table = "court_case", name ="employeeId", insertable = false, updatable = false)
 	private Employee employee;
 	
-	@OneToOne
-	@JoinColumn(table = "court_case", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeWorklocation employeeWorkLocation;
-	
-	@OneToOne
-	@JoinColumn(table = "court_case", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeCastDetails employeeCastDetails;
 }

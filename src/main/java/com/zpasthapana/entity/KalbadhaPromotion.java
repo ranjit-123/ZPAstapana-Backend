@@ -40,11 +40,4 @@ public class KalbadhaPromotion extends BaseEntity{
 	@JoinColumn(table = "kalbadha_promotion", name ="employeeId", insertable = false, updatable = false)
 	private Employee employee;
 	
-	@OneToOne
-	@JoinColumn(table = "kalbadha_promotion", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeWorklocation employeeWorkLocation;
-	
-	@OneToOne
-	@JoinColumn(table = "kalbadha_promotion", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeCastDetails employeeCastDetails;
 }

@@ -110,33 +110,17 @@ public class ZPUtility {
 						if (ObjectUtils.isNotEmpty(em)) {
 							setField(e, em, "employeeFullName");
 						}
-					}
-				} catch (Exception ex) {
-					log.error("Error", ex);
-				}
-				try {
-					Field employeeWorkField = ReflectionUtils.findField(e.getClass(), "employeeWorkLocation");
-					if (ObjectUtils.isNotEmpty(employeeWorkField)) {
-						employeeWorkField.setAccessible(true);
-						EmployeeWorklocation employeeWork = (EmployeeWorklocation) ReflectionUtils
-								.getField(employeeWorkField, e);
+						
+						EmployeeWorklocation employeeWork = em.getEmployeeWorkLocation();
 						if (ObjectUtils.isNotEmpty(employeeWork)) {
 							setWorkField(e, employeeWork);
 						}
-					}
-					
-				} catch (Exception ex) {
-					log.error("Error", ex);
-				}
-				try {
-					Field employeeCastDetails = ReflectionUtils.findField(e.getClass(), "employeeCastDetails");
-					if (ObjectUtils.isNotEmpty(employeeCastDetails)) {
-						employeeCastDetails.setAccessible(true);
-						EmployeeCastDetails ecastDetails = (EmployeeCastDetails) ReflectionUtils
-								.getField(employeeCastDetails, e);
+						
+						EmployeeCastDetails ecastDetails = em.getEmployeeCastDetails();
 						if (ObjectUtils.isNotEmpty(ecastDetails)) {
 							setCastField(e, ecastDetails);
 						}
+						
 					}
 				} catch (Exception ex) {
 					log.error("Error", ex);
@@ -153,7 +137,7 @@ public class ZPUtility {
 		Field fieldSet = ReflectionUtils.findField(e.getClass(), "castCategoryName");
 		if(ObjectUtils.isNotEmpty(fieldSet)) {
 			fieldSet.setAccessible(true);
-			ReflectionUtils.setField(fieldSet, e, ecastDetails.getCastecategory());
+			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("castecategory_", ecastDetails.getCastecategory()));
 		}
 	}
 

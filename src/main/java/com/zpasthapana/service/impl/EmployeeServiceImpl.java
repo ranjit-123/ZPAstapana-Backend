@@ -114,6 +114,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 			employeeCastDetails = employeeCastDetailsRepo.save(employeeCastDetails);
 			response = modelMapper.map(employeeCastDetails, EmployeeResponse.class);
 			
+			employee.setEmployeeCastDetailsId(employeeCastDetails.getEmployeeCastDetailsId());
+			
 			EmployeeDesiganation employeeDesiganation = modelMapper.map(employeeRequest, EmployeeDesiganation.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeDesiganation, fields);
 			employeeDesiganation = employeeDesiganationRepo.save(employeeDesiganation);

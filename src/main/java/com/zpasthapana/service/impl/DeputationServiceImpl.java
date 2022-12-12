@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.zpasthapana.entity.Deputation;
 import com.zpasthapana.pojo.DeputationRequest;
+import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.repo.DeputationRepo;
 import com.zpasthapana.service.DeputationService;
 import com.zpasthapana.util.ZPUtility;
@@ -41,8 +43,12 @@ public class DeputationServiceImpl implements DeputationService{
 
 	@Override
 	public void updateDeputation(Long employeeId, DeputationRequest request) {
-		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ResponsePageDto<Deputation> getAllDeputation(Pageable paging) {
+		return ZPUtility.getPage(paging, deputationRepo.findAll(paging));
 	}
 
 }

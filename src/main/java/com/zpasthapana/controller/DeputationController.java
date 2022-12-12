@@ -3,6 +3,8 @@ package com.zpasthapana.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zpasthapana.entity.Deputation;
 import com.zpasthapana.pojo.DeputationRequest;
 import com.zpasthapana.pojo.ResponseMessage;
+import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.service.DeputationService;
+import com.zpasthapana.util.ZPUtility;
 
 @RestController
 @RequestMapping("deputations")
@@ -50,6 +55,15 @@ public class DeputationController {
 	public ResponseEntity<ResponseMessage> updateAccidentalInsurance(@PathVariable Long employeeId, @RequestBody DeputationRequest request) {
 		deputationService.updateDeputation(employeeId, request);
 		return new ResponseEntity<ResponseMessage>(ResponseMessage.builder().status(HttpStatus.OK).build(),
+				HttpStatus.OK);
+	}
+	
+	@PostMapping("/page")
+	public ResponseEntity<ResponsePageDto<Deputation>> getAllDeputation(@RequestBody UIPageRequest pageRequest) {
+		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
+		ResponsePageDto<Deputation> pageData = deputationService.getAllDeputation(paging);
+		pageData.setDraw(pageRequest.getPageNumber() + 1);
+		return new ResponseEntity<ResponsePageDto<Deputation>>(pageData,
 				HttpStatus.OK);
 	}
 	

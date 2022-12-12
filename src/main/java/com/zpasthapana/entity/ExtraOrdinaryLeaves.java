@@ -38,11 +38,4 @@ public class ExtraOrdinaryLeaves extends BaseEntity{
 	@JoinColumn(table = "extra_ordinary_leaves", name ="employeeId", insertable = false, updatable = false)
 	private Employee employee;
 	
-	@OneToOne
-	@JoinColumn(table = "extra_ordinary_leaves", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeWorklocation employeeWorkLocation;
-	
-	@OneToOne
-	@JoinColumn(table = "extra_ordinary_leaves", name ="employeeId", insertable = false, updatable = false)
-	private EmployeeCastDetails employeeCastDetails;
 }
