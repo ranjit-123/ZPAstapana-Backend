@@ -59,10 +59,18 @@ public class MasterDataUtil {
 			masterData.put("subdepartment_" + keys.getKeyId(), keys.getKeyName());
 		}
 		
+		date = jdbcTemplate.query("SELECT payCommissionID as keyId, payCommissionName as keyName FROM tblpaycommission", BeanPropertyRowMapper.newInstance(KeyData.class));
+		for (KeyData keys : date) {
+			masterData.put("paycommission_" + keys.getKeyId(), keys.getKeyName());
+		}
 	}
 
 
 	public static String getKeyDate(String type, Long key) {
+		return masterData.get(type + key);
+	}
+	
+	public static String getKeyDate(String type, String key) {
 		return masterData.get(type + key);
 	}
 }

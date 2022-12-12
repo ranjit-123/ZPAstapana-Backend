@@ -2,6 +2,7 @@ package com.zpasthapana.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,7 +11,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -48,6 +52,12 @@ public class EmployeeDesiganation extends BaseEntity {
 	private Date appointmentOrderDate;
 	private String serviceBookFirstPagePDF;
 
+	
+	@Column(name = "current", nullable = false)
+	@ColumnDefault(value = "true")
+	@Generated(GenerationTime.INSERT)
+	private Boolean isCurrent;
+	
 	private Long createdBy;
 	private Long modifiedBy;
 	@CreationTimestamp

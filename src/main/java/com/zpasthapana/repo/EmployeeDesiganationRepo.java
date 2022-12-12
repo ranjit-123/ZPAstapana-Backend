@@ -6,4 +6,6 @@ import com.zpasthapana.entity.EmployeeDesiganation;
 
 public interface EmployeeDesiganationRepo extends JpaRepository<EmployeeDesiganation, Long>{
 
+	EmployeeDesiganation findAllByEmployeeIdAndIsCurrent(Long employeeId, Boolean true1);
+
 }

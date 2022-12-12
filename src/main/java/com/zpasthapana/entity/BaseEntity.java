@@ -6,6 +6,8 @@ public class BaseEntity {
 	@Transient
 	public String employeeFullName;
 	@Transient
+	public String employeeFullNameEng;
+	@Transient
 	public String talukaName;
 	@Transient
 	public String subDivisionName;
@@ -15,4 +17,6 @@ public class BaseEntity {
 	public String designationName;
 	@Transient
 	public String castCategoryName;
+	@Transient
+	public String payCommissionName;
 }

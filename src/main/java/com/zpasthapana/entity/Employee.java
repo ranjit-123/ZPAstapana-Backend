@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,6 +61,20 @@ public class Employee extends BaseEntity {
 	private String firstNameEng;
 	private String middleNameEng;
 	private String lastNameEng;
+	
+	private Long employeeDesiganationId;
+	
+	@OneToOne
+	@JoinColumn(table = "employee", name ="employeeWorklocationId", insertable = false, updatable = false)
+	private EmployeeWorklocation employeeWorkLocation;
+	
+	@OneToOne
+	@JoinColumn(table = "employee_cast_details", name ="employee_id", insertable = false, updatable = false)
+	private EmployeeCastDetails employeeCastDetails;
+	
+	@OneToOne
+	@JoinColumn(table = "employee", name ="employeeDesiganationId", insertable = false, updatable = false)
+	private EmployeeDesiganation employeeDesiganation;
 
 	@Column(name = "active", nullable = false)
 	@ColumnDefault(value = "true")

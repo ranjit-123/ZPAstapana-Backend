@@ -9,6 +9,7 @@ import javax.persistence.EntityNotFoundException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,7 @@ import com.zpasthapana.entity.EmployeeTypingDetails;
 import com.zpasthapana.entity.EmployeeWorklocation;
 import com.zpasthapana.pojo.EmployeeRequest;
 import com.zpasthapana.pojo.EmployeeResponse;
+import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.repo.ConcessionDetailsRepo;
 import com.zpasthapana.repo.EmployeeCastDetailsRepo;
 import com.zpasthapana.repo.EmployeeDesiganationRepo;
@@ -117,6 +119,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 			employeeDesiganation = employeeDesiganationRepo.save(employeeDesiganation);
 			response = modelMapper.map(employeeDesiganation, EmployeeResponse.class);
 			
+			employee.setEmployeeDesiganationId(employeeDesiganation.getEmployeeDesiganationId());
+			
 			EmployeeDisability employeeDisability = modelMapper.map(employeeRequest, EmployeeDisability.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeDisability, fields);
 			employeeDisability = employeeDisabilityRepo.save(employeeDisability);
@@ -145,6 +149,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 			employeeWorklocation = employeeWorklocationRepo.save(employeeWorklocation);	
 			response = modelMapper.map(employeeWorklocation, EmployeeResponse.class);
 			
+			employee.setEmployeeWorklocationId(employeeWorklocation.getEmployeeWorklocationId());
+			
 			ConcessionDetails concessionDetails = modelMapper.map(employeeRequest, ConcessionDetails.class);
 			ZPUtility.updateFileNames(employeeRequest, concessionDetails, fields);
 			concessionDetails = concessionDetailsRepo.save(concessionDetails);	
@@ -159,6 +165,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 			ZPUtility.updateFileNames(employeeRequest, employeeLanguageExam, fields);
 			employeeLanguageExam = employeeLanguageExamRepo.save(employeeLanguageExam);	
 			response = modelMapper.map(concessionDetails, EmployeeResponse.class);
+			
+			employee = employeeRepo.save(employee);
+			response = modelMapper.map(employee, EmployeeResponse.class);
 			
 			return response;
 		} catch (Exception e) {
@@ -224,6 +233,16 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public List<Employee> getAllEmployee() {
 		return employeeRepo.findAll();
+	}
+
+	@Override
+	public ResponsePageDto<Employee> getAllAssetLiability(Pageable paging) {
+		return ZPUtility.getPage(paging, employeeRepo.findAll(paging));
+	}
+
+	@Override
+	public Optional<Employee> getEmployeeById(Long employeeId) {
+		return employeeRepo.findById(employeeId);
 	}
 
 }

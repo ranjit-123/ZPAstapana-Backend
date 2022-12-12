@@ -102,31 +102,44 @@ public class ZPUtility {
 		
 		pageData.getData().forEach(e->{
 			try {
-				Field field = ReflectionUtils.findField(e.getClass(), "employee");
-				field.setAccessible(true);
-				if(ObjectUtils.isNotEmpty(field)) {
-					try {
-						Employee em =  (Employee) ReflectionUtils.getField(field, e);
-						setField(e, em, "employeeFullName");
-					} catch (Exception ex) {
-						log.error("Error", ex);
+				try {
+					Field field = ReflectionUtils.findField(e.getClass(), "employee");
+					if (ObjectUtils.isNotEmpty(field)) {
+						field.setAccessible(true);
+						Employee em = (Employee) ReflectionUtils.getField(field, e);
+						if (ObjectUtils.isNotEmpty(em)) {
+							setField(e, em, "employeeFullName");
+						}
 					}
-					try {
-						Field employeeWorkField = ReflectionUtils.findField(e.getClass(), "employeeWorkLocation");
+				} catch (Exception ex) {
+					log.error("Error", ex);
+				}
+				try {
+					Field employeeWorkField = ReflectionUtils.findField(e.getClass(), "employeeWorkLocation");
+					if (ObjectUtils.isNotEmpty(employeeWorkField)) {
 						employeeWorkField.setAccessible(true);
-						EmployeeWorklocation employeeWork =  (EmployeeWorklocation) ReflectionUtils.getField(employeeWorkField, e);
-						setWorkField(e, employeeWork);
-					} catch (Exception ex) {
-						log.error("Error", ex);
+						EmployeeWorklocation employeeWork = (EmployeeWorklocation) ReflectionUtils
+								.getField(employeeWorkField, e);
+						if (ObjectUtils.isNotEmpty(employeeWork)) {
+							setWorkField(e, employeeWork);
+						}
 					}
-					try {
-						Field employeeCastDetails = ReflectionUtils.findField(e.getClass(), "employeeCastDetails");
+					
+				} catch (Exception ex) {
+					log.error("Error", ex);
+				}
+				try {
+					Field employeeCastDetails = ReflectionUtils.findField(e.getClass(), "employeeCastDetails");
+					if (ObjectUtils.isNotEmpty(employeeCastDetails)) {
 						employeeCastDetails.setAccessible(true);
-						EmployeeCastDetails ecastDetails =  (EmployeeCastDetails) ReflectionUtils.getField(employeeCastDetails, e);
-						setCastField(e, ecastDetails);
-					} catch (Exception ex) {
-						log.error("Error", ex);
+						EmployeeCastDetails ecastDetails = (EmployeeCastDetails) ReflectionUtils
+								.getField(employeeCastDetails, e);
+						if (ObjectUtils.isNotEmpty(ecastDetails)) {
+							setCastField(e, ecastDetails);
+						}
 					}
+				} catch (Exception ex) {
+					log.error("Error", ex);
 				}
 			} catch (Exception ex) {
 				log.error("Error", ex);
