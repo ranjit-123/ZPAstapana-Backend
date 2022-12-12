@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zpasthapana.entity.BaseEntity;
 import com.zpasthapana.entity.Employee;
 import com.zpasthapana.entity.EmployeeCastDetails;
+import com.zpasthapana.entity.EmployeeDesiganation;
 import com.zpasthapana.entity.EmployeeWorklocation;
 import com.zpasthapana.pojo.EmployeeRequest;
 import com.zpasthapana.pojo.EmployeeResponse;
@@ -79,8 +80,13 @@ public class EmployeeController {
 			e.talukaName = MasterDataUtil.getKeyDate("taluka_", em.getTaluka());
 			e.subDivisionName = MasterDataUtil.getKeyDate("subdivision_", em.getSubDivision());
 			e.subDepartmentName = MasterDataUtil.getKeyDate("subdepartment_", em.getSubDepartment()); 		
-			e.designationName = MasterDataUtil.getKeyDate("designation_", em.getDesignationId());
 		}
+		
+		if(ObjectUtils.isNotEmpty(employee.get().getEmployeeDesiganation())) {
+			EmployeeDesiganation emDesignation = employee.get().getEmployeeDesiganation();
+			e.designationName = MasterDataUtil.getKeyDate("designation_", emDesignation.getEmployeeDesiganationId());
+		}
+		
 		if(ObjectUtils.isNotEmpty(employee.get().getEmployeeCastDetails())) {
 			EmployeeCastDetails ec = employee.get().getEmployeeCastDetails();
 			e.castCategoryName = MasterDataUtil.getKeyDate("castecategory_", ec.getCastecategory());
