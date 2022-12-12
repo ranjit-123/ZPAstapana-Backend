@@ -119,7 +119,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 			employeeDesiganation = employeeDesiganationRepo.save(employeeDesiganation);
 			response = modelMapper.map(employeeDesiganation, EmployeeResponse.class);
 			
-			employee.setEmployeeDesiganationId(employeeDesiganation.getEmployeeDesiganationId());
+			employee.setEmployeeDesiganationDetailsId(employeeDesiganation.getEmployeeDesiganationDetailsId());
 			
 			EmployeeDisability employeeDisability = modelMapper.map(employeeRequest, EmployeeDisability.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeDisability, fields);

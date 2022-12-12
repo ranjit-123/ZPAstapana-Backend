@@ -44,17 +44,18 @@ public class KalbadhaPromotionServiceImpl implements KalbadhaPromotionService {
 
 		EmployeeDesiganation addNewDesignation = modelMapper.map(empDesignation, EmployeeDesiganation.class);
 
-		addNewDesignation.setEmployeeDesiganationId(null);
+		addNewDesignation.setEmployeeDesiganationDetailsId(null);
 		addNewDesignation.setEmployeeDesiganationId(Long.valueOf(entity.getAddKalbadhaPromotionDisignation() + ""));
 		addNewDesignation.setPayCommission(entity.getAddKalbadhaPromotionPayCommission() + "");
 		addNewDesignation.setSalaryRange(entity.getAddKalbadhaPromotionGrade());
 
 		addNewDesignation = employeeDesiganationRepo.save(addNewDesignation);
+		
 		empDesignation.setIsCurrent(Boolean.FALSE);
 		employeeDesiganationRepo.save(empDesignation);
 
 		Employee em = employeeRepo.findById(request.getEmployeeId()).get();
-		em.setEmployeeDesiganationId(addNewDesignation.getEmployeeDesiganationId());
+		em.setEmployeeDesiganationDetailsId(addNewDesignation.getEmployeeDesiganationDetailsId());
 		employeeRepo.save(em);
 	}
 

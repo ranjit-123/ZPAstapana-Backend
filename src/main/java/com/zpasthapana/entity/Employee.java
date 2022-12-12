@@ -62,7 +62,7 @@ public class Employee extends BaseEntity {
 	private String middleNameEng;
 	private String lastNameEng;
 	
-	private Long employeeDesiganationId;
+	private Long employeeDesiganationDetailsId;
 	
 	@OneToOne
 	@JoinColumn(table = "employee", name ="employeeWorklocationId", insertable = false, updatable = false)
@@ -73,7 +73,7 @@ public class Employee extends BaseEntity {
 	private EmployeeCastDetails employeeCastDetails;
 	
 	@OneToOne
-	@JoinColumn(table = "employee", name ="employeeDesiganationId", insertable = false, updatable = false)
+	@JoinColumn(table = "employee", name ="employeeDesiganationDetailsId", insertable = false, updatable = false)
 	private EmployeeDesiganation employeeDesiganation;
 
 	@Column(name = "active", nullable = false)

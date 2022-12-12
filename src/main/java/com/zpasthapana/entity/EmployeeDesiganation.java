@@ -33,6 +33,8 @@ import lombok.Setter;
 public class EmployeeDesiganation extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long employeeDesiganationDetailsId;
+	
 	private Long employeeDesiganationId;
 	private Long employeeId;
 	private String employeeselectioncategory;
