@@ -105,6 +105,15 @@ public class EmployeeController {
 				HttpStatus.OK);
 	}
 	
+	@PostMapping("/working/page")
+	public ResponseEntity<ResponsePageDto<Employee>> getAllWorkingEmployees(@RequestBody UIPageRequest pageRequest) {
+		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
+		ResponsePageDto<Employee> pageData = employeeService.getAllWorkingEmployees(paging);
+		pageData.setDraw(pageRequest.getPageNumber() + 1);
+		return new ResponseEntity<ResponsePageDto<Employee>>(pageData,
+				HttpStatus.OK);
+	}
+	
 	@PostMapping("/retiered/page")
 	public ResponseEntity<ResponsePageDto<Employee>> getAllRetieredEmployees(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));

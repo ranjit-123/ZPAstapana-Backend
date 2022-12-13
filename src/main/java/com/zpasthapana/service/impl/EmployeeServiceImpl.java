@@ -240,7 +240,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public ResponsePageDto<Employee> getAllAssetLiability(Pageable paging) {
-		return ZPUtility.getPage(paging, employeeRepo.findAllWorkingEmployee(new Date(),paging));
+		return ZPUtility.getPage(paging, employeeRepo.findAll(paging));
 	}
 
 	@Override
@@ -251,6 +251,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public ResponsePageDto<Employee> getAllRetieredEmployees(Pageable paging) {
 		return ZPUtility.getPage(paging, employeeRepo.findAllRetieredEmployee(new Date(), paging));
+	}
+
+	@Override
+	public ResponsePageDto<Employee> getAllWorkingEmployees(Pageable paging) {
+		return ZPUtility.getPage(paging, employeeRepo.findAllWorkingEmployee(new Date(),paging));
 	}
 
 }
