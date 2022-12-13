@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -31,4 +33,8 @@ public class ServiceSegment extends BaseEntity{
 	private String serviceSegmentsDuringServicePeriodOrderNumber;
 	private Date serviceSegmentsDuringServicePeriodendLastDate;
 	private Long employeeId;
+	
+	@OneToOne
+	@JoinColumn(table = "service_segment", name ="employeeId", insertable = false, updatable = false)
+	private Employee employee;
 }

@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -29,4 +31,8 @@ public class ApprenticeNotice extends BaseEntity {
 	private Date apprenticePeriodOrderDate;
 	private String apprenticePeriodOrderPDF;
 	private Date apprenticePeriodApplyDate;
+	
+	@OneToOne
+	@JoinColumn(table = "apprentice_notice", name ="employeeId", insertable = false, updatable = false)
+	private Employee employee;
 }

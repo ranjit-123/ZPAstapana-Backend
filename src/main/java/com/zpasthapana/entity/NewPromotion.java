@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -51,4 +53,8 @@ public class NewPromotion extends BaseEntity{
 	private String promotionsQualificationPDF;
 	private Long addNewPromotionCastecategory;
 	private Integer certificateNumber;
+	
+	@OneToOne
+	@JoinColumn(table = "new_promotion", name ="employeeId", insertable = false, updatable = false)
+	private Employee employee;
 }

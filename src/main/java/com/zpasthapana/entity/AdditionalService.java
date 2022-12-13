@@ -20,19 +20,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "new_training")
-public class NewTraining extends BaseEntity{
+@Table(name = "additional_service")
+public class AdditionalService extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Long employeeId;
-	private Integer newTrainingeFlag;
-	private String newTrainingeName;
-	private Date newTrainingFromDate;
-	private Date newTrainingToDate;
-	private Date newTrainingDetails;
+	private Integer additionalZPServiceFlag;
+	private Date additionalZPServiceDateOfOrder;
+	private Date additionalZPServiceendLastDate;
+	private Date additionalZPServicestartDate;
+	private String additionalZPServiceDetails;
+	private Long additionalZPServiceOrderNumber;
 	
 	@OneToOne
-	@JoinColumn(table = "new_training", name ="employeeId", insertable = false, updatable = false)
+	@JoinColumn(table = "additional_service", name ="employeeId", insertable = false, updatable = false)
 	private Employee employee;
 }
