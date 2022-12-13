@@ -23,6 +23,7 @@ import com.zpasthapana.entity.BaseEntity;
 import com.zpasthapana.entity.Employee;
 import com.zpasthapana.entity.EmployeeCastDetails;
 import com.zpasthapana.entity.EmployeeWorklocation;
+import com.zpasthapana.entity.User;
 import com.zpasthapana.pojo.BaseRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.SortField;
@@ -120,7 +121,24 @@ public class ZPUtility {
 						if (ObjectUtils.isNotEmpty(ecastDetails)) {
 							setCastField(e, ecastDetails);
 						}
+					} else if(e instanceof Employee) {
+						Employee em = (Employee) e;
+						if (ObjectUtils.isNotEmpty(em)) {
+							setField(e, em, "employeeFullName");
+						}
 						
+						EmployeeWorklocation employeeWork = em.getEmployeeWorkLocation();
+						if (ObjectUtils.isNotEmpty(employeeWork)) {
+							setWorkField(e, employeeWork);
+						}
+						
+						EmployeeCastDetails ecastDetails = em.getEmployeeCastDetails();
+						if (ObjectUtils.isNotEmpty(ecastDetails)) {
+							setCastField(e, ecastDetails);
+						}
+					} else if(e instanceof User) {
+						User u = (User) e;
+						u.setPassword("");
 					}
 				} catch (Exception ex) {
 					log.error("Error", ex);

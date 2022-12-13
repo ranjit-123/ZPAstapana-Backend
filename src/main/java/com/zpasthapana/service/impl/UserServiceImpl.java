@@ -6,16 +6,19 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zpasthapana.entity.User;
+import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.UserPojo;
 import com.zpasthapana.repo.UserRepo;
 import com.zpasthapana.service.UserService;
 import com.zpasthapana.util.JwtTokenUtil;
+import com.zpasthapana.util.ZPUtility;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -75,6 +78,11 @@ public class UserServiceImpl implements UserService {
 			userRepo.save(userToUpdate);
 		}
 		return Optional.of(userReq);
+	}
+
+	@Override
+	public ResponsePageDto<User> getAllUsers(Pageable paging) {
+		return ZPUtility.getPage(paging, userRepo.findAll(paging));
 	}
 
 }

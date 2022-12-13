@@ -1,7 +1,5 @@
 package com.zpasthapana.pojo;
 
-import java.util.Date;
-
 import com.zpasthapana.entity.BaseEntity;
 
 import lombok.AllArgsConstructor;
