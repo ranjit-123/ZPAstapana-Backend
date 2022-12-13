@@ -37,7 +37,12 @@ public class NewTransferServiceImpl implements NewTransferService {
 
 	@Override
 	public ResponsePageDto<NewTransfer> getAllNewTransfer(Pageable paging) {
-		return ZPUtility.getPage(paging, newTransferRepo.findAll(paging));
+		return ZPUtility.getPage(paging, newTransferRepo.findAllByInterDistrictTransferFlag(1, paging));
+	}
+
+	@Override
+	public ResponsePageDto<NewTransfer> getAllDistrictNewTransfer(Pageable paging) {
+		return ZPUtility.getPage(paging, newTransferRepo.findAllByInterDistrictTransferFlag(0, paging));
 	}
 	
 }

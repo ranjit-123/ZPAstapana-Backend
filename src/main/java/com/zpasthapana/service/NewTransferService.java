@@ -16,4 +16,6 @@ public interface NewTransferService {
 
 	ResponsePageDto<NewTransfer> getAllNewTransfer(Pageable paging);
 
+	ResponsePageDto<NewTransfer> getAllDistrictNewTransfer(Pageable paging);
+
 }

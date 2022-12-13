@@ -51,4 +51,13 @@ public class NewTransferController {
 		return new ResponseEntity<ResponsePageDto<NewTransfer>>(pageData,
 				HttpStatus.OK);
 	}
+	
+	@PostMapping("/inter-district/page")
+	public ResponseEntity<ResponsePageDto<NewTransfer>> getAllDistrictNewTransfer(@RequestBody UIPageRequest pageRequest) {
+		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
+		ResponsePageDto<NewTransfer> pageData = newTransferService.getAllDistrictNewTransfer(paging);
+		pageData.setDraw(pageRequest.getPageNumber() + 1);
+		return new ResponseEntity<ResponsePageDto<NewTransfer>>(pageData,
+				HttpStatus.OK);
+	}
 }
