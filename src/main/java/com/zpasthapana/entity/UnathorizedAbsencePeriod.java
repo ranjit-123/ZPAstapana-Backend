@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -34,5 +36,8 @@ public class UnathorizedAbsencePeriod {
 	private Integer isCaseResolved;
 	private String resolutionDetails;
 	private Date resolutionDate;
-	private Long employeeId;         
+	private Long employeeId;    
+	@OneToOne
+	@JoinColumn(table = "unathorized_absence_period", name ="employeeId", insertable = false, updatable = false)
+	private Employee employee;
 }

@@ -13,8 +13,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,7 +34,7 @@ public class EmployeeDisability extends BaseEntity {
 	private String appointmentDisability;
 	private Integer disabilityID;
 	private String disabilityPercentage;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date certificateDisabilityDate;
 	private String disabilityCertificatePDF;
 
@@ -44,10 +42,10 @@ public class EmployeeDisability extends BaseEntity {
 	private Long modifiedBy;
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date createDate;
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date modifyDate;
 }

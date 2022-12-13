@@ -10,8 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,25 +26,25 @@ public class Deputation extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String deputationOrderNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date deputationDate;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date deputationOfficeDate;
 	private String deputationPdf;
 	private String deputationReason;
 	private Integer commissionerPermission;
 	private Integer commissionerOrderNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date commissionerOrderDate;
 	private String commissionerOrderPdf;
 	private Integer deputationSection;
 	private Integer cmbSubDivisionID;
 	private Integer cmbProperOfficeID;
 	private Integer deputationEndOrderNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date deputationEndOrderDate;
 	private String deputationEndPdf;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date deputationServiceEndDate;
 	private String dtpDateOfRegularOfficeRejoining;
 	private Long employeeId;

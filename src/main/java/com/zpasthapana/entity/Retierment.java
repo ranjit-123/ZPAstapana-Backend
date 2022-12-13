@@ -20,7 +20,6 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,16 +38,12 @@ public class Retierment extends BaseEntity{
 	private Long id;
 	private String retirementOrderNumber;
 	
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="Asia/Calcutta")
 	private Date orderDate;
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.sss'Z'", timezone="Asia/Calcutta")
 	private Date retirementDate;
 	private String retirementReason;
 	private Integer isPayAfterRetirement;
 	private Integer isPension;
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.sss'Z'", timezone="Asia/Calcutta")
 	private Date declarationDate;
-	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.sss'Z'", timezone="Asia/Calcutta")
 	private Date fromDate;
 	private Integer pendingLevel;
 	private String currentCondition;

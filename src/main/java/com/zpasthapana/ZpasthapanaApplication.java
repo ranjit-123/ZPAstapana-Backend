@@ -19,6 +19,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @SuppressWarnings("deprecation")
 @SpringBootApplication
 @EnableScheduling
@@ -65,6 +67,14 @@ public class ZpasthapanaApplication {
 		mp.addConverter(toStringDateTime);
 		return mp;
 	}
+	
+	@Bean
+    public ObjectMapper objectMapper() {
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        ObjectMapper dateFormatMapper = new ObjectMapper();
+        dateFormatMapper.setDateFormat(dateFormat);
+        return dateFormatMapper;
+    }
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {

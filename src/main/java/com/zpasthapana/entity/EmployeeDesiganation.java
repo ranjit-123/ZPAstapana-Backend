@@ -17,8 +17,6 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,14 +41,14 @@ public class EmployeeDesiganation extends BaseEntity {
 	private Long qualification;
 	private Long parallelReservationType;
 	private String salaryRange;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date dateOfAppointed;
 	private String appointedDateFirstPagePDF;
 	private String appointmentOrderPDF;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date dateOfHumanitySeniority;
 	private String appointmentOrderNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date appointmentOrderDate;
 	private String serviceBookFirstPagePDF;
 
@@ -64,10 +62,10 @@ public class EmployeeDesiganation extends BaseEntity {
 	private Long modifiedBy;
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date createDate;
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date modifyDate;
 }

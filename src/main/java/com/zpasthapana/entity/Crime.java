@@ -19,8 +19,6 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,10 +39,10 @@ public class Crime extends BaseEntity {
 	private Integer suspendCase;
 	private String reasonNotSuspended;
 	private Integer indictmentNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date indictmentDate;
 	private String actualIndictmentNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date actualIndictmentDate;
 	private String conditionOfCase;
 	private Integer courtResult;
@@ -52,13 +50,13 @@ public class Crime extends BaseEntity {
 	private String whatIsActionTaken;
 	private Integer punishmentOrderNo;
 	private String punishmentOrderPdf;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date punishmentOrderDate;
 	private String resultPdf;
 	private Integer appealedInHigherCourt;
 	private String caseDetails;
 	private Integer appealNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date appealDate;
 	private Long employeeId;
 
@@ -71,11 +69,11 @@ public class Crime extends BaseEntity {
 	private Long modifiedBy;
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date createDate;
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date modifyDate;
 	
 	@OneToOne

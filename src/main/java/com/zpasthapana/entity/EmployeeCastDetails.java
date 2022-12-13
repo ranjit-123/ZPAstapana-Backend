@@ -13,8 +13,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,20 +34,20 @@ public class EmployeeCastDetails extends BaseEntity {
 	private Integer casteCertificateFlag;
 	private Long appointmentCasteCategoryID;
 	private String casteCertificateNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date casteCertificateDate;
 	private String casteCertificatedIssuedOfficerName;
 	private String casteCertificatePDF;
 	private Integer casteValidityFlag;
 	private String casteValidityNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date casteValidityDate;
 	private String casteValidityPDF;
 	private String casteValidityCommitteeName;
 	private Integer casteCategoryChangedAfterAppointmentFlag;
 	private Integer casteCategoryChangedAfterAppointmentID;
 	private String casteCategoryChangedAfterAppointmentNumber;
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date casteCategoryChangedAfterAppointmentDate;
 	private String casteValidityChangedAfterAppointmentPDF;
 
@@ -57,10 +55,10 @@ public class EmployeeCastDetails extends BaseEntity {
 	private Long modifiedBy;
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date createDate;
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
+	
 	private Date modifyDate;
 }

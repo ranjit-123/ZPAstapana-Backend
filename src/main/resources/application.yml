@@ -17,12 +17,6 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   
   profiles: default
-  
-  jackson:
-    serialization:
-            fail-on-empty-beans: false
-    time-zone: "GMT+8"
-    date-format: "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
       
   application: 
     name: zpastapana

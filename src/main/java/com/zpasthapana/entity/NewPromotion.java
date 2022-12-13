@@ -35,7 +35,7 @@ public class NewPromotion extends BaseEntity{
 	private Date addNewPromotionLastDateOfService;
 	private Integer addNewPromotionTravelPeriodFlag;
 	private Date dateOfTravelPeriodStart;
-	private String addNewPromotionOrderDate;
+	private Date addNewPromotionOrderDate;
 	private String addNewPromotionOrderNumber;
 	private Date addNewPromotionDateOfHumanitySeniority;
 	private Date dateOfPromotionAppointment;
