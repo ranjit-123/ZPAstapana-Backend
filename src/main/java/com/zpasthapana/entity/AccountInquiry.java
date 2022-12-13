@@ -29,8 +29,8 @@ public class AccountInquiry extends BaseEntity{
 	private Date memoDate;
 	private Integer memoNumber;
 	private Date memoGivenDate;
-	private Integer accusationsHeld;
-	private Integer currentCondition;
+	private String accusationsHeld;
+	private String currentCondition;
 	private Integer presentAtWork;
 	private Integer caseInCourt;
 	private Integer inquiryOfficerPlacementNo;

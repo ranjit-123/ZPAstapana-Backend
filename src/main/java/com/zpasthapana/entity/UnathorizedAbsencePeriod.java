@@ -25,7 +25,7 @@ public class UnathorizedAbsencePeriod {
 	private Long id;
 	private Date absenceStartDate;
 	private Date absenceEndDate;
-	private String absenceStart;
+	private String absenceStartDetails;
 	private Integer isPresent;
 	private Date presentDate;
 	private Integer isEnquiryOn;

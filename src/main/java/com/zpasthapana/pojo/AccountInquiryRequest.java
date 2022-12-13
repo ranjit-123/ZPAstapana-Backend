@@ -17,8 +17,8 @@ public class AccountInquiryRequest extends BaseRequest{
 	private String memoDate;
 	private Integer memoNumber;
 	private String memoGivenDate;
-	private Integer accusationsHeld;
-	private Integer currentCondition;
+	private String accusationsHeld;
+	private String currentCondition;
 	private Integer presentAtWork;
 	private Integer caseInCourt;
 	private Integer inquiryOfficerPlacementNo;
@@ -31,7 +31,7 @@ public class AccountInquiryRequest extends BaseRequest{
 	private String finalPunishment;
 	private Integer implementationDone;
 	private String serviceBookNoteDetails;
-	private String punishmentCopy;
+	private MultipartFile punishmentCopy;
 	private Integer rbtnFirstAppealAgainstOrderFlag;
 	private String firstAppealDate;
 	private String firstAppealResultDate;

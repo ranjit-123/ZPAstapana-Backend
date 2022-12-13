@@ -18,7 +18,7 @@ public class NewPromotionRequest extends BaseRequest{
 	private Integer addNewPromotionRegularPromotionsFlag;
 	private Integer addNewPromotioneEployeeSelectionCategoryIDFlag;
 	private String addNewPromotionGrade;
-	private String addNewPromotionPDF;
+	private MultipartFile addNewPromotionPDF;
 	private String addNewPromotionDisignation;
 	private String addNewPromotionPayCommission;
 	private Date addNewPromotionLastDateOfService;

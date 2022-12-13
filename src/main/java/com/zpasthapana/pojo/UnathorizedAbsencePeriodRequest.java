@@ -15,16 +15,16 @@ import lombok.Setter;
 @Setter
 public class UnathorizedAbsencePeriodRequest extends BaseEntity{
 	private Long id;
-	private Date absenceStartDate;
-	private Date absenceEndDate;
-	private String absenceStart;
+	private String absenceStartDate;
+	private String absenceEndDate;
+	private String absenceStartDetails;
 	private Integer isPresent;
-	private Date presentDate;
+	private String presentDate;
 	private Integer isEnquiryOn;
 	private String enquiryDetails;
 	private Integer accountEnquiryCase;
 	private Integer isCaseResolved;
 	private String resolutionDetails;
-	private Date resolutionDate;
+	private String resolutionDate;
 	private Long employeeId;        
 }
