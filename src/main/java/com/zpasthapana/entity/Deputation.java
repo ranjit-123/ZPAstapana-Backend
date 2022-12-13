@@ -42,7 +42,7 @@ public class Deputation extends BaseEntity {
 	private Integer deputationSection;
 	private Integer cmbSubDivisionID;
 	private Integer cmbProperOfficeID;
-	private Integer deputationEndOrderNumbe;
+	private Integer deputationEndOrderNumber;
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Asia/Calcutta")
 	private Date deputationEndOrderDate;
 	private String deputationEndPdf;

@@ -24,7 +24,7 @@ public class DeputationRequest extends BaseRequest{
 	private Integer deputationSection;
 	private Integer cmbSubDivisionID;
 	private Integer cmbProperOfficeID;
-	private Integer deputationEndOrderNumbe;
+	private Integer deputationEndOrderNumber;
 	private String deputationEndOrderDate;
 	private MultipartFile deputationEndPdf;
 	private String deputationServiceEndDate;
