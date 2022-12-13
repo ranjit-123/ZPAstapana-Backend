@@ -6,8 +6,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zpasthapana.entity.Employee;
 import com.zpasthapana.entity.Retierment;
 import com.zpasthapana.pojo.RetiermentRequest;
+import com.zpasthapana.repo.EmployeeRepo;
 import com.zpasthapana.repo.RetiermentRepo;
 import com.zpasthapana.service.RetiermentService;
 
@@ -18,11 +20,17 @@ public class RetiermentServiceImpl implements RetiermentService {
 	RetiermentRepo retiermentRepo;
 	
 	@Autowired
+	EmployeeRepo employeeRepo;
+	
+	@Autowired
 	ModelMapper modelMapper;
 	
 	@Override
 	public void addRetirement(RetiermentRequest request) {
-		retiermentRepo.save(modelMapper.map(request, Retierment.class));
+		Retierment r = retiermentRepo.save(modelMapper.map(request, Retierment.class));
+		Employee emp = employeeRepo.findById(request.getEmployeeId()).get();
+		emp.setRetiermentId(r.getId());
+		employeeRepo.save(emp);
 	}
 
 	@Override

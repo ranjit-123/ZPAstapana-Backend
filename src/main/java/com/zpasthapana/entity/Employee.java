@@ -65,6 +65,9 @@ public class Employee extends BaseEntity {
 	private Long employeeDesiganationDetailsId;
 	private Long employeeCastDetailsId;
 	
+	private Long retiermentId;
+	
+	
 	@OneToOne
 	@JoinColumn(table = "employee", name ="employeeWorklocationId", insertable = false, updatable = false)
 	private EmployeeWorklocation employeeWorkLocation;
@@ -76,6 +79,10 @@ public class Employee extends BaseEntity {
 	@OneToOne
 	@JoinColumn(table = "employee", name ="employeeDesiganationDetailsId", insertable = false, updatable = false)
 	private EmployeeDesiganation employeeDesiganation;
+	
+	@OneToOne
+	@JoinColumn(table = "employee", name ="retiermentId", insertable = false, updatable = false)
+	private Retierment retierment;
 
 	@Column(name = "active", nullable = false)
 	@ColumnDefault(value = "true")

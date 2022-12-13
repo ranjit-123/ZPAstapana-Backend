@@ -19,6 +19,7 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -59,6 +60,7 @@ public class Retierment extends BaseEntity{
 	
 	@OneToOne
 	@JoinColumn(table = "retierment", name ="employeeId", insertable = false, updatable = false)
+	@JsonBackReference
 	private Employee employee;
 	
 	@Column(name = "active", nullable = false)

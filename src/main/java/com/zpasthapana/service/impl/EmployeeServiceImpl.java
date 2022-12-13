@@ -1,6 +1,7 @@
 package com.zpasthapana.service.impl;
 
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -239,12 +240,17 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public ResponsePageDto<Employee> getAllAssetLiability(Pageable paging) {
-		return ZPUtility.getPage(paging, employeeRepo.findAll(paging));
+		return ZPUtility.getPage(paging, employeeRepo.findAllWorkingEmployee(new Date(),paging));
 	}
 
 	@Override
 	public Optional<Employee> getEmployeeById(Long employeeId) {
 		return employeeRepo.findById(employeeId);
+	}
+
+	@Override
+	public ResponsePageDto<Employee> getAllRetieredEmployees(Pageable paging) {
+		return ZPUtility.getPage(paging, employeeRepo.findAllRetieredEmployee(new Date(), paging));
 	}
 
 }

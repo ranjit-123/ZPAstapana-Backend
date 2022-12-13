@@ -20,4 +20,6 @@ public interface EmployeeService {
 	ResponsePageDto<Employee> getAllAssetLiability(Pageable paging);
 
 	Optional<Employee> getEmployeeById(Long employeeId);
+
+	ResponsePageDto<Employee> getAllRetieredEmployees(Pageable paging);
 }
