@@ -30,7 +30,7 @@ public class NewTraining extends BaseEntity{
 	private String newTrainingeName;
 	private Date newTrainingFromDate;
 	private Date newTrainingToDate;
-	private Date newTrainingDetails;
+	private String newTrainingDetails;
 	
 	@OneToOne
 	@JoinColumn(table = "new_training", name ="employeeId", insertable = false, updatable = false)

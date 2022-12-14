@@ -1,7 +1,5 @@
 package com.zpasthapana.pojo;
 
-import java.util.Date;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +15,7 @@ public class AssetLiabilityRequest extends BaseRequest{
 	private Long id;
 	private String isAssetLiabilitySubmitted;
 	private String financialYear;
-	private Date submissionDate;
+	private String submissionDate;
 	private String whomToSubmitted;
 	private MultipartFile depositedLetterPdf;
 	private Long employeeId;

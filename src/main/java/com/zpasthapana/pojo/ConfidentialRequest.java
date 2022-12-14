@@ -1,5 +1,7 @@
 package com.zpasthapana.pojo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +18,7 @@ public class ConfidentialRequest extends BaseRequest{
 	private Integer reportingOfficerMarks;
 	private Integer reviewOfficerMarks;
 	private String reportSubmitDate;
-	private String reportCopy;
+	private MultipartFile reportCopy;
 	private String isAppealed;
 	private String appealDecision;
 	private Integer appealMarks;

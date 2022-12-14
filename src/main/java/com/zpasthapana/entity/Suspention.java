@@ -34,7 +34,7 @@ public class Suspention extends BaseEntity{
 	private Integer suspensionSubdivision;
 	private String suspensionOfficeName;
 	private Integer subsistenceIncreased;
-	private Integer subsistenceOrderNo;
+	private String subsistenceOrderNo;
 	private Date subsistenceOrderDate;
 	private Double subsistenceAmt;
 	private Integer isAcbReviewed;

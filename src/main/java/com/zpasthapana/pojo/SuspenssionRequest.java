@@ -22,7 +22,7 @@ public class SuspenssionRequest extends BaseRequest {
 	private Integer suspensionSubdivision;
 	private String suspensionOfficeName;
 	private Integer subsistenceIncreased;
-	private Integer subsistenceOrderNo;
+	private String subsistenceOrderNo;
 	private String subsistenceOrderDate;
 	private Double subsistenceAmt;
 	private Integer isAcbReviewed;
