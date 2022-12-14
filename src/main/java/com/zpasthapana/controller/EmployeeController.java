@@ -99,7 +99,7 @@ public class EmployeeController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<Employee>> getAllCourtCase(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<Employee> pageData = employeeService.getAllAssetLiability(paging);
+		ResponsePageDto<Employee> pageData = employeeService.getAllAssetLiability(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<Employee>>(pageData,
 				HttpStatus.OK);
@@ -108,7 +108,7 @@ public class EmployeeController {
 	@PostMapping("/working/page")
 	public ResponseEntity<ResponsePageDto<Employee>> getAllWorkingEmployees(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<Employee> pageData = employeeService.getAllWorkingEmployees(paging);
+		ResponsePageDto<Employee> pageData = employeeService.getAllWorkingEmployees(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<Employee>>(pageData,
 				HttpStatus.OK);
@@ -117,7 +117,7 @@ public class EmployeeController {
 	@PostMapping("/retiered/page")
 	public ResponseEntity<ResponsePageDto<Employee>> getAllRetieredEmployees(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<Employee> pageData = employeeService.getAllRetieredEmployees(paging);
+		ResponsePageDto<Employee> pageData = employeeService.getAllRetieredEmployees(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<Employee>>(pageData,
 				HttpStatus.OK);

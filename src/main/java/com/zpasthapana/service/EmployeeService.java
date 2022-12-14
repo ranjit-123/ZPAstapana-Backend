@@ -9,6 +9,7 @@ import com.zpasthapana.entity.Employee;
 import com.zpasthapana.pojo.EmployeeRequest;
 import com.zpasthapana.pojo.EmployeeResponse;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface EmployeeService {
 	EmployeeResponse createEmployee(EmployeeRequest employeeRequest);
@@ -17,11 +18,11 @@ public interface EmployeeService {
 
 	List<Employee> getAllEmployee();
 
-	ResponsePageDto<Employee> getAllAssetLiability(Pageable paging);
+	ResponsePageDto<Employee> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging);
 
 	Optional<Employee> getEmployeeById(Long employeeId);
 
-	ResponsePageDto<Employee> getAllRetieredEmployees(Pageable paging);
+	ResponsePageDto<Employee> getAllRetieredEmployees(UIPageRequest pageRequest, Pageable paging);
 
-	ResponsePageDto<Employee> getAllWorkingEmployees(Pageable paging);
+	ResponsePageDto<Employee> getAllWorkingEmployees(UIPageRequest pageRequest, Pageable paging);
 }

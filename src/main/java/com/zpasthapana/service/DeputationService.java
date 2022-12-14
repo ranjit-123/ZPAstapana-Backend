@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.Deputation;
 import com.zpasthapana.pojo.DeputationRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface DeputationService {
 	public void addDeputation(DeputationRequest request);
@@ -14,4 +15,5 @@ public interface DeputationService {
 	public List<Deputation> getEmployeeDeputation(Long employeeId);
 	public void updateDeputation(Long employeeId, DeputationRequest request);
 	public ResponsePageDto<Deputation> getAllDeputation(Pageable paging);
+	public ResponsePageDto<Deputation> getAllDeputation(UIPageRequest pageRequest, Pageable paging);
 }

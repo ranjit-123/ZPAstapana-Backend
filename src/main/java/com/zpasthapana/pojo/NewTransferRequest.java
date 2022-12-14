@@ -30,7 +30,7 @@ public class NewTransferRequest extends BaseRequest {
 	private Date holidayPerioddateOfTravelPeriodStart;
 	private Date holidayPerioddateOfTravelPeriodEnd;
 	private Date dateOfPromotionAppointment;
-	private Integer talukaID;
-	private Integer subDivisionID;
-	private Integer subDepartmentId;
+	private Long talukaID;
+	private Long subDivisionID;
+	private Long subDepartmentId;
 }

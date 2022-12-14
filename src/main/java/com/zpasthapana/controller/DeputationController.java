@@ -61,7 +61,7 @@ public class DeputationController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<Deputation>> getAllDeputation(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<Deputation> pageData = deputationService.getAllDeputation(paging);
+		ResponsePageDto<Deputation> pageData = deputationService.getAllDeputation(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<Deputation>>(pageData,
 				HttpStatus.OK);

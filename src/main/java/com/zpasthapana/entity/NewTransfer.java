@@ -40,9 +40,9 @@ public class NewTransfer extends BaseEntity{
 	private Date holidayPerioddateOfTravelPeriodStart;
 	private Date holidayPerioddateOfTravelPeriodEnd;
 	private Date dateOfPromotionAppointment;
-	private Integer talukaID;
-	private Integer subDivisionID;
-	private Integer subDepartmentId;
+	private Long talukaID;
+	private Long subDivisionID;
+	private Long subDepartmentId;
 	
 	@OneToOne
 	@JoinColumn(table = "new_transfer", name ="employeeId", insertable = false, updatable = false)

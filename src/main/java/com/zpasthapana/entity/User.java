@@ -59,22 +59,22 @@ public class User extends BaseEntity{
 	private Integer accessFlag;
 
 	@Column(name = "divisionID")
-	private Integer divisionID;
+	private Long divisionID;
 
 	@Column(name = "zillaParishadID")
-	private Integer zillaParishadID;
+	private Long zillaParishadID;
 
 	@Column(name = "departmentID")
-	private Integer departmentID;
+	private Long departmentID;
 
 	@Column(name = "talukaID")
-	private Integer talukaID;
+	private Long talukaID;
 
 	@Column(name = "subDivisionID")
-	private Integer subDivisionID;
+	private Long subDivisionID;
 
 	@Column(name = "properOfficeID")
-	private Integer properOfficeID;
+	private Long properOfficeID;
 	
 	@Column(name = "isActive")
 	private Integer isActive;

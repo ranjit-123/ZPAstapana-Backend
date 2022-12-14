@@ -11,6 +11,7 @@ import com.zpasthapana.entity.NewTransfer;
 import com.zpasthapana.pojo.NewTransferRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.repo.NewTransferRepo;
+import com.zpasthapana.service.EmployeeCurrentStatusService;
 import com.zpasthapana.service.NewTransferService;
 import com.zpasthapana.util.ZPUtility;
 
@@ -23,11 +24,15 @@ public class NewTransferServiceImpl implements NewTransferService {
 	@Autowired
 	ModelMapper modelMapper;
 	
+	@Autowired
+	EmployeeCurrentStatusService employeeCurrentStatusService;
+	
 	@Override
 	public void addNewTransfer(NewTransferRequest request) {
 		NewTransfer entity = modelMapper.map(request, NewTransfer.class);
 		ZPUtility.uploadFiles(request, entity, request.getEmployeeId());
 		newTransferRepo.save(entity);
+		this.employeeCurrentStatusService.updateCurrentWorkLocation(entity, request);
 	}
 
 	@Override

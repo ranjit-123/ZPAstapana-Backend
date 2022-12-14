@@ -29,6 +29,7 @@ import com.zpasthapana.entity.EmployeeWorklocation;
 import com.zpasthapana.pojo.EmployeeRequest;
 import com.zpasthapana.pojo.EmployeeResponse;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.ConcessionDetailsRepo;
 import com.zpasthapana.repo.EmployeeCastDetailsRepo;
 import com.zpasthapana.repo.EmployeeDesiganationRepo;
@@ -239,8 +240,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
-	public ResponsePageDto<Employee> getAllAssetLiability(Pageable paging) {
-		return ZPUtility.getPage(paging, employeeRepo.findAll(paging));
+	public ResponsePageDto<Employee> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, employeeRepo.findAllByPermission(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(),paging));
 	}
 
 	@Override
@@ -249,13 +251,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
-	public ResponsePageDto<Employee> getAllRetieredEmployees(Pageable paging) {
-		return ZPUtility.getPage(paging, employeeRepo.findAllRetieredEmployee(new Date(), paging));
+	public ResponsePageDto<Employee> getAllRetieredEmployees(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, employeeRepo.findAllRetieredEmployee(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), new Date(), paging));
 	}
 
 	@Override
-	public ResponsePageDto<Employee> getAllWorkingEmployees(Pageable paging) {
-		return ZPUtility.getPage(paging, employeeRepo.findAllWorkingEmployee(new Date(),paging));
+	public ResponsePageDto<Employee> getAllWorkingEmployees(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, employeeRepo.findAllWorkingEmployee(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), new Date(),paging));
 	}
 
 }

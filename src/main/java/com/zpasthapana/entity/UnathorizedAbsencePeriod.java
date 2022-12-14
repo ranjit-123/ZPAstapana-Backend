@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "unathorized_absence_period")
-public class UnathorizedAbsencePeriod {
+public class UnathorizedAbsencePeriod extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

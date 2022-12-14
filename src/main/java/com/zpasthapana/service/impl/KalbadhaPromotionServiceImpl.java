@@ -7,14 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.zpasthapana.entity.Employee;
-import com.zpasthapana.entity.EmployeeDesiganation;
 import com.zpasthapana.entity.KalbadhaPromotion;
 import com.zpasthapana.pojo.KalbadhaPromotionRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
-import com.zpasthapana.repo.EmployeeDesiganationRepo;
-import com.zpasthapana.repo.EmployeeRepo;
 import com.zpasthapana.repo.KalbadhaPromotionRepo;
+import com.zpasthapana.service.EmployeeCurrentStatusService;
 import com.zpasthapana.service.KalbadhaPromotionService;
 import com.zpasthapana.util.ZPUtility;
 
@@ -25,10 +22,7 @@ public class KalbadhaPromotionServiceImpl implements KalbadhaPromotionService {
 	KalbadhaPromotionRepo kalbadhaPromotionRepo;
 	
 	@Autowired
-	EmployeeDesiganationRepo employeeDesiganationRepo;
-	
-	@Autowired
-	EmployeeRepo employeeRepo;
+	EmployeeCurrentStatusService employeeCurrentStatusService;
 	
 	@Autowired
 	ModelMapper modelMapper;
@@ -38,26 +32,7 @@ public class KalbadhaPromotionServiceImpl implements KalbadhaPromotionService {
 		KalbadhaPromotion entity = modelMapper.map(request, KalbadhaPromotion.class);
 		ZPUtility.uploadFiles(request, entity, request.getEmployeeId());
 		entity = kalbadhaPromotionRepo.save(entity);
-
-		EmployeeDesiganation empDesignation = employeeDesiganationRepo
-				.findAllByEmployeeIdAndIsCurrent(request.getEmployeeId(), Boolean.TRUE);
-
-		EmployeeDesiganation addNewDesignation = new EmployeeDesiganation();
-		modelMapper.map(empDesignation, addNewDesignation);
-
-		addNewDesignation.setEmployeeDesiganationDetailsId(null);
-		addNewDesignation.setEmployeeDesiganationId(Long.valueOf(entity.getAddKalbadhaPromotionDisignation() + ""));
-		addNewDesignation.setPayCommission(entity.getAddKalbadhaPromotionPayCommission() + "");
-		addNewDesignation.setSalaryRange(entity.getAddKalbadhaPromotionGrade());
-
-		addNewDesignation = employeeDesiganationRepo.save(addNewDesignation);
-		
-		empDesignation.setIsCurrent(Boolean.FALSE);
-		employeeDesiganationRepo.save(empDesignation);
-
-		Employee em = employeeRepo.findById(request.getEmployeeId()).get();
-		em.setEmployeeDesiganationDetailsId(addNewDesignation.getEmployeeDesiganationDetailsId());
-		employeeRepo.save(em);
+		employeeCurrentStatusService.updateCurrentDesignation(entity, request);
 	}
 
 	@Override

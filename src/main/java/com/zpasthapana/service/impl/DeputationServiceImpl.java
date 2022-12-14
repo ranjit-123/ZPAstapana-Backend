@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.Deputation;
 import com.zpasthapana.pojo.DeputationRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.DeputationRepo;
 import com.zpasthapana.service.DeputationService;
 import com.zpasthapana.util.ZPUtility;
@@ -49,6 +50,13 @@ public class DeputationServiceImpl implements DeputationService{
 	@Override
 	public ResponsePageDto<Deputation> getAllDeputation(Pageable paging) {
 		return ZPUtility.getPage(paging, deputationRepo.findAll(paging));
+	}
+
+	@Override
+	public ResponsePageDto<Deputation> getAllDeputation(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, deputationRepo.findAllByPermission(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(),
+				paging));
 	}
 
 }
