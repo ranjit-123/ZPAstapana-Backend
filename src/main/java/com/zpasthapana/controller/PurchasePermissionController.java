@@ -46,7 +46,7 @@ public class PurchasePermissionController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<PurchasePermission>> getAllPurchasePermission(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<PurchasePermission> pageData = purchasePermissionsService.getAllPurchasePermission(paging);
+		ResponsePageDto<PurchasePermission> pageData = purchasePermissionsService.getAllPurchasePermission(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<PurchasePermission>>(pageData,
 				HttpStatus.OK);

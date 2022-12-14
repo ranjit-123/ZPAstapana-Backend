@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.NewPromotion;
 import com.zpasthapana.pojo.NewPromotionRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.NewPromotionRepo;
 import com.zpasthapana.service.EmployeeCurrentStatusService;
 import com.zpasthapana.service.NewPromotionService;
@@ -42,8 +43,9 @@ public class NewPromotionServiceImpl implements NewPromotionService {
 	}
 
 	@Override
-	public ResponsePageDto<NewPromotion> getAllNewPromotion(Pageable paging) {
-		return ZPUtility.getPage(paging, newPromotionRepo.findAll(paging));
+	public ResponsePageDto<NewPromotion> getAllNewPromotion(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, newPromotionRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

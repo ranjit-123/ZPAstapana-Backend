@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.ExtraOrdinaryLeaves;
 import com.zpasthapana.pojo.ExtraOrdinaryLeaveRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.ExtraOrdinaryLeavesRepo;
 import com.zpasthapana.service.ExtraOrdinaryLeavesService;
 import com.zpasthapana.util.ZPUtility;
@@ -37,8 +38,9 @@ public class ExtraOrdinaryLeavesServiceImpl implements ExtraOrdinaryLeavesServic
 	}
 
 	@Override
-	public ResponsePageDto<ExtraOrdinaryLeaves> getAllAssetLiability(Pageable paging) {
-		return ZPUtility.getPage(paging, extraOrdinaryLeavesRepo.findAll(paging));
+	public ResponsePageDto<ExtraOrdinaryLeaves> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, extraOrdinaryLeavesRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

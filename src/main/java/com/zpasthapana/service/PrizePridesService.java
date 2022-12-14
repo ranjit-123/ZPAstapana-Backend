@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.PrizePrides;
 import com.zpasthapana.pojo.PrizePridesRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface PrizePridesService {
 
@@ -14,6 +15,6 @@ public interface PrizePridesService {
 
 	List<PrizePrides> getAllPrizePride();
 
-	ResponsePageDto<PrizePrides> getAllPrizePride(Pageable paging);
+	ResponsePageDto<PrizePrides> getAllPrizePride(UIPageRequest pageRequest, Pageable paging);
 
 }

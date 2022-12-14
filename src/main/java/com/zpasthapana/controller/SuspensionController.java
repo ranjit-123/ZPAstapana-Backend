@@ -46,7 +46,7 @@ public class SuspensionController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<Suspention>> getAllSuspenssion(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<Suspention> pageData = suspensionsService.getAllSuspenssion(paging);
+		ResponsePageDto<Suspention> pageData = suspensionsService.getAllSuspenssion(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<Suspention>>(pageData,
 				HttpStatus.OK);

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.AccountInquiry;
 import com.zpasthapana.pojo.AccountInquiryRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.AccountInquiryRepo;
 import com.zpasthapana.service.AccountInquiryService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class AccountInquiryServiceImpl implements AccountInquiryService{
 	}
 
 	@Override
-	public ResponsePageDto<AccountInquiry> getAllAssetLiability(Pageable paging) {
-		return ZPUtility.getPage(paging, accountInquiryRepo.findAll(paging));
+	public ResponsePageDto<AccountInquiry> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, accountInquiryRepo.findAllByPermission(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

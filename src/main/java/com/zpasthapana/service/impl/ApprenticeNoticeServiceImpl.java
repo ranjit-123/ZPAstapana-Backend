@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.ApprenticeNotice;
 import com.zpasthapana.pojo.ApprenticeNoticeRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.ApprenticeNoticeRepo;
 import com.zpasthapana.service.ApprenticeNoticeService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class ApprenticeNoticeServiceImpl implements ApprenticeNoticeService {
 	}
 
 	@Override
-	public ResponsePageDto<ApprenticeNotice> getAllAssetLiability(Pageable paging) {
-		return ZPUtility.getPage(paging, apprenticeNoticeRepo.findAll(paging));
+	public ResponsePageDto<ApprenticeNotice> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, apprenticeNoticeRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

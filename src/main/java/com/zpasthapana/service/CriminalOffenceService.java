@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.CriminalOffence;
 import com.zpasthapana.pojo.CriminalOffenceRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface CriminalOffenceService {
 
@@ -14,6 +15,6 @@ public interface CriminalOffenceService {
 
 	List<CriminalOffence> getAllCriminalOffence();
 
-	ResponsePageDto<CriminalOffence> getAllCriminalOffence(Pageable paging);
+	ResponsePageDto<CriminalOffence> getAllCriminalOffence(UIPageRequest pageRequest, Pageable paging);
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.AdditionalService;
 import com.zpasthapana.pojo.AdditionalServiceRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.AdditionalServiceRepo;
 import com.zpasthapana.service.AdditionalServiceService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
 	}
 
 	@Override
-	public ResponsePageDto<AdditionalService> getAllAdditionalService(Pageable paging) {
-		return ZPUtility.getPage(paging, additionalServiceRepo.findAll(paging));
+	public ResponsePageDto<AdditionalService> getAllAdditionalService(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, additionalServiceRepo.findAllByPermission(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

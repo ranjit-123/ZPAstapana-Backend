@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.ServiceSegment;
 import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.ServiceSegmentRequest;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.ServiceSegmentRepo;
 import com.zpasthapana.service.ServiceSegmentService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class ServiceSegmentServiceImpl implements ServiceSegmentService {
 	}
 
 	@Override
-	public ResponsePageDto<ServiceSegment> getAllServiceSegment(Pageable paging) {
-		return ZPUtility.getPage(paging, serviceSegmentRepo.findAll(paging));
+	public ResponsePageDto<ServiceSegment> getAllServiceSegment(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, serviceSegmentRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

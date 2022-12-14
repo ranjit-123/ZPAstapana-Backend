@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.AssetLiability;
 import com.zpasthapana.pojo.AssetLiabilityRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.AssetLiabilityRepo;
 import com.zpasthapana.service.AssetLiabilityService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class AssetLiabilityServiceImpl implements AssetLiabilityService {
 	}
 
 	@Override
-	public ResponsePageDto<AssetLiability> getAllAssetLiability(Pageable paging) {
-		return ZPUtility.getPage(paging, assetLiabilityRepo.findAll(paging));
+	public ResponsePageDto<AssetLiability> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, assetLiabilityRepo.findAllByPermission(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

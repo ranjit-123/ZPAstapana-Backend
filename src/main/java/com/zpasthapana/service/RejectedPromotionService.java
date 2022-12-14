@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.RejectedPromotion;
 import com.zpasthapana.pojo.RejectedPromotionRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface RejectedPromotionService {
 
@@ -14,6 +15,6 @@ public interface RejectedPromotionService {
 
 	List<RejectedPromotion> getAllRejectedPromotion();
 
-	ResponsePageDto<RejectedPromotion> getAllRejectedPromotion(Pageable paging);
+	ResponsePageDto<RejectedPromotion> getAllRejectedPromotion(UIPageRequest pageRequest, Pageable paging);
 
 }

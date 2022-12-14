@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.Crime;
 import com.zpasthapana.pojo.CrimeRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.CrimeRepo;
 import com.zpasthapana.service.CrimeService;
 import com.zpasthapana.util.ZPUtility;
@@ -47,8 +48,9 @@ public class CrimeServiceImpl implements CrimeService {
 	}
 
 	@Override
-	public ResponsePageDto<Crime> getAllCrime(Pageable paging) {
-		return ZPUtility.getPage(paging, crimeRepo.findAll(paging));
+	public ResponsePageDto<Crime> getAllCrime(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, crimeRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

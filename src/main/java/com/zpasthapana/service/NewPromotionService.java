@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.NewPromotion;
 import com.zpasthapana.pojo.NewPromotionRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface NewPromotionService {
 
@@ -14,6 +15,6 @@ public interface NewPromotionService {
 
 	List<NewPromotion> getAllNewPromotion();
 
-	ResponsePageDto<NewPromotion> getAllNewPromotion(Pageable paging);
+	ResponsePageDto<NewPromotion> getAllNewPromotion(UIPageRequest pageRequest, Pageable paging);
 
 }

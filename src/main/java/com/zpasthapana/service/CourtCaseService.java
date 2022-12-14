@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.CourtCase;
 import com.zpasthapana.pojo.CourtCaseRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface CourtCaseService {
 
@@ -14,6 +15,6 @@ public interface CourtCaseService {
 
 	List<CourtCase> getAllAssetLiability();
 
-	ResponsePageDto<CourtCase> getAllAssetLiability(Pageable paging);
+	ResponsePageDto<CourtCase> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging);
 
 }

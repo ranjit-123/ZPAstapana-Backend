@@ -46,7 +46,7 @@ public class NewPromotionController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<NewPromotion>> getAllNewPromotion(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<NewPromotion> pageData = newPromotionService.getAllNewPromotion(paging);
+		ResponsePageDto<NewPromotion> pageData = newPromotionService.getAllNewPromotion(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<NewPromotion>>(pageData,
 				HttpStatus.OK);

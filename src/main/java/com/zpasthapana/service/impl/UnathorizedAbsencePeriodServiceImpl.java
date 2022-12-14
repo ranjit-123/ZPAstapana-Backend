@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.zpasthapana.entity.UnathorizedAbsencePeriod;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.pojo.UnathorizedAbsencePeriodRequest;
 import com.zpasthapana.repo.UnathorizedAbsencePeriodRepo;
 import com.zpasthapana.service.UnathorizedAbsencePeriodService;
@@ -33,8 +34,9 @@ public class UnathorizedAbsencePeriodServiceImpl implements UnathorizedAbsencePe
 	}
 
 	@Override
-	public ResponsePageDto<UnathorizedAbsencePeriod> getUnathorizedAbsencePeriod(Pageable paging) {
-		return ZPUtility.getPage(paging, unathorizedAbsencePeriodRepo.findAll(paging));
+	public ResponsePageDto<UnathorizedAbsencePeriod> getUnathorizedAbsencePeriod(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, unathorizedAbsencePeriodRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

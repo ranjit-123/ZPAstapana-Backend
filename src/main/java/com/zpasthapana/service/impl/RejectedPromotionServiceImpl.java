@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.RejectedPromotion;
 import com.zpasthapana.pojo.RejectedPromotionRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.RejectedPromotionRepo;
 import com.zpasthapana.service.RejectedPromotionService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class RejectedPromotionServiceImpl implements RejectedPromotionService {
 	}
 
 	@Override
-	public ResponsePageDto<RejectedPromotion> getAllRejectedPromotion(Pageable paging) {
-		return ZPUtility.getPage(paging, rejectedPromotionRepo.findAll(paging));
+	public ResponsePageDto<RejectedPromotion> getAllRejectedPromotion(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, rejectedPromotionRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

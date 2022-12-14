@@ -46,7 +46,7 @@ public class CourtCaseController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<CourtCase>> getAllCourtCase(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<CourtCase> pageData = courtCaseService.getAllAssetLiability(paging);
+		ResponsePageDto<CourtCase> pageData = courtCaseService.getAllAssetLiability(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<CourtCase>>(pageData,
 				HttpStatus.OK);

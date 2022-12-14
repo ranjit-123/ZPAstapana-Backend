@@ -46,7 +46,7 @@ public class ExtraOrdinaryLeaveController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<ExtraOrdinaryLeaves>> getAllCourtCase(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<ExtraOrdinaryLeaves> pageData = extraOrdinaryLeavesService.getAllAssetLiability(paging);
+		ResponsePageDto<ExtraOrdinaryLeaves> pageData = extraOrdinaryLeavesService.getAllAssetLiability(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<ExtraOrdinaryLeaves>>(pageData,
 				HttpStatus.OK);

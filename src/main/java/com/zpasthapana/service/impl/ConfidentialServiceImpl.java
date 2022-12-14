@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.Confidential;
 import com.zpasthapana.pojo.ConfidentialRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.ConfidentialRepo;
 import com.zpasthapana.service.ConfidentialService;
 import com.zpasthapana.util.ZPUtility;
@@ -45,8 +46,9 @@ public class ConfidentialServiceImpl implements ConfidentialService{
 	}
 
 	@Override
-	public ResponsePageDto<Confidential> getAllConfidential(Pageable paging) {
-		return ZPUtility.getPage(paging, confidentialRepo.findAll(paging));
+	public ResponsePageDto<Confidential> getAllConfidential(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, confidentialRepo.findAllByPermission(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

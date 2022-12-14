@@ -7,11 +7,12 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.Confidential;
 import com.zpasthapana.pojo.ConfidentialRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface ConfidentialService {
 	public void addConfidential(ConfidentialRequest request);
 	public List<Confidential> getAllConfidential();
 	public List<Confidential> getEmployeeConfidential(Long employeeId);
 	public void updateConfidential(Long employeeId, ConfidentialRequest request);
-	public ResponsePageDto<Confidential> getAllConfidential(Pageable paging);
+	public ResponsePageDto<Confidential> getAllConfidential(UIPageRequest pageRequest, Pageable paging);
 }

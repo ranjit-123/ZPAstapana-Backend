@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.ServiceSegment;
 import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.ServiceSegmentRequest;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface ServiceSegmentService {
 
@@ -14,6 +15,6 @@ public interface ServiceSegmentService {
 
 	List<ServiceSegment> getAllServiceSegment();
 
-	ResponsePageDto<ServiceSegment> getAllServiceSegment(Pageable paging);
+	ResponsePageDto<ServiceSegment> getAllServiceSegment(UIPageRequest pageRequest, Pageable paging);
 
 }

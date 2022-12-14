@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.ExtraOrdinaryLeaves;
 import com.zpasthapana.pojo.ExtraOrdinaryLeaveRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface ExtraOrdinaryLeavesService {
 
@@ -14,7 +15,7 @@ public interface ExtraOrdinaryLeavesService {
 
 	List<ExtraOrdinaryLeaves> getAllAssetLiability();
 
-	ResponsePageDto<ExtraOrdinaryLeaves> getAllAssetLiability(Pageable paging);
+	ResponsePageDto<ExtraOrdinaryLeaves> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging);
 
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.CourtCase;
 import com.zpasthapana.pojo.CourtCaseRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.CourtCaseRepo;
 import com.zpasthapana.service.CourtCaseService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class CourtCaseServiceImpl implements CourtCaseService {
 	}
 
 	@Override
-	public ResponsePageDto<CourtCase> getAllAssetLiability(Pageable paging) {
-		return ZPUtility.getPage(paging, courtCaseRepo.findAll(paging));
+	public ResponsePageDto<CourtCase> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, courtCaseRepo.findAllByPermision(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

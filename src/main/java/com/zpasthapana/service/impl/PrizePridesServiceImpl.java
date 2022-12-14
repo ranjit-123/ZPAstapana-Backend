@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.PrizePrides;
 import com.zpasthapana.pojo.PrizePridesRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.PrizePridesRepo;
 import com.zpasthapana.service.PrizePridesService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class PrizePridesServiceImpl implements PrizePridesService{
 	}
 
 	@Override
-	public ResponsePageDto<PrizePrides> getAllPrizePride(Pageable paging) {
-		return ZPUtility.getPage(paging, prizePridesRepo.findAll(paging));
+	public ResponsePageDto<PrizePrides> getAllPrizePride(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, prizePridesRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

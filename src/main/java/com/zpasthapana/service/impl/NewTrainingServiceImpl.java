@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.NewTraining;
 import com.zpasthapana.pojo.NewTrainingRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.NewTrainingRepo;
 import com.zpasthapana.service.NewTrainingService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class NewTrainingServiceImpl implements NewTrainingService {
 	}
 
 	@Override
-	public ResponsePageDto<NewTraining> getAllNewTraining(Pageable paging) {
-		return ZPUtility.getPage(paging, newTrainingRepo.findAll(paging));
+	public ResponsePageDto<NewTraining> getAllNewTraining(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, newTrainingRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

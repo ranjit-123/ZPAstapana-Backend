@@ -46,7 +46,7 @@ public class AssetLiabilityController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<AssetLiability>> getAllAssetLiability(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<AssetLiability> pageData = assetLiabilityService.getAllAssetLiability(paging);
+		ResponsePageDto<AssetLiability> pageData = assetLiabilityService.getAllAssetLiability(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<AssetLiability>>(pageData,
 				HttpStatus.OK);

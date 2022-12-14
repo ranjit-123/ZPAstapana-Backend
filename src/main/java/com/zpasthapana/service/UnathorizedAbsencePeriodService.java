@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.zpasthapana.entity.UnathorizedAbsencePeriod;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.pojo.UnathorizedAbsencePeriodRequest;
 
 public interface UnathorizedAbsencePeriodService {
@@ -14,6 +15,6 @@ public interface UnathorizedAbsencePeriodService {
 
 	List<UnathorizedAbsencePeriod> getUnathorizedAbsencePeriod();
 
-	ResponsePageDto<UnathorizedAbsencePeriod> getUnathorizedAbsencePeriod(Pageable paging);
+	ResponsePageDto<UnathorizedAbsencePeriod> getUnathorizedAbsencePeriod(UIPageRequest pageRequest, Pageable paging);
 
 }

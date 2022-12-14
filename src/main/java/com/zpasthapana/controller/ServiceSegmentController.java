@@ -46,7 +46,7 @@ public class ServiceSegmentController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<ServiceSegment>> getAllServiceSegment(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<ServiceSegment> pageData = serviceSegmentService.getAllServiceSegment(paging);
+		ResponsePageDto<ServiceSegment> pageData = serviceSegmentService.getAllServiceSegment(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<ServiceSegment>>(pageData,
 				HttpStatus.OK);

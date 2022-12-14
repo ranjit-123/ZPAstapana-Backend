@@ -46,7 +46,7 @@ public class AccountInquiryController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<AccountInquiry>> getAllAccountInquiry(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<AccountInquiry> pageData = accountInquiryService.getAllAssetLiability(paging);
+		ResponsePageDto<AccountInquiry> pageData = accountInquiryService.getAllAssetLiability(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<AccountInquiry>>(pageData,
 				HttpStatus.OK);

@@ -46,7 +46,7 @@ public class RejectedPromotionController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<RejectedPromotion>> getAllRejectedPromotion(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<RejectedPromotion> pageData = rejectedPromotionService.getAllRejectedPromotion(paging);
+		ResponsePageDto<RejectedPromotion> pageData = rejectedPromotionService.getAllRejectedPromotion(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<RejectedPromotion>>(pageData,
 				HttpStatus.OK);

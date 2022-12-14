@@ -45,7 +45,7 @@ public class AdditionalServiceController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<AdditionalService>> getAllAdditionalService(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<AdditionalService> pageData = additionalServiceService.getAllAdditionalService(paging);
+		ResponsePageDto<AdditionalService> pageData = additionalServiceService.getAllAdditionalService(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<AdditionalService>>(pageData,
 				HttpStatus.OK);

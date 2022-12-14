@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.AccountInquiry;
 import com.zpasthapana.pojo.AccountInquiryRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface AccountInquiryService {
 
@@ -14,7 +15,7 @@ public interface AccountInquiryService {
 
 	List<AccountInquiry> getAllAssetLiability();
 
-	ResponsePageDto<AccountInquiry> getAllAssetLiability(Pageable paging);
+	ResponsePageDto<AccountInquiry> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging);
 
 
 }

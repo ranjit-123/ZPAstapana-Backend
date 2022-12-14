@@ -46,7 +46,7 @@ public class ApprenticeNoticeController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<ApprenticeNotice>> getAllApprenticeNotice(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<ApprenticeNotice> pageData = apprenticeNoticeService.getAllAssetLiability(paging);
+		ResponsePageDto<ApprenticeNotice> pageData = apprenticeNoticeService.getAllAssetLiability(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<ApprenticeNotice>>(pageData,
 				HttpStatus.OK);

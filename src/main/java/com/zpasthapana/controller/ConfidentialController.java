@@ -61,7 +61,7 @@ public class ConfidentialController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<Confidential>> getAllConfidential(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<Confidential> pageData = confidentialService.getAllConfidential(paging);
+		ResponsePageDto<Confidential> pageData = confidentialService.getAllConfidential(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<Confidential>>(pageData,
 				HttpStatus.OK);

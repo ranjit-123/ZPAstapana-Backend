@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.Suspention;
 import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.SuspenssionRequest;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.SuspentionRepo;
 import com.zpasthapana.service.SuspensionsService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class SuspensionsServiceImpl implements SuspensionsService {
 	}
 
 	@Override
-	public ResponsePageDto<Suspention> getAllSuspenssion(Pageable paging) {
-		return ZPUtility.getPage(paging, suspentionRepo.findAll(paging));
+	public ResponsePageDto<Suspention> getAllSuspenssion(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, suspentionRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

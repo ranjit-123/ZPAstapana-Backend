@@ -47,7 +47,7 @@ public class PrizePrideController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<PrizePrides>> getAllPrizePride(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<PrizePrides> pageData = prizePridesService.getAllPrizePride(paging);
+		ResponsePageDto<PrizePrides> pageData = prizePridesService.getAllPrizePride(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<PrizePrides>>(pageData,
 				HttpStatus.OK);

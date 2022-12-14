@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.Suspention;
 import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.SuspenssionRequest;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface SuspensionsService {
 
@@ -14,6 +15,6 @@ public interface SuspensionsService {
 
 	List<Suspention> getAllSuspenssion();
 
-	ResponsePageDto<Suspention> getAllSuspenssion(Pageable paging);
+	ResponsePageDto<Suspention> getAllSuspenssion(UIPageRequest pageRequest, Pageable paging);
 
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.AdditionalService;
 import com.zpasthapana.pojo.AdditionalServiceRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface AdditionalServiceService {
 
@@ -14,6 +15,6 @@ public interface AdditionalServiceService {
 
 	List<AdditionalService> getAllAdditionalService();
 
-	ResponsePageDto<AdditionalService> getAllAdditionalService(Pageable paging);
+	ResponsePageDto<AdditionalService> getAllAdditionalService(UIPageRequest pageRequest, Pageable paging);
 
 }

@@ -61,7 +61,7 @@ public class CrimeController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<Crime>> getAllCourtCase(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<Crime> pageData = crimeService.getAllCrime(paging);
+		ResponsePageDto<Crime> pageData = crimeService.getAllCrime(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<Crime>>(pageData,
 				HttpStatus.OK);

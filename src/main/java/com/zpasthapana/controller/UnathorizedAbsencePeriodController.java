@@ -46,7 +46,7 @@ public class UnathorizedAbsencePeriodController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<UnathorizedAbsencePeriod>> getUnathorizedAbsencePeriod(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<UnathorizedAbsencePeriod> pageData = unathorizedAbsencePeriodService.getUnathorizedAbsencePeriod(paging);
+		ResponsePageDto<UnathorizedAbsencePeriod> pageData = unathorizedAbsencePeriodService.getUnathorizedAbsencePeriod(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<UnathorizedAbsencePeriod>>(pageData,
 				HttpStatus.OK);

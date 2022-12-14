@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.NewTraining;
 import com.zpasthapana.pojo.NewTrainingRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface NewTrainingService {
 
@@ -14,6 +15,6 @@ public interface NewTrainingService {
 
 	List<NewTraining> getAllNewTraining();
 
-	ResponsePageDto<NewTraining> getAllNewTraining(Pageable paging);
+	ResponsePageDto<NewTraining> getAllNewTraining(UIPageRequest pageRequest, Pageable paging);
 
 }

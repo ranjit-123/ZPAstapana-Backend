@@ -46,7 +46,7 @@ public class NewTrainingController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<NewTraining>> getAllNewTraining(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<NewTraining> pageData = newTrainingService.getAllNewTraining(paging);
+		ResponsePageDto<NewTraining> pageData = newTrainingService.getAllNewTraining(pageRequest, paging);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<NewTraining>>(pageData,
 				HttpStatus.OK);

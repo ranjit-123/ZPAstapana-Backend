@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.PurchasePermission;
 import com.zpasthapana.pojo.PurchasePermissionRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.PurchasePermissionRepo;
 import com.zpasthapana.service.PurchasePermissionsService;
 import com.zpasthapana.util.ZPUtility;
@@ -36,8 +37,9 @@ public class PurchasePermissionsServiceImpl implements PurchasePermissionsServic
 	}
 
 	@Override
-	public ResponsePageDto<PurchasePermission> getAllPurchasePermission(Pageable paging) {
-		return ZPUtility.getPage(paging, purchasePermissionRepo.findAll(paging));
+	public ResponsePageDto<PurchasePermission> getAllPurchasePermission(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, purchasePermissionRepo.findAllByPermissions(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 }

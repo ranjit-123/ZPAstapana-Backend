@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.PurchasePermission;
 import com.zpasthapana.pojo.PurchasePermissionRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface PurchasePermissionsService {
 
@@ -14,6 +15,6 @@ public interface PurchasePermissionsService {
 
 	List<PurchasePermission> getAllPurchasePermission();
 
-	ResponsePageDto<PurchasePermission> getAllPurchasePermission(Pageable paging);
+	ResponsePageDto<PurchasePermission> getAllPurchasePermission(UIPageRequest pageRequest, Pageable paging);
 
 }

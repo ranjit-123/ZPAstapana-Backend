@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.AssetLiability;
 import com.zpasthapana.pojo.AssetLiabilityRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface AssetLiabilityService {
 
@@ -14,6 +15,6 @@ public interface AssetLiabilityService {
 
 	List<AssetLiability> getAllAssetLiability();
 
-	ResponsePageDto<AssetLiability> getAllAssetLiability(Pageable paging);
+	ResponsePageDto<AssetLiability> getAllAssetLiability(UIPageRequest pageRequest, Pageable paging);
 
 }
