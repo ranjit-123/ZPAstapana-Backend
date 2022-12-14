@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.KalbadhaPromotion;
 import com.zpasthapana.pojo.KalbadhaPromotionRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.KalbadhaPromotionRepo;
 import com.zpasthapana.service.EmployeeCurrentStatusService;
 import com.zpasthapana.service.KalbadhaPromotionService;
@@ -36,8 +37,9 @@ public class KalbadhaPromotionServiceImpl implements KalbadhaPromotionService {
 	}
 
 	@Override
-	public ResponsePageDto<KalbadhaPromotion> getAllPurchasePermission(Pageable paging) {
-		return ZPUtility.getPage(paging, kalbadhaPromotionRepo.findAll(paging));
+	public ResponsePageDto<KalbadhaPromotion> getAllPurchasePermission(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, kalbadhaPromotionRepo.findAllByPermission(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), paging));
 	}
 
 	@Override

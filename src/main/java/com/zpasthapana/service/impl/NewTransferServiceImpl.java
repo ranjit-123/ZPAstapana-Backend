@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.NewTransfer;
 import com.zpasthapana.pojo.NewTransferRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.NewTransferRepo;
 import com.zpasthapana.service.EmployeeCurrentStatusService;
 import com.zpasthapana.service.NewTransferService;
@@ -41,13 +42,15 @@ public class NewTransferServiceImpl implements NewTransferService {
 	}
 
 	@Override
-	public ResponsePageDto<NewTransfer> getAllNewTransfer(Pageable paging) {
-		return ZPUtility.getPage(paging, newTransferRepo.findAllByInterDistrictTransferFlag(1, paging));
+	public ResponsePageDto<NewTransfer> getAllNewTransfer(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, newTransferRepo.findAllByInterDistrictTransferFlag(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), 1, paging));
 	}
 
 	@Override
-	public ResponsePageDto<NewTransfer> getAllDistrictNewTransfer(Pageable paging) {
-		return ZPUtility.getPage(paging, newTransferRepo.findAllByInterDistrictTransferFlag(0, paging));
+	public ResponsePageDto<NewTransfer> getAllDistrictNewTransfer(UIPageRequest pageRequest, Pageable paging) {
+		return ZPUtility.getPage(paging, newTransferRepo.findAllByInterDistrictTransferFlag(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), 0, paging));
 	}
 	
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.zpasthapana.entity.NewTransfer;
 import com.zpasthapana.pojo.NewTransferRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 
 public interface NewTransferService {
 
@@ -14,8 +15,8 @@ public interface NewTransferService {
 
 	List<NewTransfer> getAllNewTransfer();
 
-	ResponsePageDto<NewTransfer> getAllNewTransfer(Pageable paging);
+	ResponsePageDto<NewTransfer> getAllNewTransfer(UIPageRequest pageRequest, Pageable paging);
 
-	ResponsePageDto<NewTransfer> getAllDistrictNewTransfer(Pageable paging);
+	ResponsePageDto<NewTransfer> getAllDistrictNewTransfer(UIPageRequest pageRequest, Pageable paging);
 
 }
