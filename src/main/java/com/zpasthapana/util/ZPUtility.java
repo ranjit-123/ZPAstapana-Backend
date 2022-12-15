@@ -22,7 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.zpasthapana.entity.BaseEntity;
 import com.zpasthapana.entity.Employee;
 import com.zpasthapana.entity.EmployeeCastDetails;
+import com.zpasthapana.entity.EmployeeDesiganation;
 import com.zpasthapana.entity.EmployeeWorklocation;
+import com.zpasthapana.entity.KalbadhaPromotion;
+import com.zpasthapana.entity.NewPromotion;
 import com.zpasthapana.entity.User;
 import com.zpasthapana.pojo.BaseRequest;
 import com.zpasthapana.pojo.ResponsePageDto;
@@ -32,11 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ZPUtility {
-	
+
 //	private static String homeDirectory = "D:\\files\\";
-	
+
 	private static String homeDirectory = "/home/";
-	
+
 	public static void uploadFile(MultipartFile file, Long destination) {
 		try {
 			String directory = homeDirectory + destination + File.pathSeparator;
@@ -48,7 +51,7 @@ public class ZPUtility {
 			log.error("Error ", e);
 		}
 	}
-	
+
 	public static void uploadFiles(BaseRequest request, BaseEntity entity, Long employeeId) {
 		List<Field> fields = List.of(request.getClass().getDeclaredFields()).stream()
 				.filter(f -> f.getType() == MultipartFile.class).collect(Collectors.toList());
@@ -58,7 +61,7 @@ public class ZPUtility {
 			if (ObjectUtils.isNotEmpty(fileData)) {
 				MultipartFile file = (MultipartFile) fileData;
 				uploadFile(file, employeeId);
-				if(ObjectUtils.isNotEmpty(entity)) {
+				if (ObjectUtils.isNotEmpty(entity)) {
 					Field setField = ReflectionUtils.findField(entity.getClass(), field.getName());
 					setField.setAccessible(true);
 					ReflectionUtils.setField(setField, entity, file.getOriginalFilename());
@@ -83,25 +86,26 @@ public class ZPUtility {
 			}
 		});
 	}
-	 
+
 	public static Sort getSort(List<SortField> sortFields) {
-		if(ObjectUtils.isNotEmpty(sortFields)) {
+		if (ObjectUtils.isNotEmpty(sortFields)) {
 			List<Order> orders = new ArrayList<Order>();
-			sortFields.forEach(sortField->{
-				Order StartTimeOrder = new Order(Sort.Direction.fromString(sortField.getOrder()), sortField.getFieldName());
-		        orders.add(StartTimeOrder);
+			sortFields.forEach(sortField -> {
+				Order StartTimeOrder = new Order(Sort.Direction.fromString(sortField.getOrder()),
+						sortField.getFieldName());
+				orders.add(StartTimeOrder);
 			});
 			return Sort.by(orders);
 		} else {
 			return Sort.unsorted();
 		}
 	}
-	
+
 	public static <T> ResponsePageDto<T> getPage(Pageable paging, Page<T> page) {
-		ResponsePageDto<T> pageData = new ResponsePageDto<T>(page.getContent(), 0,
-				page.getTotalElements(), page.getTotalElements());
-		
-		pageData.getData().forEach(e->{
+		ResponsePageDto<T> pageData = new ResponsePageDto<T>(page.getContent(), 0, page.getTotalElements(),
+				page.getTotalElements());
+
+		pageData.getData().forEach(e -> {
 			try {
 				try {
 					Field field = ReflectionUtils.findField(e.getClass(), "employee");
@@ -111,32 +115,61 @@ public class ZPUtility {
 						if (ObjectUtils.isNotEmpty(em)) {
 							setField(e, em, "employeeFullName");
 						}
-						
+
 						EmployeeWorklocation employeeWork = em.getEmployeeWorkLocation();
 						if (ObjectUtils.isNotEmpty(employeeWork)) {
 							setWorkField(e, employeeWork);
 						}
-						
+
 						EmployeeCastDetails ecastDetails = em.getEmployeeCastDetails();
 						if (ObjectUtils.isNotEmpty(ecastDetails)) {
 							setCastField(e, ecastDetails);
 						}
-					} else if(e instanceof Employee) {
+						if (e instanceof NewPromotion) {
+							NewPromotion promotion = (NewPromotion) e;
+							Field fieldSet = ReflectionUtils.findField(e.getClass(), "designationName");
+							if (ObjectUtils.isNotEmpty(fieldSet)) {
+								fieldSet.setAccessible(true);
+								ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("designation_",
+										promotion.getAddNewPromotionDisignation()));
+							}
+						} else if (e instanceof KalbadhaPromotion) {
+							KalbadhaPromotion kalbadhPromotion = (KalbadhaPromotion) e;
+							Field fieldSet = ReflectionUtils.findField(e.getClass(), "designationName");
+							if (ObjectUtils.isNotEmpty(fieldSet)) {
+								fieldSet.setAccessible(true);
+								ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("designation_",
+										kalbadhPromotion.getAddKalbadhaPromotionDisignation()));
+							}
+						} else {
+							EmployeeDesiganation empDesiganation = em.getEmployeeDesiganation();
+							if (ObjectUtils.isNotEmpty(empDesiganation)) {
+								setDesiganationField(e, empDesiganation);
+							}
+						}
+
+					} else if (e instanceof Employee) {
 						Employee em = (Employee) e;
 						if (ObjectUtils.isNotEmpty(em)) {
 							setField(e, em, "employeeFullName");
 						}
-						
+
 						EmployeeWorklocation employeeWork = em.getEmployeeWorkLocation();
 						if (ObjectUtils.isNotEmpty(employeeWork)) {
 							setWorkField(e, employeeWork);
 						}
-						
+
 						EmployeeCastDetails ecastDetails = em.getEmployeeCastDetails();
 						if (ObjectUtils.isNotEmpty(ecastDetails)) {
 							setCastField(e, ecastDetails);
 						}
-					} else if(e instanceof User) {
+
+						EmployeeDesiganation empDesiganation = em.getEmployeeDesiganation();
+						if (ObjectUtils.isNotEmpty(empDesiganation)) {
+							setDesiganationField(e, empDesiganation);
+						}
+
+					} else if (e instanceof User) {
 						User u = (User) e;
 						u.setPassword("");
 					}
@@ -147,46 +180,52 @@ public class ZPUtility {
 				log.error("Error", ex);
 			}
 		});
-		
+
 		return pageData;
+	}
+
+	private static <T> void setDesiganationField(T e, EmployeeDesiganation empDesiganation) {
+		Field fieldSet = ReflectionUtils.findField(e.getClass(), "designationName");
+		if (ObjectUtils.isNotEmpty(empDesiganation)) {
+			fieldSet.setAccessible(true);
+			ReflectionUtils.setField(fieldSet, e,
+					MasterDataUtil.getKeyDate("designation_", empDesiganation.getEmployeeDesiganationId()));
+		}
 	}
 
 	private static <T> void setCastField(T e, EmployeeCastDetails ecastDetails) {
 		Field fieldSet = ReflectionUtils.findField(e.getClass(), "castCategoryName");
-		if(ObjectUtils.isNotEmpty(fieldSet)) {
+		if (ObjectUtils.isNotEmpty(fieldSet)) {
 			fieldSet.setAccessible(true);
-			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("castecategory_", ecastDetails.getCastecategory()));
+			ReflectionUtils.setField(fieldSet, e,
+					MasterDataUtil.getKeyDate("castecategory_", ecastDetails.getCastecategory()));
 		}
 	}
 
 	private static <T> void setField(T e, Employee em, String fieldName) {
 		Field fieldSet = ReflectionUtils.findField(e.getClass(), fieldName);
-		if(ObjectUtils.isNotEmpty(fieldSet)) {
+		if (ObjectUtils.isNotEmpty(fieldSet)) {
 			fieldSet.setAccessible(true);
-			if(StringUtils.equalsIgnoreCase(fieldName, fieldName)) {
-				ReflectionUtils.setField(fieldSet, e, em.getFirstName() + " " + em.getMiddleName() + " " + em.getLastName());
+			if (StringUtils.equalsIgnoreCase(fieldName, fieldName)) {
+				ReflectionUtils.setField(fieldSet, e,
+						em.getFirstName() + " " + em.getMiddleName() + " " + em.getLastName());
 			}
 		}
 	}
-	
+
 	private static <T> void setWorkField(T e, EmployeeWorklocation em) {
 		Field fieldSet = ReflectionUtils.findField(e.getClass(), "talukaName");
-		if(ObjectUtils.isNotEmpty(fieldSet)) {
+		if (ObjectUtils.isNotEmpty(fieldSet)) {
 			fieldSet.setAccessible(true);
 			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("taluka_", em.getTaluka()));
 		}
 		fieldSet = ReflectionUtils.findField(e.getClass(), "subDivisionName");
-		if(ObjectUtils.isNotEmpty(fieldSet)) {
+		if (ObjectUtils.isNotEmpty(fieldSet)) {
 			fieldSet.setAccessible(true);
 			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("subdivision_", em.getSubDivision()));
 		}
-		fieldSet = ReflectionUtils.findField(e.getClass(), "designationName");
-		if(ObjectUtils.isNotEmpty(fieldSet)) {
-			fieldSet.setAccessible(true);
-			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("designation_", em.getDesignationId()));
-		}
 		fieldSet = ReflectionUtils.findField(e.getClass(), "subDepartmentName");
-		if(ObjectUtils.isNotEmpty(fieldSet)) {
+		if (ObjectUtils.isNotEmpty(fieldSet)) {
 			fieldSet.setAccessible(true);
 			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("subdepartment_", em.getSubDepartment()));
 		}
