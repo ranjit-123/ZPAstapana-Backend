@@ -1,7 +1,5 @@
 package com.zpasthapana.pojo;
 
-import java.util.Date;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -21,25 +19,25 @@ public class NewPromotionRequest extends BaseRequest{
 	private MultipartFile addNewPromotionPDF;
 	private String addNewPromotionDisignation;
 	private String addNewPromotionPayCommission;
-	private Date addNewPromotionLastDateOfService;
+	private String addNewPromotionLastDateOfService;
 	private Integer addNewPromotionTravelPeriodFlag;
-	private Date dateOfTravelPeriodStart;
+	private String dateOfTravelPeriodStart;
 	private String addNewPromotionOrderDate;
 	private String addNewPromotionOrderNumber;
-	private Date addNewPromotionDateOfHumanitySeniority;
-	private Date dateOfPromotionAppointment;
-	private Date holidayPerioddateOfTravelPeriodEnd;
-	private Date holidayPerioddateOfTravelPeriodStart;
+	private String addNewPromotionDateOfHumanitySeniority;
+	private String dateOfPromotionAppointment;
+	private String holidayPerioddateOfTravelPeriodEnd;
+	private String holidayPerioddateOfTravelPeriodStart;
 	private Integer holidayPeriodFlag;
-	private Date dateOfTravelPeriodEnd;
+	private String dateOfTravelPeriodEnd;
 	private Long talukaID;
 	private Long subDivisionID;
 	private Long subDepartmentId;
 	private Integer additionalQualificationApplicableFlag;
 	private Integer promotionsQualificationFlag;
 	private String promotionsQualificationExamName;
-	private Date passDate;
+	private String passDate;
 	private MultipartFile promotionsQualificationPDF;
 	private Long addNewPromotionCastecategory;
-	private Integer certificateNumber;
+	private String certificateNumber;
 }

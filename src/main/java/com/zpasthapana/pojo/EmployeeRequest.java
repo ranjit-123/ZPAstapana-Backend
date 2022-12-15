@@ -57,7 +57,7 @@ public class EmployeeRequest extends BaseRequest{
 	private String casteCategoryChangedAfterAppointmentDate;
 	private MultipartFile casteValidityChangedAfterAppointmentPDF;
 	
-	private String employeeselectioncategory;
+	private Integer employeeselectioncategory;
 	private String payCommission;
 	private Integer appointmentQualificationFlag;
 	private Long qualification;

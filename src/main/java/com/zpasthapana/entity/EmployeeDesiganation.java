@@ -35,7 +35,7 @@ public class EmployeeDesiganation extends BaseEntity {
 	
 	private Long employeeDesiganationId;
 	private Long employeeId;
-	private String employeeselectioncategory;
+	private Integer employeeselectioncategory;
 	private String payCommission;
 	private Integer appointmentQualificationFlag;
 	private Long qualification;

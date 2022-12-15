@@ -69,6 +69,7 @@ public class EmployeeCurrentStatusServiceImpl implements EmployeeCurrentStatusSe
 		addNewDesignation.setEmployeeDesiganationDetailsId(null);
 		addNewDesignation.setEmployeeDesiganationId(designationId);
 		addNewDesignation.setPayCommission(payCommition);
+		addNewDesignation.setEmployeeselectioncategory(2);
 		addNewDesignation.setSalaryRange(grade);
 		addNewDesignation = employeeDesiganationRepo.save(addNewDesignation);
 		empDesignation.setIsCurrent(Boolean.FALSE);

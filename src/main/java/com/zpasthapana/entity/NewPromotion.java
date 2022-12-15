@@ -52,7 +52,7 @@ public class NewPromotion extends BaseEntity{
 	private Date passDate;
 	private String promotionsQualificationPDF;
 	private Long addNewPromotionCastecategory;
-	private Integer certificateNumber;
+	private String certificateNumber;
 	
 	@OneToOne
 	@JoinColumn(table = "new_promotion", name ="employeeId", insertable = false, updatable = false)
