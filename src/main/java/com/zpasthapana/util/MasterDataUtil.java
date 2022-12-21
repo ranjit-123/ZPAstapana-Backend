@@ -29,37 +29,37 @@ public class MasterDataUtil {
 	@Scheduled(fixedDelay = 1000 * 60 * 1)
 	public void setUpQuery() {
 		log.info("master data loaded");
-		List<KeyData> date = jdbcTemplate.query("select divisionID as keyId, divisionName as keyName from tbldivision", BeanPropertyRowMapper.newInstance(KeyData.class));
+		List<KeyData> date = jdbcTemplate.query("select divisionID as keyId, divisionName as keyName from tblDivision", BeanPropertyRowMapper.newInstance(KeyData.class));
 		for (KeyData keys : date) {
 			masterData.put("division_" + keys.getKeyId(), keys.getKeyName());
 		}
 		
-		date = jdbcTemplate.query("SELECT subDivisionID as keyId, subDivisionName as keyName FROM tblsubdivision", BeanPropertyRowMapper.newInstance(KeyData.class));
+		date = jdbcTemplate.query("SELECT subDivisionID as keyId, subDivisionName as keyName FROM tblSubDivision", BeanPropertyRowMapper.newInstance(KeyData.class));
 		for (KeyData keys : date) {
 			masterData.put("subdivision_" + keys.getKeyId(), keys.getKeyName());
 		}
 		
-		date = jdbcTemplate.query("SELECT talukaID as keyId, talukaName as keyName FROM tbltaluka", BeanPropertyRowMapper.newInstance(KeyData.class));
+		date = jdbcTemplate.query("SELECT talukaID as keyId, talukaName as keyName FROM tblTaluka", BeanPropertyRowMapper.newInstance(KeyData.class));
 		for (KeyData keys : date) {
 			masterData.put("taluka_" + keys.getKeyId(), keys.getKeyName());
 		}
 		
-		date = jdbcTemplate.query("SELECT designationID as keyId, designationName as keyName FROM tbldesignation", BeanPropertyRowMapper.newInstance(KeyData.class));
+		date = jdbcTemplate.query("SELECT designationID as keyId, designationName as keyName FROM tblDesignation", BeanPropertyRowMapper.newInstance(KeyData.class));
 		for (KeyData keys : date) {
 			masterData.put("designation_" + keys.getKeyId(), keys.getKeyName());
 		}
 		
-		date = jdbcTemplate.query("SELECT casteCategoryID as keyId, casteCategoryName as keyName FROM tblcastecategory", BeanPropertyRowMapper.newInstance(KeyData.class));
+		date = jdbcTemplate.query("SELECT casteCategoryID as keyId, casteCategoryName as keyName FROM tblCasteCategory", BeanPropertyRowMapper.newInstance(KeyData.class));
 		for (KeyData keys : date) {
 			masterData.put("castecategory_" + keys.getKeyId(), keys.getKeyName());
 		}
 		
-		date = jdbcTemplate.query("SELECT properOfficeID as keyId, properOfficeName as keyName FROM tblproperoffice", BeanPropertyRowMapper.newInstance(KeyData.class));
+		date = jdbcTemplate.query("SELECT properOfficeID as keyId, properOfficeName as keyName FROM tblProperOffice", BeanPropertyRowMapper.newInstance(KeyData.class));
 		for (KeyData keys : date) {
 			masterData.put("subdepartment_" + keys.getKeyId(), keys.getKeyName());
 		}
 		
-		date = jdbcTemplate.query("SELECT payCommissionID as keyId, payCommissionName as keyName FROM tblpaycommission", BeanPropertyRowMapper.newInstance(KeyData.class));
+		date = jdbcTemplate.query("SELECT payCommissionID as keyId, payCommissionName as keyName FROM tblPayCommission", BeanPropertyRowMapper.newInstance(KeyData.class));
 		for (KeyData keys : date) {
 			masterData.put("paycommission_" + keys.getKeyId(), keys.getKeyName());
 		}
