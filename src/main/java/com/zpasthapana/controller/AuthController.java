@@ -16,6 +16,7 @@ import com.zpasthapana.pojo.AuthResponse;
 import com.zpasthapana.pojo.UserPojo;
 import com.zpasthapana.service.UserService;
 import com.zpasthapana.util.JwtTokenUtil;
+import com.zpasthapana.util.ZPStaticDetailsService;
 
 @RestController
 @RequestMapping("authenticate")
@@ -23,6 +24,9 @@ public class AuthController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ZPStaticDetailsService zPStaticDetailsService;
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -32,6 +36,7 @@ public class AuthController {
 		Optional<User> userResponse = userService.findByUserNameAndPassword(user.getUserName(), user.getPassword());
 		if (userResponse.isPresent()) {
 			String token = jwtTokenUtil.generateToken(userResponse.get().getUserName(), "user");
+			zPStaticDetailsService.loadManjurPade(userResponse.get());
 			return ResponseEntity.ok(new AuthResponse(token, userResponse.get().getUserId()));
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

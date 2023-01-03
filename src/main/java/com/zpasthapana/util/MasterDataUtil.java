@@ -26,7 +26,7 @@ public class MasterDataUtil {
 	static Map<String, String> masterData = new HashMap<>();
 
 	@PostConstruct
-	@Scheduled(fixedDelay = 1000 * 60 * 1)
+	@Scheduled(fixedDelay = 1000 * 60 * 5)
 	public void setUpQuery() {
 		log.info("master data loaded");
 		List<KeyData> date = jdbcTemplate.query("select divisionID as keyId, divisionName as keyName from tblDivision", BeanPropertyRowMapper.newInstance(KeyData.class));

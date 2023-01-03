@@ -22,6 +22,7 @@ public interface UserService extends UserDetailsService {
 
 	ResponsePageDto<User> getAllUsers(Pageable paging);
 
+	User findUserById(Long id);
 
 
 }

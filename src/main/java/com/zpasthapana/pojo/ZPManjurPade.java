@@ -13,6 +13,7 @@ public class ZPManjurPade {
 	private Integer zillaParishadDesignationID;
 	private Integer zillaParishadID;
 	private Integer designationID;
+	private Integer designationClassID;
 	private Integer straightforwardServiceApproved;
 	private Integer examApproved;
 	private Integer promotionApproved;

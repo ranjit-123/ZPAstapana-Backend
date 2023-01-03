@@ -85,4 +85,13 @@ public class UserServiceImpl implements UserService {
 		return ZPUtility.getPage(paging, userRepo.findAll(paging));
 	}
 
+	@Override
+	public User findUserById(Long id) {
+		Optional<User> user = userRepo.findById(id);
+		if (user.isPresent()) {
+			return user.get();
+		}
+		throw new UsernameNotFoundException("Not Found");
+	}
+
 }
