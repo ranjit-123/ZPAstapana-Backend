@@ -1,5 +1,7 @@
 package com.zpasthapana.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 import com.zpasthapana.service.ReportService;
 
@@ -19,8 +22,13 @@ public class ReportController {
 	ReportService reportService;
 	
 	@GetMapping("/manjur-bharaleli-pade/{userId}")
-	public ResponseEntity<ZPMajurPadereportWrapper> getAllTollAndParkings(@PathVariable Long userId) {
+	public ResponseEntity<ZPMajurPadereportWrapper> getManjurBharaleliPadeForDepartment(@PathVariable Long userId) {
 		return new ResponseEntity<ZPMajurPadereportWrapper>(reportService.getMajurPadeReport(userId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/manjur-bharaleli-pade-all/{userId}")
+	public ResponseEntity<List<ZPMajurPadereport>> getManjurBharaleliPadeForAll(@PathVariable Long userId) {
+		return new ResponseEntity<List<ZPMajurPadereport>>(reportService.getMajurPadeDepartMentWiseReport(userId), HttpStatus.OK);
 	}
 
 }

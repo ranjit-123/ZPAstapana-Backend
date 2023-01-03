@@ -63,6 +63,11 @@ public class MasterDataUtil {
 		for (KeyData keys : date) {
 			masterData.put("paycommission_" + keys.getKeyId(), keys.getKeyName());
 		}
+		
+		date = jdbcTemplate.query("SELECT departmentID as keyId, departmentName as keyName FROM tblDepartment", BeanPropertyRowMapper.newInstance(KeyData.class));
+		for (KeyData keys : date) {
+			masterData.put("department_" + keys.getKeyId(), keys.getKeyName());
+		}
 	}
 
 
