@@ -25,7 +25,13 @@ public class ZPStaticDetailsService {
 	public Map<ZPBean, ZPManjurPade> loadManjurPade(User user) {
 		log.info("majur pad data loaded");
 		Map<ZPBean, ZPManjurPade> zpManujurPade = new HashMap<>();
-		List<ZPManjurPade> date = jdbcTemplate.query("SELECT p.*, d.designationClassID FROM tblZillaParishadDesignation p inner join tblDesignation d on p.designationID = d.designationID where p.zillaParishadID = " + user.getZillaParishadID(), BeanPropertyRowMapper.newInstance(ZPManjurPade.class));
+		String query = "SELECT p.*, d.designationClassID FROM tblZillaParishadDesignation p inner join tblDesignation d on p.designationID = d.designationID where p.zillaParishadID = " + user.getZillaParishadID();
+		
+		if(user.getDepartmentID() > 0) {
+			
+		}
+		
+		List<ZPManjurPade> date = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(ZPManjurPade.class));
 		for (ZPManjurPade d : date) {
 			zpManujurPade.put(ZPBean.builder().designationId(d.getDesignationID()).zpId(d.getZillaParishadID()).build(), d);
 		}
