@@ -38,6 +38,18 @@ public class ZPStaticDetailsService {
 		return zpManujurPade;
 	}
 	
+	public Map<ZPBean, ZPManjurPade> loadManjurPadeForDepartment(User user, Long departmentId) {
+		log.info("majur pad data loaded");
+		Map<ZPBean, ZPManjurPade> zpManujurPade = new HashMap<>();
+		String query = "SELECT p.*, d.designationClassID FROM tblZillaParishadDesignation p inner join tblDesignation d on p.designationID = d.designationID where p.zillaParishadID = " + user.getZillaParishadID();
+		query = query + " and d.departmentID = " + departmentId;
+		List<ZPManjurPade> date = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(ZPManjurPade.class));
+		for (ZPManjurPade d : date) {
+			zpManujurPade.put(ZPBean.builder().designationId(d.getDesignationID()).zpId(d.getZillaParishadID()).build(), d);
+		}
+		return zpManujurPade;
+	}
+	
 	public Map<ZPBean, ZPManjurPade> loadDepartmentWisePade(User user) {
 		Map<ZPBean, ZPManjurPade> zpManujurPadeDepartmentWise = new HashMap<>();
 		List<ZPManjurPade> date = jdbcTemplate.query(

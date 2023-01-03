@@ -26,9 +26,29 @@ public class ReportController {
 		return new ResponseEntity<ZPMajurPadereportWrapper>(reportService.getMajurPadeReport(userId), HttpStatus.OK);
 	}
 	
+	@GetMapping("/manjur-bharaleli-pade-admin/{userId}/{departmentId}")
+	public ResponseEntity<ZPMajurPadereportWrapper> getManjurBharaleliPadeForDepartmentAdmin(@PathVariable Long userId, @PathVariable Long departmentId) {
+		return new ResponseEntity<ZPMajurPadereportWrapper>(reportService.getMajurPadeReportByDepartMentId(userId, departmentId), HttpStatus.OK);
+	}
+	
 	@GetMapping("/manjur-bharaleli-pade-all/{userId}")
 	public ResponseEntity<List<ZPMajurPadereport>> getManjurBharaleliPadeForAll(@PathVariable Long userId) {
 		return new ResponseEntity<List<ZPMajurPadereport>>(reportService.getMajurPadeDepartMentWiseReport(userId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/manjur-bharaleli-pade-divyang/{userId}")
+	public ResponseEntity<ZPMajurPadereportWrapper> getManjurBharaleliPadeForDepartmentHandicap(@PathVariable Long userId) {
+		return new ResponseEntity<ZPMajurPadereportWrapper>(reportService.getMajurPadeReportHandicap(userId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/manjur-bharaleli-pade-admin-divyang/{userId}/{departmentId}")
+	public ResponseEntity<ZPMajurPadereportWrapper> getManjurBharaleliPadeForDepartmentAdminHandicap(@PathVariable Long userId, @PathVariable Long departmentId) {
+		return new ResponseEntity<ZPMajurPadereportWrapper>(reportService.getMajurPadeReportByDepartMentIdHandicap(userId, departmentId), HttpStatus.OK);
+	}
+	
+	@GetMapping("/manjur-bharaleli-pade-all-divyang/{userId}")
+	public ResponseEntity<List<ZPMajurPadereport>> getManjurBharaleliPadeForAllHandicap(@PathVariable Long userId) {
+		return new ResponseEntity<List<ZPMajurPadereport>>(reportService.getMajurPadeDepartMentWiseReportHandicap(userId), HttpStatus.OK);
 	}
 
 }

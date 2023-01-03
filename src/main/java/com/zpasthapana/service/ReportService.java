@@ -10,5 +10,13 @@ public interface ReportService {
 	ZPMajurPadereportWrapper getMajurPadeReport(Long userId);
 
 	List<ZPMajurPadereport> getMajurPadeDepartMentWiseReport(Long userId);
+
+	ZPMajurPadereportWrapper getMajurPadeReportByDepartMentId(Long userId, Long departmentId);
+
+	ZPMajurPadereportWrapper getMajurPadeReportHandicap(Long userId);
+
+	ZPMajurPadereportWrapper getMajurPadeReportByDepartMentIdHandicap(Long userId, Long departmentId);
+
+	List<ZPMajurPadereport> getMajurPadeDepartMentWiseReportHandicap(Long userId);
 	
 }
