@@ -316,7 +316,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "	DAY(dateOfBirth) as janmDinank, MONTH(dateOfBirth) as janmMahina, YEAR(dateOfBirth) as janmVarsh,\r\n"
 				+ "    ifnull(DAY(ifnull(empr.retirementDate, e.retirementDate)),'') as sevaNivrutDinank, \r\n"
 				+ "    ifnull(MONTH(ifnull(empr.retirementDate, e.retirementDate)),'') as sevaNivrutMahina, ifnull(YEAR(ifnull(empr.retirementDate, e.retirementDate)), '') as sevaNivrutVarsh\r\n"
-				+ "    ,ifnull(retirementReason, '') as retirementReason FROM employee e inner join employee_designation_details ed \r\n"
+				+ "    ,ifnull(empr.retirementReason, '') as retirementReason FROM employee e inner join employee_designation_details ed \r\n"
 				+ "on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId \r\n"
 				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
 				+ "on e.employee_id = edm.employeeId\r\n"
