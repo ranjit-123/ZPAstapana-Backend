@@ -2,6 +2,7 @@ package com.zpasthapana.service;
 
 import java.util.List;
 
+import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 
@@ -18,5 +19,7 @@ public interface ReportService {
 	ZPMajurPadereportWrapper getMajurPadeReportByDepartMentIdHandicap(Long userId, Long departmentId);
 
 	List<ZPMajurPadereport> getMajurPadeDepartMentWiseReportHandicap(Long userId);
+
+	List<BinduNamavaliReport> getBindunamavaliReport(Long userId, String type);
 	
 }

@@ -3,6 +3,7 @@ package com.zpasthapana.service.impl;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
 		if (user.isPresent()) {
 			return user.get();
 		}
-		throw new UsernameNotFoundException("Not Found");
+		throw new EntityNotFoundException("Not Found");
 	}
 
 }
