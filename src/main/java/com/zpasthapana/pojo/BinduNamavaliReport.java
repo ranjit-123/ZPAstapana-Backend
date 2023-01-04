@@ -35,4 +35,5 @@ public class BinduNamavaliReport {
 	private String sevaNivrutDinank;
 	private String sevaNivrutMahina;
 	private String sevaNivrutVarsh;
+	private String retirementReason;
 }
