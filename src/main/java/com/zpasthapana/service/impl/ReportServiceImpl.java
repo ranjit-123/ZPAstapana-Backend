@@ -322,7 +322,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "on e.employee_id = edm.employeeId\r\n"
 				+ "inner join employee_cast_details ec on e.employeeCastDetailsId = ec.employeeCastDetailsId\r\n"
 				+ "inner join employee_worklocation ew on e.employee_id = ew.employeeId\r\n"
-				+ "left join (select employeeId, max(retirementDate) as retirementDate from retierment group by employeeId) empr on e.employee_id = empr.employeeId "
+				+ "left join retierment empr on e.employee_id = empr.employeeId "
 				+ " where ew.zpId = " + user.getZillaParishadID();
 		
 		if(user.getDepartmentID() > 0) {
