@@ -303,9 +303,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public List<BinduNamavaliReport> getBindunamavaliReport(Long userId, String type) {
-		
 		User user = userService.findUserById(userId);
-		
 		String query = "SELECT YEAR(edm.dateOfAppointed) as bharatiVarsh, '' as kramank, '' as arakshan, \r\n"
 				+ " concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as name, \r\n"
 				+ "    ec.caste as jat, ec.castecategory as jatichaPravarg, ec.appointmentCasteCategoryID as nemnukichaPravarg, \r\n"

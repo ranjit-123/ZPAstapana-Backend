@@ -1,9 +1,8 @@
 package com.zpasthapana.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 import com.zpasthapana.service.ReportService;
+import com.zpasthapana.util.MasterDataUtil;
 
 @RestController
 @RequestMapping("reports")
@@ -58,6 +58,11 @@ public class ReportController {
 	@GetMapping("/bindu-namavali/{userId}")
 	public ResponseEntity<List<BinduNamavaliReport>> getBinduNamavali(@PathVariable Long userId, @RequestParam(name = "type", required = false) String type) {
 		List<BinduNamavaliReport> result = reportService.getBindunamavaliReport(userId, type);
+		result = result.stream().map(s->{
+			s.setJatichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getJatichaPravarg()));
+			s.setNemnukichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getNemnukichaPravarg()));
+			return s;
+		}).collect(Collectors.toList());
 		return new ResponseEntity<List<BinduNamavaliReport>>(result, HttpStatus.OK);
 	}
 
