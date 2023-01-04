@@ -332,7 +332,7 @@ public class ReportServiceImpl implements ReportService {
 		}
 		
 		if(StringUtils.equalsIgnoreCase(type, "karayarat")) {
-			query = query + " and (e.retirementDate is null or e.retirementDate >= CURDATE() ";
+			query = query + " and (e.retirementDate is null or e.retirementDate >= CURDATE())";
 		} else if(StringUtils.equalsIgnoreCase(type, "nivrut")) {
 			query = query + " and e.retirementDate < CURDATE() ";
 		} 
