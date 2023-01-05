@@ -68,6 +68,10 @@ public class MasterDataUtil {
 		for (KeyData keys : date) {
 			masterData.put("department_" + keys.getKeyId(), keys.getKeyName());
 		}
+		
+		masterData.put("niyuktitype_"+ 1, "सरळसेवा");
+		masterData.put("niyuktitype_"+ 2, "पदौन्नती");
+		masterData.put("niyuktitype_"+ 3, "स्पर्धा परिक्षा");
 	}
 
 

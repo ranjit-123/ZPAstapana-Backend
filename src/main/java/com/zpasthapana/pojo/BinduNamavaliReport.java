@@ -1,5 +1,7 @@
 package com.zpasthapana.pojo;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,4 +38,14 @@ public class BinduNamavaliReport {
 	private String sevaNivrutMahina;
 	private String sevaNivrutVarsh;
 	private String retirementReason;
+	private Date dateOfHumanitySeniority;
+	private Integer employeeDesiganationId;
+	
+	private Date dateOfAppointed;
+	private Date retirementDate;
+	private String niyuktichaMarg;
+	private String degreeName;
+	private Date prathamPadonnatiDinak;
+	private Date dwitiyPadonnatiDinak;
+	private Date tritiyPadonnatiDinak;
 }

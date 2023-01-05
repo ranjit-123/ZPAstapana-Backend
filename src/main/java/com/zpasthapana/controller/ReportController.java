@@ -1,5 +1,6 @@
 package com.zpasthapana.controller;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zpasthapana.pojo.BinduNamavaliReport;
+import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 import com.zpasthapana.service.ReportService;
@@ -62,8 +64,20 @@ public class ReportController {
 			s.setJatichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getJatichaPravarg()));
 			s.setNemnukichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getNemnukichaPravarg()));
 			return s;
-		}).collect(Collectors.toList());
+		}).sorted(Comparator.comparing(BinduNamavaliReport::getEmployeeDesiganationId).thenComparing(BinduNamavaliReport::getDateOfHumanitySeniority)).collect(Collectors.toList());
 		return new ResponseEntity<List<BinduNamavaliReport>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/jestatechi-suchi/{userId}")
+	public ResponseEntity<List<JestatechaReport>> getJestatechiSuchi(@PathVariable Long userId, @RequestParam(name = "type", required = false) String type) {
+		List<JestatechaReport> result = reportService.getJestatechaReport(userId, type);
+		result = result.stream().map(s->{
+			s.setJatichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getJatichaPravarg()));
+			s.setNemnukichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getNemnukichaPravarg()));
+			s.setNiyuktichaMarg(MasterDataUtil.getKeyDate("niyuktitype_", s.getNiyuktichaMarg()));
+			return s;
+		}).sorted(Comparator.comparing(JestatechaReport::getDateOfHumanitySeniority)).collect(Collectors.toList());
+		return new ResponseEntity<List<JestatechaReport>>(result, HttpStatus.OK);
 	}
 
 }

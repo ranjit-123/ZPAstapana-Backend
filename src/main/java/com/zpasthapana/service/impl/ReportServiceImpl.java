@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.zpasthapana.entity.User;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.DataThreeInteger;
+import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.ZPBean;
 import com.zpasthapana.pojo.ZPDesAndCategoryBean;
 import com.zpasthapana.pojo.ZPMajurPadereport;
@@ -304,14 +305,14 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<BinduNamavaliReport> getBindunamavaliReport(Long userId, String type) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT YEAR(edm.dateOfAppointed) as bharatiVarsh, '' as kramank, '' as arakshan, \r\n"
+		String query = "SELECT distinct YEAR(edm.dateOfAppointed) as bharatiVarsh, '' as kramank, '' as arakshan, \r\n"
 				+ " concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as name, \r\n"
 				+ "    ec.caste as jat, ec.castecategory as jatichaPravarg, ec.appointmentCasteCategoryID as nemnukichaPravarg, \r\n"
 				+ "    ifnull(ec.casteCertificateNumber,'') as jatPramanpatraKramank, ec.casteCertificateDate as jatPramanpatraDinak, \r\n"
 				+ "    ifnull(ec.casteCertificatedIssuedOfficerName, '') as jatPramanpatraDenareAdhikari, ifnull(ec.casteValidityNumber,'') as jatVaidhataKramank, \r\n"
 				+ "    ifnull(ec.casteValidityDate, '') as jatVaidhataDinak, ifnull(ec.casteValidityCommitteeName,'') as jatVaidhataSamiti,\r\n"
 				+ "    DAY(ed.dateOfAppointed) as niyuktichaDinank, MONTH(ed.dateOfAppointed) as niyuktichaMahina, \r\n"
-				+ "    YEAR(ed.dateOfAppointed) as niyukticheVarsh,\r\n"
+				+ "    YEAR(ed.dateOfAppointed) as niyukticheVarsh, ed.dateOfAppointed as dateOfHumanitySeniority, ed.employeeDesiganationId as employeeDesiganationId, \r\n"
 				+ "	DAY(edm.dateOfAppointed) as mulNiyuktichaDinank, MONTH(edm.dateOfAppointed) as mulNiyuktichaMahina, YEAR(edm.dateOfAppointed) as mulNiyukticheVarsh,\r\n"
 				+ "	DAY(dateOfBirth) as janmDinank, MONTH(dateOfBirth) as janmMahina, YEAR(dateOfBirth) as janmVarsh,\r\n"
 				+ "    ifnull(DAY(ifnull(empr.retirementDate, e.retirementDate)),'') as sevaNivrutDinank, \r\n"
@@ -338,6 +339,42 @@ public class ReportServiceImpl implements ReportService {
 		List<BinduNamavaliReport> data = jdbcTemplate.query(
 				query,
 				BeanPropertyRowMapper.newInstance(BinduNamavaliReport.class));
+
+		return data;
+	}
+	
+	@Override
+	public List<JestatechaReport> getJestatechaReport(Long userId, String type) {
+		User user = userService.findUserById(userId);
+		String query = "SELECT distinct '' as kramank, \r\n"
+				+ " concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as name, \r\n"
+				+ "    ec.caste as jat, ec.castecategory as jatichaPravarg, ec.appointmentCasteCategoryID as nemnukichaPravarg, \r\n"
+				+ "    '' as badalachaDinank, dateOfBirth, ed.dateOfAppointed as dateOfAppointed, employeeselectioncategory as niyuktichaMarg, ed.dateOfHumanitySeniority as dateOfHumanitySeniority, \r\n"
+				+ "    ifnull(ifnull(empr.retirementDate, e.retirementDate),'') as retirementDate\r\n"
+				+ "    ,'' as prathamPadonnatiDinak, '' as dwitiyPadonnatiDinak, '' as tritiyPadonnatiDinak, ifnull(eed.degreeName,'') as degreeName "
+				+ " FROM employee e inner join employee_designation_details ed \r\n"
+				+ "on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId \r\n"
+				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
+				+ "on e.employee_id = edm.employeeId\r\n"
+				+ "inner join employee_cast_details ec on e.employeeCastDetailsId = ec.employeeCastDetailsId\r\n"
+				+ "inner join employee_worklocation ew on e.employee_id = ew.employeeId\r\n"
+				+ "left join retierment empr on e.employee_id = empr.employeeId "
+				+ "left join employee_education_details eed on eed.employeeId = e.employee_id "
+				+ " where ew.zpId = " + user.getZillaParishadID();
+		
+		if(user.getDepartmentID() > 0) {
+			query = query + " and ew.departmentId = " + user.getDepartmentID();
+		}
+		
+		if(StringUtils.equalsIgnoreCase(type, "karayarat")) {
+			query = query + " and (ifnull(empr.retirementDate, ifnull(e.retirementDate, CURDATE())) >= CURDATE())";
+		} else if(StringUtils.equalsIgnoreCase(type, "nivrut")) {
+			query = query + " and ifnull(empr.retirementDate, e.retirementDate) < CURDATE() ";
+		} 
+		
+		List<JestatechaReport> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(JestatechaReport.class));
 
 		return data;
 	}
