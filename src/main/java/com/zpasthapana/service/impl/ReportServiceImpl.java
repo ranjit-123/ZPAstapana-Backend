@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -300,7 +301,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
-	public List<BinduNamavaliReport> getBindunamavaliReport(Long userId, String type) {
+	public List<BinduNamavaliReport> getBindunamavaliReport(Long userId, String type, Integer designationId) {
 		User user = userService.findUserById(userId);
 		String query = "SELECT distinct YEAR(edm.dateOfAppointed) as bharatiVarsh, '' as kramank, '' as arakshan, \r\n"
 				+ " concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as name, \r\n"
@@ -331,7 +332,11 @@ public class ReportServiceImpl implements ReportService {
 			query = query + " and (ifnull(empr.retirementDate, ifnull(e.retirementDate, CURDATE())) >= CURDATE())";
 		} else if(StringUtils.equalsIgnoreCase(type, "nivrut")) {
 			query = query + " and ifnull(empr.retirementDate, e.retirementDate) < CURDATE() ";
-		} 
+		}
+		
+		if(ObjectUtils.isNotEmpty(designationId) && designationId > 0) {
+			query = query + " and employeeDesiganationId = " + designationId;
+		}
 		
 		List<BinduNamavaliReport> data = jdbcTemplate.query(
 				query,

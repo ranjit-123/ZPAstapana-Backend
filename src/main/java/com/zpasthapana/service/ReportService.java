@@ -21,8 +21,8 @@ public interface ReportService {
 
 	List<ZPMajurPadereport> getMajurPadeDepartMentWiseReportHandicap(Long userId);
 
-	List<BinduNamavaliReport> getBindunamavaliReport(Long userId, String type);
-
 	List<JestatechaReport> getJestatechaReport(Long userId, String type);
+
+	List<BinduNamavaliReport> getBindunamavaliReport(Long userId, String type, Integer designationId);
 	
 }

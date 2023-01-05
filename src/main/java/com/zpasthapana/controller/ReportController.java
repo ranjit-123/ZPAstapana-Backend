@@ -58,8 +58,8 @@ public class ReportController {
 	}
 	
 	@GetMapping("/bindu-namavali/{userId}")
-	public ResponseEntity<List<BinduNamavaliReport>> getBinduNamavali(@PathVariable Long userId, @RequestParam(name = "type", required = false) String type) {
-		List<BinduNamavaliReport> result = reportService.getBindunamavaliReport(userId, type);
+	public ResponseEntity<List<BinduNamavaliReport>> getBinduNamavali(@PathVariable Long userId, @RequestParam(name = "type", required = false) String type, @RequestParam(name = "designationId", required = false) Integer designationId) {
+		List<BinduNamavaliReport> result = reportService.getBindunamavaliReport(userId, type, designationId);
 		result = result.stream().map(s->{
 			s.setJatichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getJatichaPravarg()));
 			s.setNemnukichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getNemnukichaPravarg()));
