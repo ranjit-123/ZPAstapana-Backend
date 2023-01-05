@@ -57,7 +57,7 @@ public class ZPStaticDetailsService {
 						+ "		FROM tblZillaParishadDesignation p inner join tblDesignation d on p.designationID = d.designationID where p.zillaParishadID = "+ user.getZillaParishadID() +" group by d.departmentID",
 				BeanPropertyRowMapper.newInstance(ZPManjurPade.class));
 		for (ZPManjurPade d : date) {
-			zpManujurPadeDepartmentWise.put(ZPBean.builder().designationId(d.getDesignationID()).zpId(d.getZillaParishadID()).build(),
+			zpManujurPadeDepartmentWise.put(ZPBean.builder().designationId(d.getDepartmentID()).zpId(d.getZillaParishadID()).build(),
 					d);
 		}
 		return zpManujurPadeDepartmentWise;
