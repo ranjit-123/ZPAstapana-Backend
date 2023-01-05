@@ -69,8 +69,8 @@ public class ReportController {
 	}
 	
 	@GetMapping("/jestatechi-suchi/{userId}")
-	public ResponseEntity<List<JestatechaReport>> getJestatechiSuchi(@PathVariable Long userId, @RequestParam(name = "type", required = false) String type) {
-		List<JestatechaReport> result = reportService.getJestatechaReport(userId, type);
+	public ResponseEntity<List<JestatechaReport>> getJestatechiSuchi(@PathVariable Long userId, @RequestParam(name = "type", required = false) String type, @RequestParam(name = "designationId", required = false) Integer designationId) {
+		List<JestatechaReport> result = reportService.getJestatechaReport(userId, type, designationId);
 		result = result.stream().map(s->{
 			s.setJatichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getJatichaPravarg()));
 			s.setNemnukichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getNemnukichaPravarg()));

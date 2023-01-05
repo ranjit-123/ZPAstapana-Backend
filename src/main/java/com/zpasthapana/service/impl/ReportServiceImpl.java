@@ -346,7 +346,7 @@ public class ReportServiceImpl implements ReportService {
 	}
 	
 	@Override
-	public List<JestatechaReport> getJestatechaReport(Long userId, String type) {
+	public List<JestatechaReport> getJestatechaReport(Long userId, String type, Integer designationId) {
 		User user = userService.findUserById(userId);
 		String query = "SELECT distinct '' as kramank, \r\n"
 				+ " concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as name, \r\n"
@@ -373,6 +373,10 @@ public class ReportServiceImpl implements ReportService {
 		} else if(StringUtils.equalsIgnoreCase(type, "nivrut")) {
 			query = query + " and ifnull(empr.retirementDate, e.retirementDate) < CURDATE() ";
 		} 
+		
+		if(ObjectUtils.isNotEmpty(designationId) && designationId > 0) {
+			query = query + " and ed.employeeDesiganationId = " + designationId;
+		}
 		
 		List<JestatechaReport> data = jdbcTemplate.query(
 				query,
