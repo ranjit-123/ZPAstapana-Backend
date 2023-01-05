@@ -72,17 +72,16 @@ public class ReportServiceImpl implements ReportService {
 
 	public Map<ZPDesAndCategoryBean, DataThreeInteger> loadFilledPade(User user, boolean b) {
 		
-		String query = "SELECT ee.employeeDesiganationId as val1, ed.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
-				+ "inner join employee_designation_details ee on e.employee_id = ee.employeeId\r\n"
+		String query = "SELECT ee.employeeDesiganationId as val1, ee.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
-				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "inner join employee_designation_details ee on e.employeeDesiganationDetailsId = ee.employeeDesiganationDetailsId\r\n"
 				+ "where ew.zpId = " + user.getZillaParishadID();
 		
 		if(b) {
 			query = query + " and ee.parallelReservationType = 7";
 		}
 		
-		query = query + " group by ed.employeeselectioncategory, ee.employeeDesiganationId";
+		query = query + " group by ee.employeeselectioncategory, ee.employeeDesiganationId";
 		
 		List<DataThreeInteger> data = jdbcTemplate.query(
 				query,
@@ -98,17 +97,16 @@ public class ReportServiceImpl implements ReportService {
 	
 	public Map<ZPDesAndCategoryBean, DataThreeInteger> loadFilledPade(User user, Long departmentId, boolean b) {
 		
-		String query = "SELECT ee.employeeDesiganationId as val1, ed.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
-				+ "inner join employee_designation_details ee on e.employee_id = ee.employeeId\r\n"
+		String query = "SELECT ee.employeeDesiganationId as val1, ee.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
-				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "inner join employee_designation_details ee on e.employeeDesiganationDetailsId = ee.employeeDesiganationDetailsId\r\n"
 				+ "where ew.zpId = " + user.getZillaParishadID() + " and ew.departmentId = " + departmentId;
 		
 		if(b) {
 			query = query + " and ee.parallelReservationType = 7";
 		}
 		
-		query = query + " group by ed.employeeselectioncategory, ee.employeeDesiganationId";
+		query = query + " group by ee.employeeselectioncategory, ee.employeeDesiganationId";
 		
 		List<DataThreeInteger> data = jdbcTemplate.query(
 				query,
@@ -123,17 +121,16 @@ public class ReportServiceImpl implements ReportService {
 	}
 	
 	public Map<ZPDesAndCategoryBean, DataThreeInteger> loadFilledPadeDepartment(User user, boolean b) {
-		String query = "SELECT ew.departmentId as val1, ed.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
-				+ "inner join employee_designation_details ee on e.employee_id = ee.employeeId\r\n"
+		String query = "SELECT ew.departmentId as val1, ee.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
-				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "inner join employee_designation_details ee on ee.employeeDesiganationDetailsId = e.employeeDesiganationDetailsId\r\n"
 				+ "where ew.zpId = " + user.getZillaParishadID();
 		
 		if(b) {
 			query = query + " and ee.parallelReservationType = 7";
 		}
 		
-		query = query + " group by ed.employeeselectioncategory, ew.departmentId";
+		query = query + " group by ee.employeeselectioncategory, ew.departmentId";
 		List<DataThreeInteger> data = jdbcTemplate.query(
 				query,
 				BeanPropertyRowMapper.newInstance(DataThreeInteger.class));
