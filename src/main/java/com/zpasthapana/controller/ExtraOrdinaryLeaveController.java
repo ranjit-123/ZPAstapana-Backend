@@ -32,9 +32,14 @@ public class ExtraOrdinaryLeaveController {
 	
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ResponseMessage> addExtraOrdinaryLeave(@ModelAttribute ExtraOrdinaryLeaveRequest request){
-		extraOrdinaryLeavesService.addExtraOrdinaryLeave(request);
-		return new ResponseEntity<ResponseMessage>(ResponseMessage.builder().status(HttpStatus.CREATED).build(),
-				HttpStatus.CREATED);
+		try {
+			extraOrdinaryLeavesService.addExtraOrdinaryLeave(request);
+			return new ResponseEntity<ResponseMessage>(ResponseMessage.builder().status(HttpStatus.CREATED).build(),
+					HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<ResponseMessage>(ResponseMessage.builder().status(HttpStatus.INTERNAL_SERVER_ERROR).build(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@GetMapping

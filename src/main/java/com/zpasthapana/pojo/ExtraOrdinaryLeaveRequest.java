@@ -20,5 +20,5 @@ public class ExtraOrdinaryLeaveRequest extends BaseRequest{
 	private Date leaveDate;
 	private MultipartFile leavePdf;
 	private Long employeeId;
-	private List<LeaveDetails> leaves;
+	private String leaves;
 }
