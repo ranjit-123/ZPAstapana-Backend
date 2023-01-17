@@ -1,5 +1,7 @@
 package com.zpasthapana.pojo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +25,7 @@ public class CrimeRequest extends BaseRequest {
 	private String courtResultReason;
 	private String whatIsActionTaken;
 	private Integer punishmentOrderNo;
-	private String punishmentOrderPdf;
+	private MultipartFile punishmentOrderPdf;
 	private String punishmentOrderDate;
 	private String resultPdf;
 	private Integer appealedInHigherCourt;
