@@ -33,7 +33,7 @@ public class StayitvaPramanpatra extends BaseEntity{
 	private String sthaetvanumber;
 	private Date sthaetvOrderDate;
 	private Date sthaetvOrderactualpassDate;
-	private MultipartFile sthaetvapramanpatraPDF;
+	private String sthaetvapramanpatraPDF;
 	private Long employeeId;
 	
 	@OneToOne
