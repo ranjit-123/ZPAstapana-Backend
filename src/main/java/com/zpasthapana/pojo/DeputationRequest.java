@@ -29,5 +29,14 @@ public class DeputationRequest extends BaseRequest{
 	private MultipartFile deputationEndPdf;
 	private String deputationServiceEndDate;
 	private String dtpDateOfRegularOfficeRejoining;
+	private Integer deputationType;
+	private String deputationEmployeeName;
+	private String deputationOfficeName;
+	private String usanvariOrderNumber;
+	private String usanvariOrderDate;
+	private String karyamuktaDate;
+	private String hajarDate;
+	private String paymentOffice;
+	private String usanvaricheOffice;
 	private Long employeeId;
 }

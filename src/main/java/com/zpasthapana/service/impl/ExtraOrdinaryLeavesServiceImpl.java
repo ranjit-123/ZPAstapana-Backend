@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.zpasthapana.entity.ExtraOrdinaryLeaves;
 import com.zpasthapana.pojo.ExtraOrdinaryLeaveRequest;
+import com.zpasthapana.pojo.LeaveDetails;
 import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.ExtraOrdinaryLeavesRepo;
@@ -29,7 +30,12 @@ public class ExtraOrdinaryLeavesServiceImpl implements ExtraOrdinaryLeavesServic
 	public void addExtraOrdinaryLeave(ExtraOrdinaryLeaveRequest request) {
 		ExtraOrdinaryLeaves entity = modelMapper.map(request, ExtraOrdinaryLeaves.class);
 		ZPUtility.uploadFiles(request, entity, request.getEmployeeId());
-		extraOrdinaryLeavesRepo.save(entity);
+		for (LeaveDetails leave : request.getLeaves()) {
+			ExtraOrdinaryLeaves entitySave = new ExtraOrdinaryLeaves();
+			modelMapper.map(entity, entitySave);
+			modelMapper.map(leave, entitySave);
+			extraOrdinaryLeavesRepo.save(entitySave);
+		}
 	}
 
 	@Override

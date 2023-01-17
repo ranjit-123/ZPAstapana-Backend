@@ -25,14 +25,20 @@ public class ExtraOrdinaryLeaves extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Integer leaveType;
+	
 	private Integer leaveOrderNumber;
 	private Date leaveDate;
 	private String leavePdf;
+	private Long employeeId;
+	
+	private String leaveDetails;
+	private Integer leaveType;
 	private Date startDate;
 	private Date endDate;
-	private String leaveDetails;
-	private Long employeeId;
+	private Integer numberOfLeaves;
+	private Integer balaceBeforeLeave;
+	private Integer balaceAfterLeave;
+	
 	
 	@OneToOne
 	@JoinColumn(table = "extra_ordinary_leaves", name ="employeeId", insertable = false, updatable = false)

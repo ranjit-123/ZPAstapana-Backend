@@ -1,6 +1,7 @@
 package com.zpasthapana.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,12 +16,9 @@ import lombok.Setter;
 @Setter
 public class ExtraOrdinaryLeaveRequest extends BaseRequest{
 	private Long id;
-	private Integer leaveType;
 	private Integer leaveOrderNumber;
 	private Date leaveDate;
 	private MultipartFile leavePdf;
-	private Date startDate;
-	private Date endDate;
-	private String leaveDetails;
 	private Long employeeId;
+	private List<LeaveDetails> leaves;
 }

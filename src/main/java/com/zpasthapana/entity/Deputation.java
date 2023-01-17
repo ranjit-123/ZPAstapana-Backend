@@ -47,6 +47,17 @@ public class Deputation extends BaseEntity {
 	
 	private Date deputationServiceEndDate;
 	private String dtpDateOfRegularOfficeRejoining;
+	
+	private Integer deputationType;
+	private String deputationEmployeeName;
+	private String deputationOfficeName;
+	private String usanvariOrderNumber;
+	private Date usanvariOrderDate;
+	private Date karyamuktaDate;
+	private Date hajarDate;
+	private String paymentOffice;
+	private String usanvaricheOffice;
+	
 	private Long employeeId;
 	
 	@OneToOne

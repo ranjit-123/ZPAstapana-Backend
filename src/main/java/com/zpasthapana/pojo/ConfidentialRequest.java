@@ -22,5 +22,8 @@ public class ConfidentialRequest extends BaseRequest{
 	private String isAppealed;
 	private String appealDecision;
 	private Integer appealMarks;
+	private String prativedanOfficerPost;
+	private String prativedanOfficerName;
+	private String punarlokanOfficerName;
 	private Long employeeId;
 }
