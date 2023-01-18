@@ -100,6 +100,8 @@ public class ConcessionDetails extends BaseEntity {
 	private String concessionFreedomFighterRelation;
 	private Integer concessionFreedomFighterIsLiveFlag;
 	private String concessionFreedomFighterPDF;
+	private String concessionHusbandWifeAggregationFullName;
+	private String concessionHusbandWifeAggregationFalimlyPhotoPDF;
 	
 	@OneToOne
 	@JoinColumn(table = "concession_details", name ="employeeId", insertable = false, updatable = false)

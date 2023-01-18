@@ -240,5 +240,12 @@ public class EmployeeRequest extends BaseRequest{
 	private String marathiHinidCombineOrderNumber;
 	private String marathiHinidCombineOrderDate;
 	private MultipartFile marathiHinidCombinePDF;
+	
+	private Integer nomineemedicalAaiVadilORSasuSasare;
+	private String medicalbillfordate;
+	private MultipartFile medicalbillforProofPDF;
+	private String concessionHusbandWifeAggregationFullName;
+	private MultipartFile concessionHusbandWifeAggregationFalimlyPhotoPDF;
+	private String pranNumber;
 
 }
