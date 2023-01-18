@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 public class ExtraOrdinaryLeaveRequest extends BaseRequest{
 	private Long id;
-	private Integer leaveOrderNumber;
+	private String leaveOrderNumber;
 	private Date leaveDate;
 	private MultipartFile leavePdf;
 	private Long employeeId;

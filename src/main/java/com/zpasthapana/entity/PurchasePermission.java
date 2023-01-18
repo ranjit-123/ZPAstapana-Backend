@@ -25,7 +25,7 @@ public class PurchasePermission extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Integer purchaseOrderNumber;
+	private String purchaseOrderNumber;
 	private Date orderDate; 
 	private String purchaseOrderPdf;
 	private String purchaseDetails;

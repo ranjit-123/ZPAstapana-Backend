@@ -21,7 +21,7 @@ public class RejectedPromotionRequest extends BaseRequest{
 	private String rejectedPromotionOrderDate;
 	private Long rejectedPromotionCastecategory;
 	private Integer rejectedGotPromotionFlag;
-	private Integer rejectedGotPromotionOrderNumber;
+	private String rejectedGotPromotionOrderNumber;
 	private String rejectedGotPromotionOrderDate;
 	private MultipartFile rejectedGotPromotionPDF;
 	private String rejectedGotPromotionDetails;

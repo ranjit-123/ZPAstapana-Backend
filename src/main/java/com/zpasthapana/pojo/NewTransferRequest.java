@@ -17,7 +17,7 @@ public class NewTransferRequest extends BaseRequest {
 	private Integer transferTypeFlag;
 	private Integer transferReasonFlag;
 	private Integer interDistrictTransferFlag;
-	private Integer transferOrderNumber;
+	private String transferOrderNumber;
 	private String transferOrderDate;
 	private MultipartFile transferOrderPDF;
 	private String lastServiceDate;

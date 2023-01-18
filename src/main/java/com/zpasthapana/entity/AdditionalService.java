@@ -31,7 +31,7 @@ public class AdditionalService extends BaseEntity {
 	private Date additionalZPServiceendLastDate;
 	private Date additionalZPServicestartDate;
 	private String additionalZPServiceDetails;
-	private Long additionalZPServiceOrderNumber;
+	private String additionalZPServiceOrderNumber;
 	
 	@OneToOne
 	@JoinColumn(table = "additional_service", name ="employeeId", insertable = false, updatable = false)

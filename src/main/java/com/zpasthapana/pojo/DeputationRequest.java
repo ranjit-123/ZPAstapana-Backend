@@ -18,13 +18,13 @@ public class DeputationRequest extends BaseRequest{
 	private MultipartFile deputationPdf;
 	private String deputationReason;
 	private Integer commissionerPermission;
-	private Integer commissionerOrderNumber;
+	private String commissionerOrderNumber;
 	private String commissionerOrderDate;
 	private MultipartFile commissionerOrderPdf;
 	private Integer deputationSection;
 	private Integer cmbSubDivisionID;
 	private Integer cmbProperOfficeID;
-	private Integer deputationEndOrderNumber;
+	private String deputationEndOrderNumber;
 	private String deputationEndOrderDate;
 	private MultipartFile deputationEndPdf;
 	private String deputationServiceEndDate;

@@ -34,7 +34,7 @@ public class RejectedPromotion extends BaseEntity {
 	private Date rejectedPromotionOrderDate;
 	private Long rejectedPromotionCastecategory;
 	private Integer rejectedGotPromotionFlag;
-	private Integer rejectedGotPromotionOrderNumber;
+	private String rejectedGotPromotionOrderNumber;
 	private Date rejectedGotPromotionOrderDate;
 	private String rejectedGotPromotionPDF;
 	private String rejectedGotPromotionDetails;

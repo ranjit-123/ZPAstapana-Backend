@@ -29,7 +29,7 @@ public class NewTransfer extends BaseEntity{
 	private Integer transferTypeFlag;
 	private Integer transferReasonFlag;
 	private Integer interDistrictTransferFlag;
-	private Integer transferOrderNumber;
+	private String transferOrderNumber;
 	private Date transferOrderDate;
 	private String transferOrderPDF;
 	private Date lastServiceDate;

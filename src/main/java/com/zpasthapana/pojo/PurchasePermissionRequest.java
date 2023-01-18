@@ -15,7 +15,7 @@ import lombok.Setter;
 @Builder
 public class PurchasePermissionRequest extends BaseRequest{
 	private Long id;
-	private Integer purchaseOrderNumber;
+	private String purchaseOrderNumber;
 	private String orderDate; 
 	private MultipartFile purchaseOrderPdf;
 	private String purchaseDetails;

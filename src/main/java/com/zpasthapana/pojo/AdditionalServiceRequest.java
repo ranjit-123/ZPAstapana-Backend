@@ -16,5 +16,5 @@ public class AdditionalServiceRequest extends BaseRequest{
 	private String additionalZPServiceendLastDate;
 	private String additionalZPServicestartDate;
 	private String additionalZPServiceDetails;
-	private Long additionalZPServiceOrderNumber;
+	private String additionalZPServiceOrderNumber;
 }

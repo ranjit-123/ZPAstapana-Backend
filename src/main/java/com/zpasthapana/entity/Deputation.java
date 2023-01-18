@@ -33,14 +33,14 @@ public class Deputation extends BaseEntity {
 	private String deputationPdf;
 	private String deputationReason;
 	private Integer commissionerPermission;
-	private Integer commissionerOrderNumber;
+	private String commissionerOrderNumber;
 	
 	private Date commissionerOrderDate;
 	private String commissionerOrderPdf;
 	private Integer deputationSection;
 	private Integer cmbSubDivisionID;
 	private Integer cmbProperOfficeID;
-	private Integer deputationEndOrderNumber;
+	private String deputationEndOrderNumber;
 	
 	private Date deputationEndOrderDate;
 	private String deputationEndPdf;

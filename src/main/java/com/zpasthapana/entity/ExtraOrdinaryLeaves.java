@@ -26,7 +26,7 @@ public class ExtraOrdinaryLeaves extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private Integer leaveOrderNumber;
+	private String leaveOrderNumber;
 	private Date leaveDate;
 	private String leavePdf;
 	private Long employeeId;
