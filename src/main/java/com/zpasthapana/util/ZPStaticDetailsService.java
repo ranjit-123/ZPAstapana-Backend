@@ -62,4 +62,11 @@ public class ZPStaticDetailsService {
 		}
 		return zpManujurPadeDepartmentWise;
 	}
+	
+	public String getZPNameByZPID(Long zpId) {
+		String sql = "SELECT zillaParishadName FROM tblZillaParishad where zillaParishadID=?";
+	    String zpName = (String) jdbcTemplate.queryForObject(
+	            sql, new Object[] { zpId }, String.class);
+	    return zpName;
+	}
 }
