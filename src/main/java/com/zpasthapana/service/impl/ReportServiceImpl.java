@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.zpasthapana.entity.User;
+import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.DataThreeInteger;
 import com.zpasthapana.pojo.JestatechaReport;
@@ -351,7 +352,7 @@ public class ReportServiceImpl implements ReportService {
 		String query = "SELECT distinct '' as jeshtataNumber, \r\n"
 				+ " concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as name, \r\n"
 				+ "    ec.caste as caste, ec.castecategory as mulJatPravarg, ec.appointmentCasteCategoryID as niyuktiPravarg, \r\n"
-				+ "    '' as pravargChangeDate, birthDate, ed.dateOfAppointed as hallichaNiyuktDinank, employeeselectioncategory as niyuktichaMarg, ed.dateOfHumanitySeniority as jeshtataManivDate, \r\n"
+				+ "    '' as pravargChangeDate, dateOfBirth as birthDate, ed.dateOfAppointed as hallichaNiyuktDinank, employeeselectioncategory as niyuktichaMarg, ed.dateOfHumanitySeniority as jeshtataManivDate, \r\n"
 				+ "    ifnull(ifnull(empr.retirementDate, e.retirementDate),'') as sevaPaveshottarPassDate\r\n"
 				+ "    ,'' as prathamPadonnatiNiyuktiDate, '' as dvitiyaPadonnatiNiyuktiDate, '' as trutiyaPadonnatiNiyuktiDate, ifnull(eed.degreeName,'') as degreeName "
 				+ " , edm.dateOfAppointed as prathamPadavarilDate, '' as remark FROM employee e inner join employee_designation_details ed \r\n"
@@ -381,6 +382,36 @@ public class ReportServiceImpl implements ReportService {
 		List<JestatechaReport> data = jdbcTemplate.query(
 				query,
 				BeanPropertyRowMapper.newInstance(JestatechaReport.class));
+
+		return data;
+	}
+	
+	@Override
+	public List<AbsenceReport> getUnAuthorisedAbsenceReport(Long userId, Integer departmentId) {
+		User user = userService.findUserById(userId);
+		String query = "SELECT distinct ew.departmentId as departmentName, concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as employeName,\r\n"
+				+ "					ed.employeeDesiganationId as designation, ifnull(empr.retirementDate, e.retirementDate) as retirementDate,\r\n"
+				+ "					ew.taluka, timestampdiff(DAY, absenceStartDate, absenceStartDate) absencePeriod, '' as actionTaken, isPresent\r\n"
+				+ "                    , ew.subDepartment as officeName, '' as morethan6monthsCase FROM employee e inner join employee_designation_details ed \r\n"
+				+ "				on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId \r\n"
+				+ "				inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
+				+ "				on e.employee_id = edm.employeeId\r\n"
+				+ "				inner join employee_cast_details ec on e.employeeCastDetailsId = ec.employeeCastDetailsId\r\n"
+				+ "				inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
+				+ "                inner join unathorized_absence_period a on e.employee_id = a.employeeId\r\n"
+				+ "				left join retierment empr on e.employee_id = empr.employeeId"
+				+ " where ew.zpId = " + user.getZillaParishadID();
+		
+		if(user.getDepartmentID() > 0) {
+			query = query + " and ew.departmentId = " + user.getDepartmentID();
+		} else if(ObjectUtils.isNotEmpty(departmentId) && departmentId > 0) {
+			query = query + " and ew.departmentId = " + departmentId;
+		}
+		
+		
+		List<AbsenceReport> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(AbsenceReport.class));
 
 		return data;
 	}

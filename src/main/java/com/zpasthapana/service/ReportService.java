@@ -2,6 +2,7 @@ package com.zpasthapana.service;
 
 import java.util.List;
 
+import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.ZPMajurPadereport;
@@ -24,5 +25,7 @@ public interface ReportService {
 	List<JestatechaReport> getJestatechaReport(Long userId, String type, Integer designationId);
 
 	List<BinduNamavaliReport> getBindunamavaliReport(Long userId, String type, Integer designationId);
+
+	List<AbsenceReport> getUnAuthorisedAbsenceReport(Long userId, Integer departmentId);
 	
 }

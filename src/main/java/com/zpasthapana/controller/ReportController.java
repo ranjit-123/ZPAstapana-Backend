@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.ZPMajurPadereport;
@@ -78,6 +79,20 @@ public class ReportController {
 			return s;
 		}).sorted(Comparator.comparing(JestatechaReport::getJeshtataManivDate)).collect(Collectors.toList());
 		return new ResponseEntity<List<JestatechaReport>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/unauthorized-absence-cases/{userId}")
+	public ResponseEntity<List<AbsenceReport>> getUnAuthorisedAbsenceReport(@PathVariable Long userId, @RequestParam(name = "departmentId", required = false) Integer departmentId) {
+		List<AbsenceReport> result = reportService.getUnAuthorisedAbsenceReport(userId, departmentId);
+		result = result.stream().map(s->{
+			s.setTaluka(MasterDataUtil.getKeyDate("taluka_", s.getTaluka()));
+			s.setDepartmentName(MasterDataUtil.getKeyDate("department_", s.getDepartmentName()));
+			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
+			s.setOfficeName(MasterDataUtil.getKeyDate("subdepartment_", s.getOfficeName()));
+			s.setAbsencePeriod(s.getAbsencePeriod() + " days");
+			return s;
+		}).collect(Collectors.toList());
+		return new ResponseEntity<List<AbsenceReport>>(result, HttpStatus.OK);
 	}
 
 }
