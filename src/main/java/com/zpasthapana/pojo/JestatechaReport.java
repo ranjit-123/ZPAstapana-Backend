@@ -12,19 +12,21 @@ import lombok.Setter;
 @Getter
 @Setter
 public class JestatechaReport {
-	private String kramank;
+	private String jeshtataNumber;
 	private String name;
-	private String jat;
-	private String jatichaPravarg;
-	private String nemnukichaPravarg;
-	private String badalachaDinank;
-	private Date dateOfBirth;
-	private Date dateOfHumanitySeniority;
-	private Date dateOfAppointed;
-	private Date retirementDate;
+	private String caste;
+	private String mulJatPravarg;
+	private String niyuktiPravarg;
+	private String pravargChangeDate;
+	private Date birthDate;
+	private Date jeshtataManivDate;
+	private Date hallichaNiyuktDinank;
+	private Date sevaPaveshottarPassDate;
 	private String niyuktichaMarg;
 	private String degreeName;
-	private String prathamPadonnatiDinak;
-	private String dwitiyPadonnatiDinak;
-	private String tritiyPadonnatiDinak;
+	private String prathamPadonnatiNiyuktiDate;
+	private String dvitiyaPadonnatiNiyuktiDate;
+	private String trutiyaPadonnatiNiyuktiDate;
+	private String prathamPadavarilDate;
+	private String remark;
 }

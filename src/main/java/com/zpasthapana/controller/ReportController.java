@@ -72,11 +72,11 @@ public class ReportController {
 	public ResponseEntity<List<JestatechaReport>> getJestatechiSuchi(@PathVariable Long userId, @RequestParam(name = "type", required = false) String type, @RequestParam(name = "designationId", required = false) Integer designationId) {
 		List<JestatechaReport> result = reportService.getJestatechaReport(userId, type, designationId);
 		result = result.stream().map(s->{
-			s.setJatichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getJatichaPravarg()));
-			s.setNemnukichaPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getNemnukichaPravarg()));
+			s.setCaste(MasterDataUtil.getKeyDate("castecategory_", s.getCaste()));
+			s.setNiyuktiPravarg(MasterDataUtil.getKeyDate("castecategory_", s.getNiyuktiPravarg()));
 			s.setNiyuktichaMarg(MasterDataUtil.getKeyDate("niyuktitype_", s.getNiyuktichaMarg()));
 			return s;
-		}).sorted(Comparator.comparing(JestatechaReport::getDateOfHumanitySeniority)).collect(Collectors.toList());
+		}).sorted(Comparator.comparing(JestatechaReport::getJeshtataManivDate)).collect(Collectors.toList());
 		return new ResponseEntity<List<JestatechaReport>>(result, HttpStatus.OK);
 	}
 

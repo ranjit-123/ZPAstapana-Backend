@@ -348,13 +348,13 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<JestatechaReport> getJestatechaReport(Long userId, String type, Integer designationId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT distinct '' as kramank, \r\n"
+		String query = "SELECT distinct '' as jeshtataNumber, \r\n"
 				+ " concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as name, \r\n"
-				+ "    ec.caste as jat, ec.castecategory as jatichaPravarg, ec.appointmentCasteCategoryID as nemnukichaPravarg, \r\n"
-				+ "    '' as badalachaDinank, dateOfBirth, ed.dateOfAppointed as dateOfAppointed, employeeselectioncategory as niyuktichaMarg, ed.dateOfHumanitySeniority as dateOfHumanitySeniority, \r\n"
-				+ "    ifnull(ifnull(empr.retirementDate, e.retirementDate),'') as retirementDate\r\n"
-				+ "    ,'' as prathamPadonnatiDinak, '' as dwitiyPadonnatiDinak, '' as tritiyPadonnatiDinak, ifnull(eed.degreeName,'') as degreeName "
-				+ " FROM employee e inner join employee_designation_details ed \r\n"
+				+ "    ec.caste as caste, ec.castecategory as mulJatPravarg, ec.appointmentCasteCategoryID as niyuktiPravarg, \r\n"
+				+ "    '' as pravargChangeDate, birthDate, ed.dateOfAppointed as hallichaNiyuktDinank, employeeselectioncategory as niyuktichaMarg, ed.dateOfHumanitySeniority as jeshtataManivDate, \r\n"
+				+ "    ifnull(ifnull(empr.retirementDate, e.retirementDate),'') as sevaPaveshottarPassDate\r\n"
+				+ "    ,'' as prathamPadonnatiNiyuktiDate, '' as dvitiyaPadonnatiNiyuktiDate, '' as trutiyaPadonnatiNiyuktiDate, ifnull(eed.degreeName,'') as degreeName "
+				+ " , edm.dateOfAppointed as prathamPadavarilDate, '' as remark FROM employee e inner join employee_designation_details ed \r\n"
 				+ "on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId \r\n"
 				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
 				+ "on e.employee_id = edm.employeeId\r\n"
