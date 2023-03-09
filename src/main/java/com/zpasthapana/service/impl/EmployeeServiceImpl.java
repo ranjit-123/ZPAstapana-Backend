@@ -263,4 +263,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 				pageRequest.getDepartmentId(), pageRequest.getTalukaId(), new Date(),paging));
 	}
 
+	@Override
+	public void deactivateEmployee(Long employeeId) {
+		Employee employee =	employeeRepo.findById(employeeId).orElseThrow();
+		employee.setIsActive(Boolean.FALSE);
+		employeeRepo.save(employee);
+	}
+
 }

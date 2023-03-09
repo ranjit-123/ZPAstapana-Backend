@@ -56,6 +56,13 @@ public class EmployeeController {
 				employeeResponse, HttpStatus.OK);
 	}
 	
+	@PutMapping(value = "/deactivate/{employeeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Void> deactivateEmployee(@PathVariable Long employeeId){
+		employeeService.deactivateEmployee(employeeId);
+		return new ResponseEntity<Void>(
+				HttpStatus.OK);
+	}
+	
 	@GetMapping
 	public ResponseEntity<List<Employee>> getAllEmployee(){
 		return new ResponseEntity<List<Employee>>(
