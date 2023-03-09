@@ -77,7 +77,7 @@ public class ReportServiceImpl implements ReportService {
 		String query = "SELECT ee.employeeDesiganationId as val1, ee.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "inner join employee_designation_details ee on e.employeeDesiganationDetailsId = ee.employeeDesiganationDetailsId\r\n"
-				+ "where ew.zpId = " + user.getZillaParishadID();
+				+ "where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
 		
 		if(b) {
 			query = query + " and ee.parallelReservationType = 7";
@@ -102,7 +102,7 @@ public class ReportServiceImpl implements ReportService {
 		String query = "SELECT ee.employeeDesiganationId as val1, ee.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "inner join employee_designation_details ee on e.employeeDesiganationDetailsId = ee.employeeDesiganationDetailsId\r\n"
-				+ "where ew.zpId = " + user.getZillaParishadID() + " and ew.departmentId = " + departmentId;
+				+ "where e.active = 1 and ew.zpId = " + user.getZillaParishadID() + " and ew.departmentId = " + departmentId;
 		
 		if(b) {
 			query = query + " and ee.parallelReservationType = 7";
@@ -126,7 +126,7 @@ public class ReportServiceImpl implements ReportService {
 		String query = "SELECT ew.departmentId as val1, ee.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "inner join employee_designation_details ee on ee.employeeDesiganationDetailsId = e.employeeDesiganationDetailsId\r\n"
-				+ "where ew.zpId = " + user.getZillaParishadID();
+				+ "where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
 		
 		if(b) {
 			query = query + " and ee.parallelReservationType = 7";
@@ -323,7 +323,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "inner join employee_cast_details ec on e.employeeCastDetailsId = ec.employeeCastDetailsId\r\n"
 				+ "inner join employee_worklocation ew on e.employee_id = ew.employeeId\r\n"
 				+ "left join retierment empr on e.employee_id = empr.employeeId "
-				+ " where ew.zpId = " + user.getZillaParishadID();
+				+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
 		
 		if(user.getDepartmentID() > 0) {
 			query = query + " and ew.departmentId = " + user.getDepartmentID();
@@ -363,7 +363,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "inner join employee_worklocation ew on e.employee_id = ew.employeeId\r\n"
 				+ "left join retierment empr on e.employee_id = empr.employeeId "
 				+ "left join employee_education_details eed on eed.employeeId = e.employee_id "
-				+ " where ew.zpId = " + user.getZillaParishadID();
+				+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
 		
 		if(user.getDepartmentID() > 0) {
 			query = query + " and ew.departmentId = " + user.getDepartmentID();
@@ -400,7 +400,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "				inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "                inner join unathorized_absence_period a on e.employee_id = a.employeeId\r\n"
 				+ "				left join retierment empr on e.employee_id = empr.employeeId"
-				+ " where ew.zpId = " + user.getZillaParishadID();
+				+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
 		
 		if(user.getDepartmentID() > 0) {
 			query = query + " and ew.departmentId = " + user.getDepartmentID();
