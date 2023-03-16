@@ -47,6 +47,7 @@ public class Employee extends BaseEntity {
 	private Long employeeWorklocationId;
 	
 	private Date retirementDate;
+	private Date sevaDate;
 	private String salaryServiceIDNumber;
 	private String permanentAddress;
 	private String currentAddress;

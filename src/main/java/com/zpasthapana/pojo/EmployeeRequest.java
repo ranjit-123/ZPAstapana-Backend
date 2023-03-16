@@ -26,6 +26,7 @@ public class EmployeeRequest extends BaseRequest{
 	private Integer gender;
 	private Long employeeWorklocationId;
 	private String retirementDate;
+	private String sevaDate;
 	private String salaryServiceIDNumber;
 	private String permanentAddress;
 	private String currentAddress;

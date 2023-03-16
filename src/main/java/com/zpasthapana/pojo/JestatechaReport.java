@@ -22,6 +22,7 @@ public class JestatechaReport {
 	private Date jeshtataManivDate;
 	private Date hallichaNiyuktDinank;
 	private Date sevaPaveshottarPassDate;
+	private Date retirementDate;
 	private String niyuktichaMarg;
 	private String degreeName;
 	private String prathamPadonnatiNiyuktiDate;

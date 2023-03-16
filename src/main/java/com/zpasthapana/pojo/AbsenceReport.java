@@ -2,8 +2,6 @@ package com.zpasthapana.pojo;
 
 import java.util.Date;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

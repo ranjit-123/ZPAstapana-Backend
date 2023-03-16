@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,7 +89,11 @@ public class ReportController {
 			s.setTaluka(MasterDataUtil.getKeyDate("taluka_", s.getTaluka()));
 			s.setDepartmentName(MasterDataUtil.getKeyDate("department_", s.getDepartmentName()));
 			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
-			s.setOfficeName(MasterDataUtil.getKeyDate("subdepartment_", s.getOfficeName()));
+			String officeName = s.getOfficeName();
+			s.setOfficeName(MasterDataUtil.getKeyDate("subdepartment_", officeName));
+			if(StringUtils.isEmpty(s.getOfficeName())) {
+				s.setOfficeName(MasterDataUtil.getKeyDate("subdivision_", officeName));
+			}
 			s.setAbsencePeriod(s.getAbsencePeriod() + " days");
 			return s;
 		}).collect(Collectors.toList());

@@ -26,6 +26,7 @@ public class EmployeeResponse extends BaseRequest{
 	private Integer gender;
 	private Long employeeWorklocationId;
 	private Date retirementDate;
+	private Date sevaDate;
 	private String salaryServiceIDNumber;
 	private String permanentAddress;
 	private String currentAddress;
