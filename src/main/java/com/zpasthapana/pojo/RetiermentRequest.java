@@ -25,4 +25,5 @@ public class RetiermentRequest extends BaseRequest{
 	private Boolean docsIncomplte;
 	private Boolean amountDue;
 	private Long employeeId;
+	private Integer panchayatSamiti;
 }
