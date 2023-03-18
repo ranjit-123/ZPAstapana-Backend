@@ -48,14 +48,14 @@ public class Crime extends BaseEntity {
 	private Integer courtResult;
 	private String courtResultReason;
 	private String whatIsActionTaken;
-	private Integer punishmentOrderNo;
+	private String punishmentOrderNo;
 	private String punishmentOrderPdf;
 	
 	private Date punishmentOrderDate;
 	private String resultPdf;
 	private Integer appealedInHigherCourt;
 	private String caseDetails;
-	private Integer appealNumber;
+	private String appealNumber;
 	
 	private Date appealDate;
 	private Long employeeId;
