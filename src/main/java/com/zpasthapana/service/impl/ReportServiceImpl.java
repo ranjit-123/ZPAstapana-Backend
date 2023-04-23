@@ -19,6 +19,12 @@ import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.DataThreeInteger;
 import com.zpasthapana.pojo.JestatechaReport;
+import com.zpasthapana.pojo.ReportData;
+import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
+import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
+import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
+import com.zpasthapana.pojo.ReportSevaNivrutResponse;
+import com.zpasthapana.pojo.ReportStayitvaReponse;
 import com.zpasthapana.pojo.ZPBean;
 import com.zpasthapana.pojo.ZPDesAndCategoryBean;
 import com.zpasthapana.pojo.ZPMajurPadereport;
@@ -413,6 +419,198 @@ public class ReportServiceImpl implements ReportService {
 		List<AbsenceReport> data = jdbcTemplate.query(
 				query,
 				BeanPropertyRowMapper.newInstance(AbsenceReport.class));
+
+		return data;
+	}
+
+	@Override
+	public List<ReportData> getUnAuthorisedAbsenceReport1(Long userId, Integer departmentId) {
+		User user = userService.findUserById(userId);
+		String query = "SELECT distinct ew.departmentId as departmentName, concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as employeName,\r\n"
+				+ "					ed.employeeDesiganationId as designation, ifnull(empr.retirementDate, e.retirementDate) as retirementDate,\r\n"
+				+ "					ew.taluka, timestampdiff(DAY, absenceStartDate, absenceEndDate) absencePeriod, accountEnquiryCase as actionTaken, isPresent\r\n"
+				+ "                    , ifnull(ew.subDepartment, ew.subDivision) as officeName, '' as morethan6monthsCase FROM employee e inner join employee_designation_details ed \r\n"
+				+ "				on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId \r\n"
+				+ "				inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
+				+ "				on e.employee_id = edm.employeeId\r\n"
+				+ "				inner join employee_cast_details ec on e.employeeCastDetailsId = ec.employeeCastDetailsId\r\n"
+				+ "				inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
+				+ "                inner join unathorized_absence_period a on e.employee_id = a.employeeId\r\n"
+				+ "				left join retierment empr on e.employee_id = empr.employeeId"
+				+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
+		
+		if(user.getDepartmentID() > 0) {
+			query = query + " and ew.departmentId = " + user.getDepartmentID();
+		} else if(ObjectUtils.isNotEmpty(departmentId) && departmentId > 0) {
+			query = query + " and ew.departmentId = " + departmentId;
+		}
+		
+		
+		List<ReportData> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(ReportData.class));
+
+		return data;
+	}
+
+	@Override
+	public List<ReportSevaNivrutResponse> getRetirementCases(Long userId, Integer departmentId) {
+		User user = userService.findUserById(userId);
+		String query = "select *, (pendigOn142021 + retirementAfter142021) as totalRetirementCase, \r\n"
+				+ "((pendigOn142021 + retirementAfter142021) - totalRetirementFinalisedCases) as totalPendingCases,  \r\n"
+				+ "(pendingDueToDepartmentalEnquiry + judicialCases) as departmentalPlusJudicialCases,\r\n"
+				+ "(((pendigOn142021 + retirementAfter142021) - totalRetirementFinalisedCases) - (pendingDueToDepartmentalEnquiry + judicialCases)) as exceptAccountEnquiryAndJudicial\r\n"
+				+ "from (select ew.departmentId as departmentName, sum(case when (pendingPensionDate >= '2022-04-01' and pendingPensionDate < '2023-04-01') then 1 else 0 end) as pendigOn142021,\r\n"
+				+ "sum(case when (pendingPensionDate >= '2023-04-01') then 1 else 0 end) as retirementAfter142021,\r\n"
+				+ "sum(case when (pensionDate >= '2023-04-01') then 1 else 0 end) as totalRetirementFinalisedCases,\r\n"
+				+ "sum(case when (MONTH(pensionDate) = month(CURDATE())) then 1 else 0 end) as finalCasesInReportMonth,\r\n"
+				+ "sum(case when (pensionDate is null and a.employeeId is not null) then 1 else 0 end) as pendingDueToDepartmentalEnquiry,\r\n"
+				+ "sum(case when (pensionDate is null and c.employeeId is not null) then 1 else 0 end) as judicialCases,\r\n"
+				+ "sum(case when (c.employeeId is null and a.employeeId is null and pensionDate is null and TIMESTAMPDIFF(MONTH, pendingPensionDate, CURDATE())\r\n"
+				+ ")  >= 6 then 1 else 0 end) as pendingMoreThanSixMonth  \r\n"
+				+ "from retierment r inner join employee e on r.employeeId = e.employee_id"
+				+ " left join (select employeeId from criminal_offence where courtResultImplemented = 0 group by employeeId)  c\r\n"
+				+ "on r.employeeId = c.employeeId left join (select employeeId from account_inquiry where implementationDone = 0 group by employeeId) a \r\n"
+				+ "on r.employeeId = a.employeeId "
+				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId" + ""
+			    + " where pensionDate is null or pensionDate >= '2023-04-01' and e.active = 1 and ew.zpId = " + user.getZillaParishadID();
+
+		if (user.getDepartmentID() > 0) {
+			query = query + " and ew.departmentId = " + user.getDepartmentID();
+		} else if (ObjectUtils.isNotEmpty(departmentId) && departmentId > 0) {
+			query = query + " and ew.departmentId = " + departmentId;
+		}
+		query = query + " group by ew.departmentId ) tmp;";
+
+		List<ReportSevaNivrutResponse> data = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(ReportSevaNivrutResponse.class));
+		return data;
+	}
+
+	@Override
+	public List<ReportSevaNivrutDepartmentLevelResponse> getRetirementCasesAll(Long userId, String type) {
+		User user = userService.findUserById(userId);
+		String query = "select distinct ew.departmentId as departmentName,concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as employeeName,\r\n"
+				+ "ed.employeeDesiganationId as designation,ifnull(ew.subDepartment, ew.subDivision) as officeName, ew.taluka, r.retirementReason, r.currentCondition as currentSituationOfCase, r.pendingLevel,\r\n"
+				+ " ifnull(r.retirementDate, e.retirementDate) as retirementDate, (case when (pensionDate is null and TIMESTAMPDIFF(MONTH, pendingPensionDate, CURDATE())\r\n"
+				+ ")  >= 6 then 1 else 0 end) as isCaseOldThan6Months, declarationDate from retierment r inner join employee e on r.employeeId = e.employee_id \r\n"
+				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
+				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
+		+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
+		
+		if(user.getDepartmentID() > 0) {
+			query = query + " and ew.departmentId = " + user.getDepartmentID();
+		}
+		
+		if(StringUtils.endsWithIgnoreCase(type, "pending")) {
+			query = query + " and pensionDate is null ";
+		} else {
+			query = query + " and pensionDate is not null ";
+		}
+		
+		query = query + " order by ew.departmentId";
+		
+		List<ReportSevaNivrutDepartmentLevelResponse> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(ReportSevaNivrutDepartmentLevelResponse.class));
+
+		return data;
+	}
+
+	@Override
+	public List<ReportMattaDayitvaResponse> getMattadayitvaAll(Long userId, String year, Long departmentId) {
+
+		String query = "SELECT\r\n"
+				+ "d.designationID as designation, \r\n"
+				+ "sum(case when (d.designationClassID = 3 and ifnull(a.isAssetLiabilitySubmitted, 0) = 0) then 1 else 0 end) as workingEmployeeA,\r\n"
+				+ "sum(case when (d.designationClassID = 4 and ifnull(a.isAssetLiabilitySubmitted, 0) = 0) then 1 else 0 end) as workingEmployeeB,\r\n"
+				+ "sum(case when (d.designationClassID = 1 and ifnull(a.isAssetLiabilitySubmitted, 0) = 0) then 1 else 0 end) as workingEmployeeC,\r\n"
+				+ "sum(case when (d.designationClassID = 3 and ifnull(a.isAssetLiabilitySubmitted, 0) = 1) then 1 else 0 end) as mattaDayitvaSubmittedA,\r\n"
+				+ "sum(case when (d.designationClassID = 4 and ifnull(a.isAssetLiabilitySubmitted, 0) = 1) then 1 else 0 end) as mattaDayitvaSubmittedB,\r\n"
+				+ "sum(case when (d.designationClassID = 1 and ifnull(a.isAssetLiabilitySubmitted, 0) = 1) then 1 else 0 end) as mattaDayitvaSubmittedC  \r\n"
+				+ "FROM employee e\r\n"
+				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
+				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
+				+ "left join assetLiability a on e.employee_id = a.employeeId and a.financialYear = '"+ year + "'";
+				
+		query = query + " where ew.departmentId = " + departmentId;
+				
+		query = query + " group by d.designationID;";
+		
+		List<ReportMattaDayitvaResponse> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(ReportMattaDayitvaResponse.class));
+
+		return data;
+	}
+
+	@Override
+	public List<ReportGopaniyAhvalResponse> getGopaniyAhvalAll(Long userId, String year, Long departmentId) {
+		
+		String lastYear = year.substring(year.indexOf("-") + 1);
+		
+		String query = "SELECT\r\n"
+				+ "d.designationID as designation, \r\n"
+				+ "sum(case when (d.designationClassID = 3) then 1 else 0 end) as allEmployeeA,\r\n"
+				+ "sum(case when (d.designationClassID = 4) then 1 else 0 end) as allEmployeeB,\r\n"
+				+ "sum(case when (d.designationClassID = 1) then 1 else 0 end) as allEmployeeC,\r\n"
+				+ "sum(case when (d.designationClassID = 3 and tmp1.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialDataSubmittedA,\r\n"
+				+ "sum(case when (d.designationClassID = 4 and tmp1.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialDataSubmittedB,\r\n"
+				+ "sum(case when (d.designationClassID = 1 and tmp1.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialDataSubmittedC,\r\n"
+				+ "sum(case when (d.designationClassID = 3 and tmp2.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialUpdatedA,\r\n"
+				+ "sum(case when (d.designationClassID = 4 and tmp2.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialUpdatedB,\r\n"
+				+ "sum(case when (d.designationClassID = 1 and tmp2.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialUpdatedC    \r\n"
+				+ "FROM employee e\r\n"
+				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
+				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
+				+ "left join (\r\n"
+				+ "SELECT employeeId, financialYear, \r\n"
+				+ "min(fromDate) as fromDate, max(toDate) as toDate\r\n"
+				+ " FROM confidential where reportingOfficerMarks is not null group by financialYear, employeeId\r\n"
+				+ ") tmp1 on e.employee_id = tmp1.employeeId and tmp1.financialYear = '"+ year + "'\r\n"
+				+ "left join (\r\n"
+				+ "SELECT employeeId, financialYear, \r\n"
+				+ "min(fromDate) as fromDate, max(toDate) as toDate\r\n"
+				+ " FROM confidential where reviewOfficerMarks is not null group by financialYear, employeeId\r\n"
+				+ ") tmp2 on e.employee_id = tmp2.employeeId and tmp2.financialYear = '"+ year + "'";
+				
+		query = query + " where ew.departmentId = " + departmentId;
+				
+		query = query + " group by d.designationID;";
+		
+		List<ReportGopaniyAhvalResponse> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(ReportGopaniyAhvalResponse.class));
+
+		return data;
+	}
+
+	@Override
+	public List<ReportStayitvaReponse> getStayitvaReportAll(Long userId, String year, Long departmentId) {
+		
+		String query = "SELECT\r\n"
+				+ "d.designationID as designation, \r\n"
+				+ "sum(case when (d.designationClassID = 1) then 1 else 0 end) as totalWorkingEmpC,\r\n"
+				+ "sum(case when (d.designationClassID = 2) then 1 else 0 end) as totalWorkingEmpD,\r\n"
+				+ "sum(case when (d.designationClassID = 1 and TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3) then 1 else 0 end) as stayitvaEligibleEmpC,\r\n"
+				+ "sum(case when (d.designationClassID = 2 and TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3) then 1 else 0 end) as stayitvaEligibleEmpD, \r\n"
+				+ "sum(case when (d.designationClassID = 1 and ifnull(tmp1.isAppealed, 0) > 0) then 1 else 0 end) as stayitvaReceivedEmpC,\r\n"
+				+ "sum(case when (d.designationClassID = 2 and ifnull(tmp1.isAppealed, 0) > 0) then 1 else 0 end) as stayitvaReceivedEmpD  \r\n"
+				+ "FROM employee e\r\n"
+				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
+				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
+				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm on e.employee_id = edm.employeeId\r\n"
+				+ "left join stayitva_pramanpatra tmp1 on e.employee_id = tmp1.employeeId\r\n";
+				
+		query = query + " where ew.departmentId = " + departmentId;
+				
+		query = query + " group by d.designationID;";
+		
+		List<ReportStayitvaReponse> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(ReportStayitvaReponse.class));
 
 		return data;
 	}

@@ -53,6 +53,9 @@ public class Retierment extends BaseEntity{
 	private Boolean amountDue;
 	private Long employeeId;
 	
+	private Date pendingPensionDate;
+	private Date pensionDate;
+	
 	@OneToOne
 	@JoinColumn(table = "retierment", name ="employeeId", insertable = false, updatable = false)
 	@JsonBackReference

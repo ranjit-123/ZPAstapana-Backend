@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.JestatechaReport;
+import com.zpasthapana.pojo.ReportData;
+import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
+import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
+import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
+import com.zpasthapana.pojo.ReportSevaNivrutResponse;
+import com.zpasthapana.pojo.ReportStayitvaReponse;
 import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 import com.zpasthapana.service.ReportService;
@@ -99,5 +105,105 @@ public class ReportController {
 		}).collect(Collectors.toList());
 		return new ResponseEntity<List<AbsenceReport>>(result, HttpStatus.OK);
 	}
-
+	
+	@GetMapping("/report/{userId}")
+	public ResponseEntity<List<ReportData>> getUnAuthorisedAbsenceReport1(@PathVariable Long userId, @RequestParam(name = "departmentId", required = false) Integer departmentId) {
+		List<ReportData> result = reportService.getUnAuthorisedAbsenceReport1(userId, departmentId);
+//		result = result.stream().map(s->{
+//			s.setTaluka(MasterDataUtil.getKeyDate("taluka_", s.getTaluka()));
+//			s.setDepartmentName(MasterDataUtil.getKeyDate("department_", s.getDepartmentName()));
+//			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
+//			String officeName = s.getOfficeName();
+//			s.setOfficeName(MasterDataUtil.getKeyDate("subdepartment_", officeName));
+//			if(StringUtils.isEmpty(s.getOfficeName())) {
+//				s.setOfficeName(MasterDataUtil.getKeyDate("subdivision_", officeName));
+//			}
+//			s.setAbsencePeriod(s.getAbsencePeriod() + " days");
+//			return s;
+//		}).collect(Collectors.toList());
+		return new ResponseEntity<List<ReportData>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/retirement-cases/department-level/{userId}")
+	public ResponseEntity<List<ReportSevaNivrutResponse>> getRetirementCases(@PathVariable Long userId, @RequestParam(name = "departmentId", required = false) Integer departmentId) {
+		List<ReportSevaNivrutResponse> result = reportService.getRetirementCases(userId, departmentId);
+		result = result.stream().map(s->{
+			s.setDepartmentName(MasterDataUtil.getKeyDate("department_", s.getDepartmentName()));
+			return s;
+		}).collect(Collectors.toList());
+		return new ResponseEntity<List<ReportSevaNivrutResponse>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/retirement-cases/department/{userId}")
+	public ResponseEntity<List<ReportSevaNivrutDepartmentLevelResponse>> getRetirementCasesAll(@PathVariable Long userId, @RequestParam(name = "type", required = false) String type) {
+		List<ReportSevaNivrutDepartmentLevelResponse> result = reportService.getRetirementCasesAll(userId, type);
+		result = result.stream().map(s->{
+			s.setTaluka(MasterDataUtil.getKeyDate("taluka_", s.getTaluka()));
+			s.setDepartmentName(MasterDataUtil.getKeyDate("department_", s.getDepartmentName()));
+			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
+			String officeName = s.getOfficeName();
+			s.setOfficeName(MasterDataUtil.getKeyDate("subdepartment_", officeName));
+			if(StringUtils.isEmpty(s.getOfficeName())) {
+				s.setOfficeName(MasterDataUtil.getKeyDate("subdivision_", officeName));
+			}
+			return s;
+		}).collect(Collectors.toList());
+		return new ResponseEntity<List<ReportSevaNivrutDepartmentLevelResponse>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/matta-dayitva/yearly-details/{userId}")
+	public ResponseEntity<List<ReportMattaDayitvaResponse>> getMattadayitvaAll(@PathVariable Long userId, @RequestParam(name = "year", required = false) String year,@RequestParam(name = "departmentId", required = false) Long departmentId) {
+		List<ReportMattaDayitvaResponse> result = reportService.getMattadayitvaAll(userId, year, departmentId);
+		result = result.stream().map(s->{
+			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
+			s.setWorkingEmployeeTotal(s.getWorkingEmployeeA() + s.getWorkingEmployeeB() + s.getWorkingEmployeeC());
+			s.setMattaDayitvaSubmittedTotal(s.getMattaDayitvaSubmittedA() + s.getMattaDayitvaSubmittedB() + s.getMattaDayitvaSubmittedC());
+			s.setMattaDayitvaNotSubmittedA(s.getWorkingEmployeeA() - s.getMattaDayitvaSubmittedA());
+			s.setMattaDayitvaNotSubmittedB(s.getWorkingEmployeeB() - s.getMattaDayitvaSubmittedB());
+			s.setMattaDayitvaNotSubmittedC(s.getWorkingEmployeeC() - s.getMattaDayitvaSubmittedC());
+			s.setMattaDayitvaNotSubmittedTotal(s.getMattaDayitvaNotSubmittedA() + s.getMattaDayitvaNotSubmittedB() + s.getMattaDayitvaNotSubmittedC());
+			return s;
+		}).collect(Collectors.toList());
+		return new ResponseEntity<List<ReportMattaDayitvaResponse>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/confidential-report/yearly-details/{userId}")
+	public ResponseEntity<List<ReportGopaniyAhvalResponse>> getGopaniyAhvalAll(@PathVariable Long userId, @RequestParam(name = "year", required = false) String year,@RequestParam(name = "departmentId", required = false) Long departmentId) {
+		List<ReportGopaniyAhvalResponse> result = reportService.getGopaniyAhvalAll(userId, year, departmentId);
+		result = result.stream().map(s -> {
+			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
+			s.setAllEmployeeTotal(s.getAllEmployeeA() + s.getAllEmployeeB() + s.getAllEmployeeC());
+			s.setConfidentialDataSubmittedTotal(s.getConfidentialDataSubmittedA() + s.getConfidentialDataSubmittedB()
+					+ s.getConfidentialDataSubmittedC());
+			s.setConfidentialNotSubmittedA(s.getAllEmployeeA() - s.getConfidentialDataSubmittedA());
+			s.setConfidentialNotSubmittedB(s.getAllEmployeeB() - s.getConfidentialDataSubmittedB());
+			s.setConfidentialNotSubmittedC(s.getAllEmployeeC() - s.getConfidentialDataSubmittedC());
+			s.setConfidentialNotSubmittedTotal(s.getConfidentialNotSubmittedA() + s.getConfidentialNotSubmittedB()
+					+ s.getConfidentialNotSubmittedC());
+			s.setConfidentialUpdatedTotal(
+					s.getConfidentialUpdatedA() + s.getConfidentialUpdatedB() + s.getConfidentialUpdatedC());
+			s.setConfidentialNotUpdatedA(s.getConfidentialDataSubmittedA() - s.getConfidentialUpdatedA());
+			s.setConfidentialNotUpdatedB(s.getConfidentialDataSubmittedB() - s.getConfidentialUpdatedB());
+			s.setConfidentialNotUpdatedC(s.getConfidentialDataSubmittedC() - s.getConfidentialUpdatedC());
+			s.setConfidentialNotUpdatedTotal(s.getConfidentialNotUpdatedA() + s.getConfidentialNotUpdatedB() + s.getConfidentialNotUpdatedC());
+			return s;
+		}).collect(Collectors.toList());
+		return new ResponseEntity<List<ReportGopaniyAhvalResponse>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/stayitva-certification/department-level/{userId}")
+	public ResponseEntity<List<ReportStayitvaReponse>> getStayitvaReportAll(@PathVariable Long userId, @RequestParam(name = "year", required = false) String year,@RequestParam(name = "departmentId", required = false) Long departmentId) {
+		List<ReportStayitvaReponse> result = reportService.getStayitvaReportAll(userId, year, departmentId);
+		result = result.stream().map(s -> {
+			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
+			s.setTotalWorkingEmpTotal(s.getTotalWorkingEmpC() + s.getTotalWorkingEmpD());
+			s.setStayitvaNotReceivedEmpC(s.getStayitvaEligibleEmpC() - s.getStayitvaReceivedEmpC());
+			s.setStayitvaNotReceivedEmpD(s.getStayitvaEligibleEmpD() - s.getStayitvaReceivedEmpD());
+			s.setStayitvaNotReceivedEmpTotal(s.getStayitvaNotReceivedEmpC() + s.getStayitvaNotReceivedEmpD());
+			s.setStayitvaEligibleEmpTotal(s.getStayitvaEligibleEmpC() + s.getStayitvaEligibleEmpD());
+			s.setStayitvaReceivedEmpTotal(s.getStayitvaReceivedEmpC() + s.getStayitvaReceivedEmpD());
+			return s;
+		}).collect(Collectors.toList());
+		return new ResponseEntity<List<ReportStayitvaReponse>>(result, HttpStatus.OK);
+	}
 }

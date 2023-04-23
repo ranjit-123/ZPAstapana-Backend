@@ -1,5 +1,6 @@
 package com.zpasthapana.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -27,7 +28,17 @@ public class RetiermentServiceImpl implements RetiermentService {
 	
 	@Override
 	public void addRetirement(RetiermentRequest request) {
-		Retierment r = retiermentRepo.save(modelMapper.map(request, Retierment.class));
+		Retierment r = modelMapper.map(request, Retierment.class);
+		
+		if(r.getIsPayAfterRetirement() == 1) {
+			r.setPendingPensionDate(new Date());
+		}
+		
+		if(r.getIsPension() == 1) {
+			r.setPensionDate(new Date());
+		}
+		
+		r = retiermentRepo.save(r);
 		Employee emp = employeeRepo.findById(request.getEmployeeId()).get();
 		emp.setRetiermentId(r.getId());
 		employeeRepo.save(emp);
