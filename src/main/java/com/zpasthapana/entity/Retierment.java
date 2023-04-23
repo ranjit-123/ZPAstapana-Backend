@@ -52,6 +52,7 @@ public class Retierment extends BaseEntity{
 	private Boolean docsIncomplte;
 	private Boolean amountDue;
 	private Long employeeId;
+	private Integer panchayatSamiti;
 	
 	private Date pendingPensionDate;
 	private Date pensionDate;

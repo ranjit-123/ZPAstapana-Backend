@@ -359,7 +359,7 @@ public class ReportServiceImpl implements ReportService {
 				+ " concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as name, \r\n"
 				+ "    ec.caste as caste, ec.castecategory as mulJatPravarg, ec.appointmentCasteCategoryID as niyuktiPravarg, \r\n"
 				+ "    '' as pravargChangeDate, dateOfBirth as birthDate, ed.dateOfAppointed as hallichaNiyuktDinank, employeeselectioncategory as niyuktichaMarg, ed.dateOfHumanitySeniority as jeshtataManivDate, \r\n"
-				+ "    e.seva_date as sevaPaveshottarPassDate\r\n"
+				+ "    e.sevaDate as sevaPaveshottarPassDate\r\n"
 				+ ", ifnull(ifnull(empr.retirementDate, e.retirementDate),'') as retirementDate"
 				+ "    ,'' as prathamPadonnatiNiyuktiDate, '' as dvitiyaPadonnatiNiyuktiDate, '' as trutiyaPadonnatiNiyuktiDate, ifnull(eed.degreeName,'') as degreeName "
 				+ " , edm.dateOfAppointed as prathamPadavarilDate, '' as remark FROM employee e inner join employee_designation_details ed \r\n"

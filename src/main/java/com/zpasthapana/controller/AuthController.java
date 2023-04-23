@@ -37,8 +37,9 @@ public class AuthController {
 		if (userResponse.isPresent()) {
 			String token = jwtTokenUtil.generateToken(userResponse.get().getUserName(), "user");
 			zPStaticDetailsService.loadManjurPade(userResponse.get());
+			Long zpId= userResponse.get().getZillaParishadID();
 			String zpName = zPStaticDetailsService.getZPNameByZPID(userResponse.get().getZillaParishadID());
-			return ResponseEntity.ok(new AuthResponse(token, userResponse.get().getUserId(),zpName));
+			return ResponseEntity.ok(new AuthResponse(token, userResponse.get().getUserId(),zpName,zpId));
 		} else {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}

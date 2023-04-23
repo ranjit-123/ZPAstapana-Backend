@@ -14,4 +14,5 @@ public class AuthResponse {
 	private String token;
 	private Long id;
 	private String zpName;
+	private Long zpId;
 }

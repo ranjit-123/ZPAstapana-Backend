@@ -56,7 +56,7 @@ public class EmployeeController {
 				employeeResponse, HttpStatus.OK);
 	}
 	
-	@PutMapping(value = "/deactivate/{employeeId}")
+	@PostMapping(value = "/deactivate/{employeeId}")
 	public ResponseEntity<Void> deactivateEmployee(@PathVariable Long employeeId){
 		employeeService.deactivateEmployee(employeeId);
 		return new ResponseEntity<Void>(
