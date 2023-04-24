@@ -19,6 +19,7 @@ import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
+import com.zpasthapana.pojo.ReportLanguageResponse;
 import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
 import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
@@ -232,5 +233,36 @@ public class ReportController {
 		result.add(total);
 		return new ResponseEntity<List<ReportSanganakAhartaResponse>>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("/marathi-hindi/language-test-department-level/{userId}")
+	public ResponseEntity<List<ReportLanguageResponse>> getHindiMarathiReportAll(@PathVariable Long userId, @RequestParam(name = "year", required = false) String year,@RequestParam(name = "departmentId", required = false) Long departmentId) {
+		List<ReportLanguageResponse> result = reportService.getHindiMarathiReportAll(userId, year, departmentId);
+		ReportLanguageResponse total = ReportLanguageResponse.builder()
+				.designation("एकूण")
+				.hindiNotPass(0)
+				.hindiPass(0)
+				.hindiSut(0)
+				.hindiTotal(0)
+				.marathiNotPass(0)
+				.marathiPass(0)
+				.marathiSut(0)
+				.marathiTotal(0)
+				.build();
+		result = result.stream().map(s -> {
+			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
+			total.setHindiNotPass(total.getHindiNotPass() + s.getHindiNotPass());
+			total.setHindiPass(total.getHindiPass() + s.getHindiPass());
+			total.setHindiSut(total.getHindiSut() + s.getHindiSut());
+			total.setHindiTotal(total.getHindiTotal() + s.getHindiTotal());
+			total.setMarathiNotPass(total.getMarathiNotPass() + s.getMarathiNotPass());
+			total.setMarathiPass(total.getMarathiPass() + s.getMarathiPass());
+			total.setMarathiSut(s.getMarathiSut() + total.getMarathiSut());
+			total.setMarathiTotal(s.getMarathiTotal() + total.getMarathiTotal());
+			return s;
+		}).collect(Collectors.toList());
+		result.add(total);
+		return new ResponseEntity<List<ReportLanguageResponse>>(result, HttpStatus.OK);
+	}
+	
 	
 }

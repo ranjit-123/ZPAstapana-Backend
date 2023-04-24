@@ -21,6 +21,7 @@ import com.zpasthapana.pojo.DataThreeInteger;
 import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
+import com.zpasthapana.pojo.ReportLanguageResponse;
 import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
 import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
@@ -640,6 +641,36 @@ public class ReportServiceImpl implements ReportService {
 		List<ReportSanganakAhartaResponse> data = jdbcTemplate.query(
 				query,
 				BeanPropertyRowMapper.newInstance(ReportSanganakAhartaResponse.class));
+
+		return data;
+	}
+
+	@Override
+	public List<ReportLanguageResponse> getHindiMarathiReportAll(Long userId, String year, Long departmentId) {
+		String query = "SELECT\r\n"
+				+ "d.designationID, \r\n"
+				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as totalEmployee,\r\n"
+				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as marathiPass,\r\n"
+				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as hindiPass,\r\n"
+				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 1) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 1) then 1 else 0 end) as marathiSut,\r\n"
+				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 1) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 1) then 1 else 0 end) as hindiSut,\r\n"
+				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 2) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 2) or tmp1.marathiHindiFlag is null then 1 else 0 end) as marathiNotPass,\r\n"
+				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 2) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 2) or tmp1.marathiHindiFlag is null then 1 else 0 end) as hindiNotPass,\r\n"
+				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as marathiTotal,\r\n"
+				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as hindiTotal \r\n"
+				+ "FROM employee e\r\n"
+				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
+				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
+				+ "left join employee_language_exam tmp1 on e.employee_id = tmp1.employeeId\r\n";
+				
+		query = query + " where ew.departmentId = " + departmentId;
+				
+		query = query + " group by d.designationID;";
+		
+		List<ReportLanguageResponse> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(ReportLanguageResponse.class));
 
 		return data;
 	}
