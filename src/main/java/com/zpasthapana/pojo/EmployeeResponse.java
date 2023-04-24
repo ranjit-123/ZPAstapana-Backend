@@ -2,6 +2,8 @@ package com.zpasthapana.pojo;
 
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -117,6 +119,13 @@ public class EmployeeResponse extends BaseRequest{
 	private String englishTypingSpeedDiscountDate;
 	private String englishTypingSpeedDiscountOrderDate;
 	private String englishTypingSpeedPDF;
+	
+	private Integer computerFlag;
+	private String computerExamName;
+	private String computerPassoutDate;
+	private String computerDiscountDate;
+	private String computerDiscountOrderDate;
+	private String computerPDF;
 	
 	private String type;
 	private Long stateId;

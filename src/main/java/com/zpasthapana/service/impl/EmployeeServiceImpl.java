@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.zpasthapana.entity.ConcessionDetails;
 import com.zpasthapana.entity.Employee;
 import com.zpasthapana.entity.EmployeeCastDetails;
+import com.zpasthapana.entity.EmployeeComputerExamDetails;
 import com.zpasthapana.entity.EmployeeDesiganation;
 import com.zpasthapana.entity.EmployeeDisability;
 import com.zpasthapana.entity.EmployeeEducation;
@@ -32,6 +33,7 @@ import com.zpasthapana.pojo.ResponsePageDto;
 import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.repo.ConcessionDetailsRepo;
 import com.zpasthapana.repo.EmployeeCastDetailsRepo;
+import com.zpasthapana.repo.EmployeeComputerExamDetailsRepo;
 import com.zpasthapana.repo.EmployeeDesiganationRepo;
 import com.zpasthapana.repo.EmployeeDisabilityRepo;
 import com.zpasthapana.repo.EmployeeEducationRepo;
@@ -76,6 +78,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	EmployeeTypingDetailsRepo employeeTypingDetailsRepo; 
 	
 	@Autowired
+	EmployeeComputerExamDetailsRepo employeeComputerExamDetailsRepo; 
+	
+	@Autowired
 	EmployeeWorklocationRepo employeeWorklocationRepo; 
 	
 	@Autowired
@@ -98,7 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 			EmployeeResponse response = EmployeeResponse.builder().build();
 			
 			Employee employee = modelMapper.map(employeeRequest, Employee.class);
-			
+			employee.setIsActive(true);
 			employee = employeeRepo.save(employee);
 			employeeRequest.setEmployeeId(employee.getEmployeeId());
 			ZPUtility.uploadFiles(employeeRequest, null, employeeRequest.getEmployeeId());
@@ -150,6 +155,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 			employeeTypingDetails = employeeTypingDetailsRepo.save(employeeTypingDetails);
 			response = modelMapper.map(employeeTypingDetails, EmployeeResponse.class);
 			
+			EmployeeComputerExamDetails employeeComputerExamDetails = modelMapper.map(employeeRequest, EmployeeComputerExamDetails.class);
+			ZPUtility.updateFileNames(employeeRequest, employeeComputerExamDetails, fields);
+			employeeComputerExamDetails = employeeComputerExamDetailsRepo.save(employeeComputerExamDetails);
+			response = modelMapper.map(employeeComputerExamDetails, EmployeeResponse.class);
+			
 			EmployeeWorklocation employeeWorklocation = modelMapper.map(employeeRequest, EmployeeWorklocation.class);
 			employeeWorklocation = employeeWorklocationRepo.save(employeeWorklocation);	
 			response = modelMapper.map(employeeWorklocation, EmployeeResponse.class);
@@ -170,7 +180,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 			ZPUtility.updateFileNames(employeeRequest, employeeLanguageExam, fields);
 			employeeLanguageExam = employeeLanguageExamRepo.save(employeeLanguageExam);	
 			response = modelMapper.map(concessionDetails, EmployeeResponse.class);
-			
 			employee = employeeRepo.save(employee);
 			response = modelMapper.map(employee, EmployeeResponse.class);
 			

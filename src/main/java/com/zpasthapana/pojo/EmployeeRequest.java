@@ -118,6 +118,13 @@ public class EmployeeRequest extends BaseRequest{
 	private String englishTypingSpeedDiscountOrderDate;
 	private MultipartFile englishTypingSpeedPDF;
 	
+	private Integer computerFlag;
+	private String computerExamName;
+	private String computerPassoutDate;
+	private String computerDiscountDate;
+	private String computerDiscountOrderDate;
+	private MultipartFile computerPDF;
+	
 	private String type;
 	private Long stateId;
 	private Long divisionId;
