@@ -1,6 +1,7 @@
 package com.zpasthapana.pojo;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,17 +10,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ReportSanganakAhartaResponse {
-	public String deparmentName;
-	public String pendigOn142021;
-	public String retirementAfter142021;
-	public String totalRetirementCase;
-	public String totalRetirementFinalisedCases;
-	public String finalCasesInReportMonth;
-	public String totalPendingCases;
-	public String pendingDueToDepartmentalEnquiry;
-	public String judicialCases;
-	public String departmentalPlusJudicialCases;
-	public String exceptAccountEnquiryAndJudicial;
-	public String pendingMoreThanSixMonth;
+	public String designation;
+	public Integer totalEmployee;
+	public Integer pass;
+	public Integer notApplicable;
+	public Integer total;
+	public Integer notQualified;
+	private Integer notQualifiedNotApplicable;
 }

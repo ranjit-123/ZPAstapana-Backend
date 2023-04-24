@@ -20,6 +20,7 @@ import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
 import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
+import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
@@ -208,19 +209,28 @@ public class ReportController {
 	}
 	
 	@GetMapping("/computer-qualification/department-level/{userId}")
-	public ResponseEntity<List<ReportStayitvaReponse>> getComputerQualificationReportAll(@PathVariable Long userId, @RequestParam(name = "year", required = false) String year,@RequestParam(name = "departmentId", required = false) Long departmentId) {
-		List<ReportStayitvaReponse> result = reportService.getStayitvaReportAll(userId, year, departmentId);
+	public ResponseEntity<List<ReportSanganakAhartaResponse>> getComputerQualificationReportAll(@PathVariable Long userId, @RequestParam(name = "year", required = false) String year,@RequestParam(name = "departmentId", required = false) Long departmentId) {
+		List<ReportSanganakAhartaResponse> result = reportService.getComputerQualificationReportAll(userId, year, departmentId);
+		ReportSanganakAhartaResponse total = ReportSanganakAhartaResponse.builder()
+				.notApplicable(0)
+				.notQualified(0)
+				.totalEmployee(0)
+				.total(0)
+				.notQualifiedNotApplicable(0)
+				.pass(0)
+				.designation("एकूण").build();
 		result = result.stream().map(s -> {
+			total.setTotal(total.getTotal() + s.getTotal());
+			total.setNotApplicable(total.getNotApplicable() + s.getNotApplicable());
+			total.setNotQualified(total.getNotQualified() + s.getNotQualified());
+			total.setTotalEmployee(total.getTotalEmployee() + s.getTotalEmployee());
+			total.setNotQualifiedNotApplicable(total.getNotQualifiedNotApplicable() + s.getNotQualifiedNotApplicable());
+			total.setPass(total.getPass() + s.getPass());
 			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
-			s.setTotalWorkingEmpTotal(s.getTotalWorkingEmpC() + s.getTotalWorkingEmpD());
-			s.setStayitvaNotReceivedEmpC(s.getStayitvaEligibleEmpC() - s.getStayitvaReceivedEmpC());
-			s.setStayitvaNotReceivedEmpD(s.getStayitvaEligibleEmpD() - s.getStayitvaReceivedEmpD());
-			s.setStayitvaNotReceivedEmpTotal(s.getStayitvaNotReceivedEmpC() + s.getStayitvaNotReceivedEmpD());
-			s.setStayitvaEligibleEmpTotal(s.getStayitvaEligibleEmpC() + s.getStayitvaEligibleEmpD());
-			s.setStayitvaReceivedEmpTotal(s.getStayitvaReceivedEmpC() + s.getStayitvaReceivedEmpD());
 			return s;
 		}).collect(Collectors.toList());
-		return new ResponseEntity<List<ReportStayitvaReponse>>(result, HttpStatus.OK);
+		result.add(total);
+		return new ResponseEntity<List<ReportSanganakAhartaResponse>>(result, HttpStatus.OK);
 	}
 	
 }

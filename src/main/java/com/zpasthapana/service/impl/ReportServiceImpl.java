@@ -22,6 +22,7 @@ import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
 import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
+import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
@@ -611,6 +612,34 @@ public class ReportServiceImpl implements ReportService {
 		List<ReportStayitvaReponse> data = jdbcTemplate.query(
 				query,
 				BeanPropertyRowMapper.newInstance(ReportStayitvaReponse.class));
+
+		return data;
+	}
+
+	@Override
+	public List<ReportSanganakAhartaResponse> getComputerQualificationReportAll(Long userId, String year,
+			Long departmentId) {
+		String query = "SELECT\r\n"
+				+ "d.designationID, \r\n"
+				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as totalEmployee,\r\n"
+				+ "sum(case when tmp1.computerFlag = 0 then 1 else 0 end) as pass,\r\n"
+				+ "sum(case when tmp1.computerFlag = 1 then 1 else 0 end) as notApplicable,\r\n"
+				+ "sum(case when tmp1.computerFlag = 1 or tmp1.computerFlag = 0 then 1 else 0 end) as total,\r\n"
+				+ "sum(case when ifnull(tmp1.computerFlag, 2) = 2 or tmp1.computerFlag = 1 then 1 else 0 end) as notQualified,\r\n"
+				+ "sum(case when tmp1.computerFlag = 1 then 1 else 0 end) as notQualifiedNotApplicable \r\n"
+				+ "FROM employee e\r\n"
+				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
+				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
+				+ "left join employee_computer_details tmp1 on e.employee_id = tmp1.employeeId";
+				
+		query = query + " where ew.departmentId = " + departmentId;
+				
+		query = query + " group by d.designationID;";
+		
+		List<ReportSanganakAhartaResponse> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(ReportSanganakAhartaResponse.class));
 
 		return data;
 	}
