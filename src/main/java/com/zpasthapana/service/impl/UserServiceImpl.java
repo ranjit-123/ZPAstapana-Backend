@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zpasthapana.entity.User;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.pojo.UserPojo;
 import com.zpasthapana.repo.UserRepo;
 import com.zpasthapana.service.UserService;
@@ -82,8 +83,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ResponsePageDto<User> getAllUsers(Pageable paging) {
-		return ZPUtility.getPage(paging, userRepo.findAll(paging));
+	public ResponsePageDto<User> getAllUsers(Pageable paging, UIPageRequest pageRequest) {
+		return ZPUtility.getPage(paging, userRepo.findAllUsers(pageRequest.getDevisionId(), pageRequest.getZpId(),
+				pageRequest.getDepartmentId(), pageRequest.getTalukaId(),paging));
 	}
 
 	@Override

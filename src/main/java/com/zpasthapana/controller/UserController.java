@@ -50,7 +50,7 @@ public class UserController {
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<User>> getAllUsers(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
-		ResponsePageDto<User> pageData = userService.getAllUsers(paging);
+		ResponsePageDto<User> pageData = userService.getAllUsers(paging, pageRequest);
 		pageData.setDraw(pageRequest.getPageNumber() + 1);
 		return new ResponseEntity<ResponsePageDto<User>>(pageData,
 				HttpStatus.OK);

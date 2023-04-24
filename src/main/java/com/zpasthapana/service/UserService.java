@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.zpasthapana.entity.User;
 import com.zpasthapana.pojo.ResponsePageDto;
+import com.zpasthapana.pojo.UIPageRequest;
 import com.zpasthapana.pojo.UserPojo;
 
 
@@ -20,7 +21,7 @@ public interface UserService extends UserDetailsService {
 
 	Optional<UserPojo> updateUserInfo(UserPojo user);
 
-	ResponsePageDto<User> getAllUsers(Pageable paging);
+	ResponsePageDto<User> getAllUsers(Pageable paging, UIPageRequest pageRequest);
 
 	User findUserById(Long id);
 
