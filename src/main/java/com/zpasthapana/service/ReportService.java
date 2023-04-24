@@ -5,6 +5,7 @@ import java.util.List;
 import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.JestatechaReport;
+import com.zpasthapana.pojo.Report3055Response;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
 import com.zpasthapana.pojo.ReportLanguageResponse;
@@ -51,5 +52,7 @@ public interface ReportService {
 	List<ReportSanganakAhartaResponse> getComputerQualificationReportAll(Long userId, String year, Long departmentId);
 
 	List<ReportLanguageResponse> getHindiMarathiReportAll(Long userId, String year, Long departmentId);
+
+	List<Report3055Response> getEmployee3055Report(Long userId, String year, Long departmentId);
 	
 }

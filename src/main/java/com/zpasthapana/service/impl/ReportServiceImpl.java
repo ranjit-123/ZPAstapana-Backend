@@ -19,6 +19,7 @@ import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.DataThreeInteger;
 import com.zpasthapana.pojo.JestatechaReport;
+import com.zpasthapana.pojo.Report3055Response;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
 import com.zpasthapana.pojo.ReportLanguageResponse;
@@ -671,6 +672,35 @@ public class ReportServiceImpl implements ReportService {
 		List<ReportLanguageResponse> data = jdbcTemplate.query(
 				query,
 				BeanPropertyRowMapper.newInstance(ReportLanguageResponse.class));
+
+		return data;
+	}
+
+	@Override
+	public List<Report3055Response> getEmployee3055Report(Long userId, String year, Long departmentId) {
+		String query = "SELECT\r\n"
+				+ "d.designationID, \r\n"
+				+ "sum(case when (TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55))\r\n"
+				+ "and TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > 0 then 1 else 0 end)\r\n"
+				+ " as age30Completed,\r\n"
+				+ "sum(case when (TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55) >= TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30)) and TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55) > 0 then 1 else 0 end) \r\n"
+				+ "as age55Completed,\r\n"
+				+ "0 as reviewedEmployees,\r\n"
+				+ "0 as notReviewedEmployees\r\n"
+				+ "FROM employee e\r\n"
+				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
+				+ "on e.employee_id = edm.employeeId\r\n"
+				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
+				+ "left join employee_language_exam tmp1 on e.employee_id = tmp1.employeeId";
+				
+		query = query + " where ew.departmentId = " + departmentId;
+				
+		query = query + " group by d.designationID;";
+		
+		List<Report3055Response> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(Report3055Response.class));
 
 		return data;
 	}

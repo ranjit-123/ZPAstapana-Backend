@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.JestatechaReport;
+import com.zpasthapana.pojo.Report3055Response;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
 import com.zpasthapana.pojo.ReportLanguageResponse;
@@ -263,6 +264,30 @@ public class ReportController {
 		result.add(total);
 		return new ResponseEntity<List<ReportLanguageResponse>>(result, HttpStatus.OK);
 	}
-	
+
+	@GetMapping("/employee-age-30-55/department-level/{userId}")
+	public ResponseEntity<List<Report3055Response>> getEmployee3055Report(@PathVariable Long userId, @RequestParam(name = "year", required = false) String year,@RequestParam(name = "departmentId", required = false) Long departmentId) {
+		List<Report3055Response> result = reportService.getEmployee3055Report(userId, year, departmentId);
+		Report3055Response total = Report3055Response.builder()
+				.designation("एकूण")
+				.age30Completed(0)
+				.age55Completed(0)
+				.reviewedEmployees(0)
+				.notReviewedEmployees(0)
+				.build();
+		result = result.stream().map(s -> {
+			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
+			s.setTotal30Plus55(s.getAge30Completed() + s.getAge55Completed());
+			s.setNotReviewedEmployees(s.getTotal30Plus55());
+			total.setAge30Completed(s.getAge30Completed() + total.getAge30Completed());
+			total.setAge55Completed(s.getAge55Completed() + total.getAge55Completed());
+			total.setNotReviewedEmployees(s.getNotReviewedEmployees() + total.getNotReviewedEmployees());
+			total.setReviewedEmployees(s.getReviewedEmployees() + total.getReviewedEmployees());
+			total.setTotal30Plus55(s.getTotal30Plus55() + total.getTotal30Plus55());
+			return s;
+		}).collect(Collectors.toList());
+		result.add(total);
+		return new ResponseEntity<List<Report3055Response>>(result, HttpStatus.OK);
+	}
 	
 }
