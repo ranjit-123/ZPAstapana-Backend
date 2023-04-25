@@ -15,4 +15,5 @@ public class AuthResponse {
 	private Long id;
 	private String zpName;
 	private Long zpId;
+	private Long divId;
 }

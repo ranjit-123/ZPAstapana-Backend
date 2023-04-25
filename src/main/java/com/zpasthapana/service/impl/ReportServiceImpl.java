@@ -521,7 +521,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public List<ReportMattaDayitvaResponse> getMattadayitvaAll(Long userId, String year, Long departmentId) {
-
+		User user = userService.findUserById(userId);
 		String query = "SELECT\r\n"
 				+ "d.designationID as designation, \r\n"
 				+ "sum(case when (d.designationClassID = 3 and ifnull(a.isAssetLiabilitySubmitted, 0) = 0) then 1 else 0 end) as workingEmployeeA,\r\n"
@@ -536,7 +536,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
 				+ "left join assetLiability a on e.employee_id = a.employeeId and a.financialYear = '"+ year + "'";
 				
-		query = query + " where ew.departmentId = " + departmentId;
+		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = "+ user.getZillaParishadID();
 				
 		query = query + " group by d.designationID;";
 		
@@ -549,7 +549,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public List<ReportGopaniyAhvalResponse> getGopaniyAhvalAll(Long userId, String year, Long departmentId) {
-		
+		User user = userService.findUserById(userId);
 		String lastYear = year.substring(year.indexOf("-") + 1);
 		
 		String query = "SELECT\r\n"
@@ -578,7 +578,7 @@ public class ReportServiceImpl implements ReportService {
 				+ " FROM confidential where reviewOfficerMarks is not null group by financialYear, employeeId\r\n"
 				+ ") tmp2 on e.employee_id = tmp2.employeeId and tmp2.financialYear = '"+ year + "'";
 				
-		query = query + " where ew.departmentId = " + departmentId;
+		query = query + " where ew.departmentId = " + departmentId+ " and ew.zpId = "+ user.getZillaParishadID();
 				
 		query = query + " group by d.designationID;";
 		
@@ -591,7 +591,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public List<ReportStayitvaReponse> getStayitvaReportAll(Long userId, String year, Long departmentId) {
-		
+		User user = userService.findUserById(userId);
 		String query = "SELECT\r\n"
 				+ "d.designationID as designation, \r\n"
 				+ "sum(case when (d.designationClassID = 1) then 1 else 0 end) as totalWorkingEmpC,\r\n"
@@ -607,7 +607,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm on e.employee_id = edm.employeeId\r\n"
 				+ "left join stayitva_pramanpatra tmp1 on e.employee_id = tmp1.employeeId\r\n";
 				
-		query = query + " where ew.departmentId = " + departmentId;
+		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
 				
 		query = query + " group by d.designationID;";
 		
@@ -621,8 +621,9 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<ReportSanganakAhartaResponse> getComputerQualificationReportAll(Long userId, String year,
 			Long departmentId) {
+		User user = userService.findUserById(userId);
 		String query = "SELECT\r\n"
-				+ "d.designationID, \r\n"
+				+ "d.designationID as designation, \r\n"
 				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as totalEmployee,\r\n"
 				+ "sum(case when tmp1.computerFlag = 0 then 1 else 0 end) as pass,\r\n"
 				+ "sum(case when tmp1.computerFlag = 1 then 1 else 0 end) as notApplicable,\r\n"
@@ -635,7 +636,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
 				+ "left join employee_computer_details tmp1 on e.employee_id = tmp1.employeeId";
 				
-		query = query + " where ew.departmentId = " + departmentId;
+		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
 				
 		query = query + " group by d.designationID;";
 		
@@ -648,8 +649,9 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public List<ReportLanguageResponse> getHindiMarathiReportAll(Long userId, String year, Long departmentId) {
+		User user = userService.findUserById(userId);
 		String query = "SELECT\r\n"
-				+ "d.designationID, \r\n"
+				+ "d.designationID as designation, \r\n"
 				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as totalEmployee,\r\n"
 				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as marathiPass,\r\n"
 				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as hindiPass,\r\n"
@@ -662,12 +664,12 @@ public class ReportServiceImpl implements ReportService {
 				+ "FROM employee e\r\n"
 				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
 				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
-				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
+				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "left join employee_language_exam tmp1 on e.employee_id = tmp1.employeeId\r\n";
 				
-		query = query + " where ew.departmentId = " + departmentId;
+		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
 				
-		query = query + " group by d.designationID;";
+		query = query + " group by d.designationID";
 		
 		List<ReportLanguageResponse> data = jdbcTemplate.query(
 				query,
@@ -678,8 +680,9 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public List<Report3055Response> getEmployee3055Report(Long userId, String year, Long departmentId) {
+		User user = userService.findUserById(userId);
 		String query = "SELECT\r\n"
-				+ "d.designationID, \r\n"
+				+ "d.designationID as designation, \r\n"
 				+ "sum(case when (TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55))\r\n"
 				+ "and TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > 0 then 1 else 0 end)\r\n"
 				+ " as age30Completed,\r\n"
@@ -689,12 +692,13 @@ public class ReportServiceImpl implements ReportService {
 				+ "0 as notReviewedEmployees\r\n"
 				+ "FROM employee e\r\n"
 				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
+				+ "				inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
 				+ "on e.employee_id = edm.employeeId\r\n"
 				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
 				+ "left join employee_language_exam tmp1 on e.employee_id = tmp1.employeeId";
 				
-		query = query + " where ew.departmentId = " + departmentId;
+		query = query + " where ew.departmentID = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
 				
 		query = query + " group by d.designationID;";
 		
