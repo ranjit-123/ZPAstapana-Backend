@@ -25,6 +25,7 @@ import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
 import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutResponse;
+import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
 import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
@@ -208,6 +209,18 @@ public class ReportController {
 			return s;
 		}).collect(Collectors.toList());
 		return new ResponseEntity<List<ReportStayitvaReponse>>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/stayitva-certification/designation-level/{userId}")
+	public ResponseEntity<List<ReportStayitvaEmpListResponse>> getStayitvaReportWithDesignation(@PathVariable Long userId,@RequestParam(name = "departmentId", required = false) Long departmentId) {
+		List<ReportStayitvaEmpListResponse> result = reportService.getStayitvaReportWithDesignation(userId, departmentId);
+		result = result.stream().map(s -> {
+			s.setFirstAppointDesignation(MasterDataUtil.getKeyDate("designation_", s.getFirstAppointDesignation()));
+			s.setSelectionType(MasterDataUtil.getKeyDate("castecategory_", s.getSelectionType()));
+			s.setFirstAppointType(MasterDataUtil.getKeyDate("niyuktitype_",s.getFirstAppointType()));
+			return s;
+		}).collect(Collectors.toList());
+		return new ResponseEntity<List<ReportStayitvaEmpListResponse>>(result, HttpStatus.OK);
 	}
 	
 	@GetMapping("/computer-qualification/department-level/{userId}")

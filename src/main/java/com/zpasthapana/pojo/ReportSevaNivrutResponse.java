@@ -22,4 +22,5 @@ public class ReportSevaNivrutResponse {
     public String departmentalPlusJudicialCases;
     public String exceptAccountEnquiryAndJudicial;
     public String pendingMoreThanSixMonth;
+    public String designationId;
 }

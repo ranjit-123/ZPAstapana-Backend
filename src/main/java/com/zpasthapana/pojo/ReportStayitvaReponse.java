@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 public class ReportStayitvaReponse {
 	public String designation;
+	public Integer designationId;
 	public Integer totalWorkingEmpC;
 	public Integer totalWorkingEmpD;
 	public Integer totalWorkingEmpTotal;

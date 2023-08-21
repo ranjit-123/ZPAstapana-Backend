@@ -27,6 +27,7 @@ import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
 import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutResponse;
+import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
 import com.zpasthapana.pojo.ZPBean;
 import com.zpasthapana.pojo.ZPDesAndCategoryBean;
@@ -593,7 +594,7 @@ public class ReportServiceImpl implements ReportService {
 	public List<ReportStayitvaReponse> getStayitvaReportAll(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
 		String query = "SELECT\r\n"
-				+ "d.designationID as designation, \r\n"
+				+ "d.designationID , d.designationID as designation, \r\n"
 				+ "sum(case when (d.designationClassID = 1) then 1 else 0 end) as totalWorkingEmpC,\r\n"
 				+ "sum(case when (d.designationClassID = 2) then 1 else 0 end) as totalWorkingEmpD,\r\n"
 				+ "sum(case when (d.designationClassID = 1 and TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3) then 1 else 0 end) as stayitvaEligibleEmpC,\r\n"
@@ -614,6 +615,33 @@ public class ReportServiceImpl implements ReportService {
 		List<ReportStayitvaReponse> data = jdbcTemplate.query(
 				query,
 				BeanPropertyRowMapper.newInstance(ReportStayitvaReponse.class));
+
+		return data;
+	}
+	
+	@Override
+	public List<ReportStayitvaEmpListResponse> getStayitvaReportWithDesignation(Long userId, Long departmentId) {
+		User user = userService.findUserById(userId);
+		String query = "SELECT distinct '111' as jeshtataNumber, CONCAT(firstName,middleName ,lastName) AS employeeNameAndOffice,appointmentOrderDate as firstAppointDate\r\n"
+				+ "  ,employeeDesiganationId as firstAppointDesignation,employeeselectioncategory as firstAppointType,caste as socialClass,castecategory as selectionType,\r\n"
+				+ "  casteValidityFlag as isCasteCertifiacteSubmitted,'20' as absencePeriod,'1' as moreThanThreeMonthAbsence,''  as probationaryPeriodApprovedDate,\r\n"
+				+ " date_add(ed.dateOfAppointed,INTERVAL 3 YEAR) as threeYearsCompletedDate,1 as isDepartmentEnquiryGoingOn FROM employee e inner join employee_designation_details ed \r\n"
+				+ "				 on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId \r\n"
+				+ "				 inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
+				+ "				on e.employee_id = edm.employeeId\r\n"
+				+ "				inner join employee_cast_details ec on e.employeeCastDetailsId = ec.employeeCastDetailsId\r\n"
+				+ "				inner join employee_worklocation ew on e.employee_id = ew.employeeId\r\n"
+				+ "				left join retierment empr on e.employee_id = empr.employeeId \r\n"
+				+ "				left join employee_education_details eed on eed.employeeId = e.employee_id \r\n"
+				+ "				 where e.active = 1 ";
+				
+		query = query + " and ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
+				
+		query = query + " group by ew.designationID;";
+		
+		List<ReportStayitvaEmpListResponse> data = jdbcTemplate.query(
+				query,
+				BeanPropertyRowMapper.newInstance(ReportStayitvaEmpListResponse.class));
 
 		return data;
 	}
