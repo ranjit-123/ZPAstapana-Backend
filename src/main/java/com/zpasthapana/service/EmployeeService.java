@@ -25,6 +25,8 @@ public interface EmployeeService {
 	ResponsePageDto<Employee> getAllRetieredEmployees(UIPageRequest pageRequest, Pageable paging);
 
 	ResponsePageDto<Employee> getAllWorkingEmployees(UIPageRequest pageRequest, Pageable paging);
+	
+	EmployeeResponse getEmployeeProfile(Long employeeId);
 
 	void deactivateEmployee(Long employeeId);
 }
