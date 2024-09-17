@@ -1,8 +1,12 @@
 package com.zpasthapana.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import com.zpasthapana.entity.EmployeeEducation;
+import com.zpasthapana.entity.EmployeeEducationDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -208,4 +212,14 @@ public class EmployeeResponse extends BaseRequest{
 	private String concessionFreedomFighterRelation;
 	private Integer concessionFreedomFighterIsLiveFlag;
 	private String concessionFreedomFighterPDF;
+	
+	private List<EmployeeEducationDTO> educationDetails;
+
+    public List<EmployeeEducationDTO> getEducationDetails() {
+        return educationDetails;
+    }
+
+    public void setEducationDetails(List<EmployeeEducationDTO> educationDetails) {
+        this.educationDetails = educationDetails;
+    }
 }
