@@ -38,37 +38,42 @@ import com.zpasthapana.util.ZPUtility;
 @RestController
 @RequestMapping("employee")
 public class EmployeeController {
-	
+
 	@Autowired
 	EmployeeService employeeService;
-	
+
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<EmployeeResponse> createEmployee(@ModelAttribute EmployeeRequest request){
 		EmployeeResponse employeeResponse = employeeService.createEmployee(request);
 		return new ResponseEntity<EmployeeResponse>(
 				employeeResponse, HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping(value = "/{employeeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Long employeeId, @ModelAttribute EmployeeRequest request){
 		EmployeeResponse employeeResponse = employeeService.updateEmployee(employeeId, request);
 		return new ResponseEntity<EmployeeResponse>(
 				employeeResponse, HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = "/deactivate/{employeeId}")
 	public ResponseEntity<Void> deactivateEmployee(@PathVariable Long employeeId){
 		employeeService.deactivateEmployee(employeeId);
 		return new ResponseEntity<Void>(
 				HttpStatus.OK);
 	}
-	
+
 	@GetMapping
 	public ResponseEntity<List<Employee>> getAllEmployee(){
 		return new ResponseEntity<List<Employee>>(
 				employeeService.getAllEmployee(), HttpStatus.OK);
 	}
-	
+
+	@GetMapping(value = "/profile/{employeeId}")
+	public ResponseEntity<EmployeeResponse> getEmployeeProfile(@PathVariable Long employeeId) {
+		return new ResponseEntity<EmployeeResponse>(employeeService.getEmployeeProfile(employeeId), HttpStatus.OK);
+	}
+
 	@GetMapping("/{employeeId}")
 	public ResponseEntity<BaseEntity> getEmployee(@PathVariable Long employeeId){
 		Optional<Employee> employee = employeeService.getEmployeeById(employeeId);
@@ -81,28 +86,28 @@ public class EmployeeController {
 		}
 		e.employeeFullName = employee.get().getFirstName() + " " + employee.get().getMiddleName() + " " + employee.get().getLastName();
 		e.employeeFullNameEng = employee.get().getFirstNameEng() + " " + employee.get().getMiddleNameEng() + " " + employee.get().getLastNameEng();
-		
+
 		if(ObjectUtils.isNotEmpty(employee.get().getEmployeeWorkLocation())) {
 			EmployeeWorklocation em = employee.get().getEmployeeWorkLocation();
 			e.talukaName = MasterDataUtil.getKeyDate("taluka_", em.getTaluka());
 			e.subDivisionName = MasterDataUtil.getKeyDate("subdivision_", em.getSubDivision());
-			e.subDepartmentName = MasterDataUtil.getKeyDate("subdepartment_", em.getSubDepartment()); 		
+			e.subDepartmentName = MasterDataUtil.getKeyDate("subdepartment_", em.getSubDepartment());
 		}
-		
+
 		if(ObjectUtils.isNotEmpty(employee.get().getEmployeeDesiganation())) {
 			EmployeeDesiganation emDesignation = employee.get().getEmployeeDesiganation();
 			e.designationName = MasterDataUtil.getKeyDate("designation_", emDesignation.getEmployeeDesiganationId());
 		}
-		
+
 		if(ObjectUtils.isNotEmpty(employee.get().getEmployeeCastDetails())) {
 			EmployeeCastDetails ec = employee.get().getEmployeeCastDetails();
 			e.castCategoryName = MasterDataUtil.getKeyDate("castecategory_", ec.getCastecategory());
 		}
-		
+
 		return new ResponseEntity<BaseEntity>(
 				e, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/page")
 	public ResponseEntity<ResponsePageDto<Employee>> getAllCourtCase(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
@@ -111,7 +116,7 @@ public class EmployeeController {
 		return new ResponseEntity<ResponsePageDto<Employee>>(pageData,
 				HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/working/page")
 	public ResponseEntity<ResponsePageDto<Employee>> getAllWorkingEmployees(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));
@@ -120,7 +125,7 @@ public class EmployeeController {
 		return new ResponseEntity<ResponsePageDto<Employee>>(pageData,
 				HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/retiered/page")
 	public ResponseEntity<ResponsePageDto<Employee>> getAllRetieredEmployees(@RequestBody UIPageRequest pageRequest) {
 		Pageable paging = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), ZPUtility.getSort(pageRequest.getSortFields()));

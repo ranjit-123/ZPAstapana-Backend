@@ -21,6 +21,7 @@ import com.zpasthapana.entity.EmployeeComputerExamDetails;
 import com.zpasthapana.entity.EmployeeDesiganation;
 import com.zpasthapana.entity.EmployeeDisability;
 import com.zpasthapana.entity.EmployeeEducation;
+import com.zpasthapana.entity.EmployeeEducationDTO;
 import com.zpasthapana.entity.EmployeeFlag;
 import com.zpasthapana.entity.EmployeeJoinDetails;
 import com.zpasthapana.entity.EmployeeLanguageExam;
@@ -54,135 +55,135 @@ import lombok.extern.slf4j.Slf4j;
 public class EmployeeServiceImpl implements EmployeeService{
 
 	@Autowired
-	EmployeeRepo employeeRepo; 
-	
+	EmployeeRepo employeeRepo;
+
 	@Autowired
-	EmployeeCastDetailsRepo employeeCastDetailsRepo; 
-	
+	EmployeeCastDetailsRepo employeeCastDetailsRepo;
+
 	@Autowired
-	EmployeeDesiganationRepo employeeDesiganationRepo; 
-	
+	EmployeeDesiganationRepo employeeDesiganationRepo;
+
 	@Autowired
-	EmployeeDisabilityRepo employeeDisabilityRepo; 
-	
+	EmployeeDisabilityRepo employeeDisabilityRepo;
+
 	@Autowired
-	EmployeeEducationRepo employeeEducationRepo; 
-	
+	EmployeeEducationRepo employeeEducationRepo;
+
 	@Autowired
-	EmployeeFlagRepo employeeFlagRepo; 
-	
+	EmployeeFlagRepo employeeFlagRepo;
+
 	@Autowired
-	EmployeeJoinDetailsRepo employeeJoinDetailsRepo; 
-	
+	EmployeeJoinDetailsRepo employeeJoinDetailsRepo;
+
 	@Autowired
-	EmployeeTypingDetailsRepo employeeTypingDetailsRepo; 
-	
+	EmployeeTypingDetailsRepo employeeTypingDetailsRepo;
+
 	@Autowired
-	EmployeeComputerExamDetailsRepo employeeComputerExamDetailsRepo; 
-	
+	EmployeeComputerExamDetailsRepo employeeComputerExamDetailsRepo;
+
 	@Autowired
-	EmployeeWorklocationRepo employeeWorklocationRepo; 
-	
+	EmployeeWorklocationRepo employeeWorklocationRepo;
+
 	@Autowired
-	ConcessionDetailsRepo concessionDetailsRepo; 
-	
+	ConcessionDetailsRepo concessionDetailsRepo;
+
 	@Autowired
-	EmployeeLanguageExamRepo employeeLanguageExamRepo; 
-	
+	EmployeeLanguageExamRepo employeeLanguageExamRepo;
+
 	@Autowired
-	EmployeeNomineeDetailsRepo employeeNomineeDetailsRepo; 
-	
+	EmployeeNomineeDetailsRepo employeeNomineeDetailsRepo;
+
 	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@Override
 	public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
 		try {
 			log.info("Insert employee");
-			
+
 			EmployeeResponse response = EmployeeResponse.builder().build();
-			
+
 			Employee employee = modelMapper.map(employeeRequest, Employee.class);
 			employee.setIsActive(true);
 			employee = employeeRepo.save(employee);
 			employeeRequest.setEmployeeId(employee.getEmployeeId());
 			ZPUtility.uploadFiles(employeeRequest, null, employeeRequest.getEmployeeId());
-			
+
 			response = modelMapper.map(employee, EmployeeResponse.class);
-			
+
 			EmployeeCastDetails employeeCastDetails = modelMapper.map(employeeRequest, EmployeeCastDetails.class);
 			
-			
+
 			List<Field> fields = List.of(employeeRequest.getClass().getDeclaredFields()).stream()
 					.filter(f -> f.getType() == MultipartFile.class).collect(Collectors.toList());
-			
+
 			ZPUtility.updateFileNames(employeeRequest, employeeCastDetails, fields);
-			
+
 			employeeCastDetails = employeeCastDetailsRepo.save(employeeCastDetails);
 			response = modelMapper.map(employeeCastDetails, EmployeeResponse.class);
-			
+
 			employee.setEmployeeCastDetailsId(employeeCastDetails.getEmployeeCastDetailsId());
-			
+
 			EmployeeDesiganation employeeDesiganation = modelMapper.map(employeeRequest, EmployeeDesiganation.class);
 			employeeDesiganation.setEmployeeDesiganationId(employeeRequest.getDesignationId());
 			ZPUtility.updateFileNames(employeeRequest, employeeDesiganation, fields);
 			employeeDesiganation = employeeDesiganationRepo.save(employeeDesiganation);
 			response = modelMapper.map(employeeDesiganation, EmployeeResponse.class);
-			
+
 			employee.setEmployeeDesiganationDetailsId(employeeDesiganation.getEmployeeDesiganationDetailsId());
-			
+
 			EmployeeDisability employeeDisability = modelMapper.map(employeeRequest, EmployeeDisability.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeDisability, fields);
 			employeeDisability = employeeDisabilityRepo.save(employeeDisability);
 			response = modelMapper.map(employeeDisability, EmployeeResponse.class);
-			
+
 			EmployeeEducation employeeEducation = modelMapper.map(employeeRequest, EmployeeEducation.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeDisability, fields);
 			employeeEducation = employeeEducationRepo.save(employeeEducation);
 			response = modelMapper.map(employeeEducation, EmployeeResponse.class);
-			
+
 			EmployeeFlag employeeFlag = modelMapper.map(employeeRequest, EmployeeFlag.class);
 			employeeFlag = employeeFlagRepo.save(employeeFlag);
 			response = modelMapper.map(employeeFlag, EmployeeResponse.class);
-			
+
 			EmployeeJoinDetails employeeJoinDetails = modelMapper.map(employeeRequest, EmployeeJoinDetails.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeJoinDetails, fields);
 			employeeJoinDetails = employeeJoinDetailsRepo.save(employeeJoinDetails);
 			response = modelMapper.map(employeeJoinDetails, EmployeeResponse.class);
-			
+
 			EmployeeTypingDetails employeeTypingDetails = modelMapper.map(employeeRequest, EmployeeTypingDetails.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeTypingDetails, fields);
 			employeeTypingDetails = employeeTypingDetailsRepo.save(employeeTypingDetails);
 			response = modelMapper.map(employeeTypingDetails, EmployeeResponse.class);
-			
+
 			EmployeeComputerExamDetails employeeComputerExamDetails = modelMapper.map(employeeRequest, EmployeeComputerExamDetails.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeComputerExamDetails, fields);
 			employeeComputerExamDetails = employeeComputerExamDetailsRepo.save(employeeComputerExamDetails);
 			response = modelMapper.map(employeeComputerExamDetails, EmployeeResponse.class);
-			
+
 			EmployeeWorklocation employeeWorklocation = modelMapper.map(employeeRequest, EmployeeWorklocation.class);
-			employeeWorklocation = employeeWorklocationRepo.save(employeeWorklocation);	
+			employeeWorklocation = employeeWorklocationRepo.save(employeeWorklocation);
 			response = modelMapper.map(employeeWorklocation, EmployeeResponse.class);
-			
+
 			employee.setEmployeeWorklocationId(employeeWorklocation.getEmployeeWorklocationId());
-			
+
 			ConcessionDetails concessionDetails = modelMapper.map(employeeRequest, ConcessionDetails.class);
 			ZPUtility.updateFileNames(employeeRequest, concessionDetails, fields);
-			concessionDetails = concessionDetailsRepo.save(concessionDetails);	
+			concessionDetails = concessionDetailsRepo.save(concessionDetails);
 			response = modelMapper.map(concessionDetails, EmployeeResponse.class);
-			
+
 			EmployeeNomineeDetails employeeNomineeDetails = modelMapper.map(employeeRequest, EmployeeNomineeDetails.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeNomineeDetails, fields);
-			employeeNomineeDetails = employeeNomineeDetailsRepo.save(employeeNomineeDetails);	
+			employeeNomineeDetails = employeeNomineeDetailsRepo.save(employeeNomineeDetails);
 			response = modelMapper.map(employeeNomineeDetails, EmployeeResponse.class);
-			
+
 			EmployeeLanguageExam employeeLanguageExam = modelMapper.map(employeeRequest, EmployeeLanguageExam.class);
 			ZPUtility.updateFileNames(employeeRequest, employeeLanguageExam, fields);
-			employeeLanguageExam = employeeLanguageExamRepo.save(employeeLanguageExam);	
+			employeeLanguageExam = employeeLanguageExamRepo.save(employeeLanguageExam);
 			response = modelMapper.map(concessionDetails, EmployeeResponse.class);
 			employee = employeeRepo.save(employee);
 			response = modelMapper.map(employee, EmployeeResponse.class);
-			
+
 			return response;
 		} catch (Exception e) {
 			log.error("Exception: ", e);
@@ -193,54 +194,54 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public EmployeeResponse updateEmployee(Long employeeId, EmployeeRequest employeeRequest) {
 		log.info("Insert employee");
-		
+
 		EmployeeResponse response = EmployeeResponse.builder().build();
-		
+
 		Optional<Employee> employeeEntity = employeeRepo.findById(employeeId);
-		
+
 		if(employeeEntity.isEmpty()) {
 			throw new EntityNotFoundException("Employee not found");
 		}
-		
+
 		Employee employee = modelMapper.map(employeeRequest, Employee.class);
 		employee.setEmployeeId(employeeId);
 		employee = employeeRepo.save(employee);
-	
+
 		employeeRequest.setEmployeeId(employeeId);
 		response = modelMapper.map(employee, EmployeeResponse.class);
-		
+
 		EmployeeCastDetails employeeCastDetails = modelMapper.map(employeeRequest, EmployeeCastDetails.class);
 		employeeCastDetails = employeeCastDetailsRepo.save(employeeCastDetails);
 		response = modelMapper.map(employeeCastDetails, EmployeeResponse.class);
-		
+
 		EmployeeDesiganation employeeDesiganation = modelMapper.map(employeeRequest, EmployeeDesiganation.class);
 		employeeDesiganation = employeeDesiganationRepo.save(employeeDesiganation);
 		response = modelMapper.map(employeeDesiganation, EmployeeResponse.class);
-		
+
 		EmployeeDisability employeeDisability = modelMapper.map(employeeRequest, EmployeeDisability.class);
 		employeeDisability = employeeDisabilityRepo.save(employeeDisability);
 		response = modelMapper.map(employeeDisability, EmployeeResponse.class);
-		
+
 		EmployeeEducation employeeEducation = modelMapper.map(employeeRequest, EmployeeEducation.class);
 		employeeEducation = employeeEducationRepo.save(employeeEducation);
 		response = modelMapper.map(employeeEducation, EmployeeResponse.class);
-		
+
 		EmployeeFlag employeeFlag = modelMapper.map(employeeRequest, EmployeeFlag.class);
 		employeeFlag = employeeFlagRepo.save(employeeFlag);
 		response = modelMapper.map(employeeFlag, EmployeeResponse.class);
-		
+
 		EmployeeJoinDetails employeeJoinDetails = modelMapper.map(employeeRequest, EmployeeJoinDetails.class);
 		employeeJoinDetails = employeeJoinDetailsRepo.save(employeeJoinDetails);
 		response = modelMapper.map(employeeJoinDetails, EmployeeResponse.class);
-		
+
 		EmployeeTypingDetails employeeTypingDetails = modelMapper.map(employeeRequest, EmployeeTypingDetails.class);
 		employeeTypingDetails = employeeTypingDetailsRepo.save(employeeTypingDetails);
 		response = modelMapper.map(employeeTypingDetails, EmployeeResponse.class);
-		
+
 		EmployeeWorklocation employeeWorklocation = modelMapper.map(employeeRequest, EmployeeWorklocation.class);
-		employeeWorklocation = employeeWorklocationRepo.save(employeeWorklocation);	
+		employeeWorklocation = employeeWorklocationRepo.save(employeeWorklocation);
 		response = modelMapper.map(employeeWorklocation, EmployeeResponse.class);
-		
+
 		return response;
 	}
 
@@ -277,6 +278,66 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Employee employee =	employeeRepo.findById(employeeId).orElseThrow();
 		employee.setIsActive(Boolean.FALSE);
 		employeeRepo.save(employee);
+	}
+
+	@Override
+	public EmployeeResponse getEmployeeProfile(Long employeeId) {
+		log.info("Fetching employee profile for employeeId: {}", employeeId);
+
+		Optional<Employee> employeeEntity = employeeRepo.findById(employeeId);
+		if (employeeEntity.isEmpty()) {
+			throw new EntityNotFoundException("Employee not found");
+		}
+		Employee employee = employeeEntity.get();
+
+		EmployeeResponse response = modelMapper.map(employee, EmployeeResponse.class);
+
+		Optional<EmployeeCastDetails> employeeCastDetails = employeeCastDetailsRepo
+				.findById(employee.getEmployeeCastDetailsId());
+		employeeCastDetails.ifPresent(castDetails -> modelMapper.map(castDetails, response));
+
+		Optional<EmployeeDesiganation> employeeDesiganation = employeeDesiganationRepo
+				.findById(employee.getEmployeeDesiganationDetailsId());
+		employeeDesiganation.ifPresent(designation -> modelMapper.map(designation, response));
+
+		Optional<EmployeeDisability> employeeDisability = Optional
+				.ofNullable(employeeDisabilityRepo.findByEmployeeId(employeeId));
+		employeeDisability.ifPresent(disability -> modelMapper.map(disability, response));
+
+		Optional<List<EmployeeEducation>> employeeEducationList = Optional
+				.ofNullable(employeeEducationRepo.findByEmployeeId(employeeId));
+		if (employeeEducationList.isPresent() && !employeeEducationList.get().isEmpty()) {
+			System.out.println("education" + employeeEducationList.toString());
+
+			List<EmployeeEducationDTO> educationDetails = employeeEducationList.get().stream()
+					.map(education -> modelMapper.map(education, EmployeeEducationDTO.class))
+					.collect(Collectors.toList());
+
+			response.setEducationDetails(educationDetails);
+		} else {
+			response.setEducationDetails(List.of());
+		}
+
+		Optional<EmployeeFlag> employeeFlag = Optional.ofNullable(employeeFlagRepo.findByEmployeeId(employeeId));
+		employeeFlag.ifPresent(flag -> modelMapper.map(flag, response));
+
+		Optional<EmployeeJoinDetails> employeeJoinDetails = Optional
+				.ofNullable(employeeJoinDetailsRepo.findByEmployeeId(employeeId));
+		employeeJoinDetails.ifPresent(joinDetails -> modelMapper.map(joinDetails, response));
+
+		Optional<EmployeeTypingDetails> employeeTypingDetails = Optional
+				.ofNullable(employeeTypingDetailsRepo.findByEmployeeId(employeeId));
+		employeeTypingDetails.ifPresent(typingDetails -> modelMapper.map(typingDetails, response));
+
+		Optional<EmployeeWorklocation> employeeWorklocation = Optional
+				.ofNullable(employeeWorklocationRepo.findByEmployeeId(employeeId));
+		employeeWorklocation.ifPresent(worklocation -> modelMapper.map(worklocation, response));
+
+		Optional<Optional<ConcessionDetails>> concessionDetails = Optional
+				.ofNullable(concessionDetailsRepo.findById(employeeId));
+		concessionDetails.ifPresent(employeeConcessionDetails -> modelMapper.map(employeeConcessionDetails, response));
+		System.out.println(response.getQualification());
+		return response;
 	}
 
 }

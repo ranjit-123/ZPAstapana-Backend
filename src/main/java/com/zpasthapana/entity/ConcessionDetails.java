@@ -25,6 +25,7 @@ public class ConcessionDetails extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private Long employeeId;
 	private Integer concessionBrainFlag;
 	private Integer concessionParalysisFlag;
 	private Integer concessionHandicappeFlag;
