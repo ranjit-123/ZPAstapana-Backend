@@ -1,7 +1,7 @@
 package com.zpasthapana.entity;
 
 public class EmployeeEducationDTO {
-	private Long employeeEducationId;
+	private String certificatePDF;
 	private String universityName;
 	private String degreeName;
 	private String passoutDate;
