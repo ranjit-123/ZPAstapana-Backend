@@ -1,6 +1,11 @@
 package com.zpasthapana.pojo;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
+
+import com.zpasthapana.entity.EmployeeEducation;
+import com.zpasthapana.entity.EmployeeEducationDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -79,11 +84,7 @@ public class EmployeeRequest extends BaseRequest{
 	private String disabilityPercentage;
 	private String certificateDisabilityDate;
 	private MultipartFile disabilityCertificatePDF;
-	
-	private String universityName; 
-	private String degreeName ;
-	private String passoutDate  ;
-	private MultipartFile certificatePDF; 
+ 
 	private Integer changedAfterAppointmentFlag;
 	private Integer transferTypeFlag;
 	private Integer furtherServiceFlag;
@@ -255,5 +256,6 @@ public class EmployeeRequest extends BaseRequest{
 	private String concessionHusbandWifeAggregationFullName;
 	private MultipartFile concessionHusbandWifeAggregationFalimlyPhotoPDF;
 	private String pranNumber;
+	private List<EmployeeEducationDTO> educationDetails;
 
 }
