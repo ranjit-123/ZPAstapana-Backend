@@ -1,6 +1,7 @@
 package com.zpasthapana.service.impl;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -137,10 +138,14 @@ public class EmployeeServiceImpl implements EmployeeService{
 			employeeDisability = employeeDisabilityRepo.save(employeeDisability);
 			response = modelMapper.map(employeeDisability, EmployeeResponse.class);
 
-			EmployeeEducation employeeEducation = modelMapper.map(employeeRequest, EmployeeEducation.class);
-			ZPUtility.updateFileNames(employeeRequest, employeeDisability, fields);
-			employeeEducation = employeeEducationRepo.save(employeeEducation);
-			response = modelMapper.map(employeeEducation, EmployeeResponse.class);
+			List<EmployeeEducation> educationList = new ArrayList<>();
+			for (EmployeeEducationDTO detail : employeeRequest.getEducationDetails()) {
+				EmployeeEducation employeeEducation = modelMapper.map(detail, EmployeeEducation.class);
+				employeeEducation.setEmployeeId(employeeRequest.getEmployeeId());
+				ZPUtility.updateFileNames(employeeRequest, employeeEducation, fields);
+				educationList.add(employeeEducation);
+			}
+			educationList = employeeEducationRepo.saveAll(educationList);
 
 			EmployeeFlag employeeFlag = modelMapper.map(employeeRequest, EmployeeFlag.class);
 			employeeFlag = employeeFlagRepo.save(employeeFlag);
