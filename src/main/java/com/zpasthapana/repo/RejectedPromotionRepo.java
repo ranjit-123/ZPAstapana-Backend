@@ -13,5 +13,7 @@ public interface RejectedPromotionRepo extends JpaRepository<RejectedPromotion, 
 			+ "where (:zpId is null or w.zpId = :zpId) and (:devisionId is null or w.divisionId = :devisionId) and (:departmentId is null or w.departmentId = :departmentId) "
 			+ "and (:talukaId is null or w.taluka = :talukaId)")
 	Page<RejectedPromotion> findAllByPermissions(Long devisionId, Long zpId, Long departmentId, Long talukaId, Pageable paging);
+	
+	RejectedPromotion findByEmployeeId(Long employeeId);
 
 }
