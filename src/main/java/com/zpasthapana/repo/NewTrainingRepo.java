@@ -13,5 +13,7 @@ public interface NewTrainingRepo extends JpaRepository<NewTraining, Long>{
 			+ "where (:zpId is null or w.zpId = :zpId) and (:devisionId is null or w.divisionId = :devisionId) and (:departmentId is null or w.departmentId = :departmentId) "
 			+ "and (:talukaId is null or w.taluka = :talukaId)")
 	Page<NewTraining> findAllByPermissions(Long devisionId, Long zpId, Long departmentId, Long talukaId, Pageable paging);
+	
+	NewTraining findByEmployeeId(Long employeeId);
 
 }

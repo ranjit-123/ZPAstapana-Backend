@@ -2,11 +2,31 @@ package com.zpasthapana.pojo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.zpasthapana.entity.AccidentalInsurance;
+import com.zpasthapana.entity.AccountInquiry;
+import com.zpasthapana.entity.AdditionalService;
+import com.zpasthapana.entity.AssetLiability;
+import com.zpasthapana.entity.Confidential;
+import com.zpasthapana.entity.CourtCase;
+import com.zpasthapana.entity.Crime;
+import com.zpasthapana.entity.Deputation;
 import com.zpasthapana.entity.EmployeeEducation;
 import com.zpasthapana.entity.EmployeeEducationDTO;
+import com.zpasthapana.entity.ExtraOrdinaryLeaves;
+import com.zpasthapana.entity.NewTraining;
+import com.zpasthapana.entity.NewTransfer;
+import com.zpasthapana.entity.PrizePrides;
+import com.zpasthapana.entity.PurchasePermission;
+import com.zpasthapana.entity.RejectedPromotion;
+import com.zpasthapana.entity.Retierment;
+import com.zpasthapana.entity.ServiceSegment;
+import com.zpasthapana.entity.StayitvaPramanpatra;
+import com.zpasthapana.entity.Suspention;
+import com.zpasthapana.entity.UnathorizedAbsencePeriod;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +39,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EmployeeResponse extends BaseRequest{
+public class EmployeeResponse extends BaseRequest {
 	private Long employeeId;
 	private Long employeeBasicDetailsId;
 	private String loginEmail;
@@ -37,14 +57,14 @@ public class EmployeeResponse extends BaseRequest{
 	private String permanentAddress;
 	private String currentAddress;
 	private String declaredScale;
-	
+
 	private String firstName;
 	private String middleName;
 	private String lastName;
 	private String firstNameEng;
 	private String middleNameEng;
 	private String lastNameEng;
-	
+
 	private String caste;
 	private String castecategory;
 	private Integer casteCertificateFlag;
@@ -63,7 +83,7 @@ public class EmployeeResponse extends BaseRequest{
 	private String casteCategoryChangedAfterAppointmentNumber;
 	private Date casteCategoryChangedAfterAppointmentDate;
 	private String casteValidityChangedAfterAppointmentPDF;
-	
+
 	private String employeeselectioncategory;
 	private String payCommission;
 	private Integer appointmentQualificationFlag;
@@ -77,7 +97,7 @@ public class EmployeeResponse extends BaseRequest{
 	private String appointmentOrderNumber;
 	private Date appointmentOrderDate;
 	private String serviceBookFirstPagePDF;
-	
+
 	private Integer disabilityFlag;
 	private Integer disabilityReservation;
 	private String appointmentDisability;
@@ -85,17 +105,17 @@ public class EmployeeResponse extends BaseRequest{
 	private String disabilityPercentage;
 	private Date certificateDisabilityDate;
 	private String disabilityCertificatePDF;
-	
-	private String universityName; 
-	private String degreeName ;
-	private String passoutDate  ;
-	private String certificatePDF; 
+
+	private String universityName;
+	private String degreeName;
+	private String passoutDate;
+	private String certificatePDF;
 	private Integer changedAfterAppointmentFlag;
 	private Integer transferTypeFlag;
 	private Integer furtherServiceFlag;
 	private Integer medicalCertificateFlag;
 	private Integer characterVerifiedFlag;
-	
+
 	private Date joiningData;
 	private String appointmentQualificationExamName;
 	private Date dateOfPass;
@@ -109,7 +129,7 @@ public class EmployeeResponse extends BaseRequest{
 	private String furtherServiceOrderNumber;
 	private Date furtherServiceOrderDate;
 	private String furtherServicePDF;
-	
+
 	private String typingFlag;
 	private String marathiHindiFlag;
 	private String marathiTypingSpeed;
@@ -123,14 +143,14 @@ public class EmployeeResponse extends BaseRequest{
 	private String englishTypingSpeedDiscountDate;
 	private String englishTypingSpeedDiscountOrderDate;
 	private String englishTypingSpeedPDF;
-	
+
 	private Integer computerFlag;
 	private String computerExamName;
 	private String computerPassoutDate;
 	private String computerDiscountDate;
 	private String computerDiscountOrderDate;
 	private String computerPDF;
-	
+
 	private String type;
 	private Long stateId;
 	private Long divisionId;
@@ -140,7 +160,7 @@ public class EmployeeResponse extends BaseRequest{
 	private Long taluka;
 	private Long subDivision;
 	private Long subDepartment;
-	
+
 	private Integer concessionBrainFlag;
 	private Integer concessionParalysisFlag;
 	private Integer concessionHandicappeFlag;
@@ -212,14 +232,77 @@ public class EmployeeResponse extends BaseRequest{
 	private String concessionFreedomFighterRelation;
 	private Integer concessionFreedomFighterIsLiveFlag;
 	private String concessionFreedomFighterPDF;
-	
+
+	private Integer apprenticePeriodFlag;
+	private String apprenticePeriodOrderNumber;
+	private Date apprenticePeriodOrderDate;
+	private String apprenticePeriodOrderPDF;
+	private Date apprenticePeriodApplyDate;
+
+	private Integer addKalbadhaPromotionRegularPromotionsFlag;
+	private Integer addKalbadhaPromotioneEployeeSelectionCategoryIDFlag;
+	private String addKalbadhaPromotionGrade;
+	private Date kalbadhaPromotionApplyDate;
+	private Integer addKalbadhaPromotionDisignation;
+	private Integer addKalbadhaPromotionPayCommission;
+	private String addKalbadhaPromotionOrderNumber;
+	private Date addKalbadhaPromotionOrderDate;
+	private String addKalbadhaPromotionPDF;
+
+	private Integer addNewPromotionRegularPromotionsFlag;
+	private Integer addNewPromotioneEployeeSelectionCategoryIDFlag;
+	private String addNewPromotionGrade;
+	private String addNewPromotionPDF;
+	private String addNewPromotionDisignation;
+	private String addNewPromotionPayCommission;
+	private Date addNewPromotionLastDateOfService;
+	private Integer addNewPromotionTravelPeriodFlag;
+	private Date dateOfTravelPeriodStart;
+	private Date addNewPromotionOrderDate;
+	private String addNewPromotionOrderNumber;
+	private Date addNewPromotionDateOfHumanitySeniority;
+	private Date dateOfPromotionAppointment;
+	private Date holidayPerioddateOfTravelPeriodEnd;
+	private Date holidayPerioddateOfTravelPeriodStart;
+	private Integer holidayPeriodFlag;
+	private Date dateOfTravelPeriodEnd;
+	private Long talukaID;
+	private Long subDivisionID;
+	private Long subDepartmentId;
+	private Integer additionalQualificationApplicableFlag;
+	private Integer promotionsQualificationFlag;
+	private String promotionsQualificationExamName;
+	private Date passDate;
+	private String promotionsQualificationPDF;
+	private Long addNewPromotionCastecategory;
+	private String certificateNumber;
+
 	private List<EmployeeEducationDTO> educationDetails;
+	private List<StayitvaPramanpatra> sthaetvPramanpatraDetails;
+	private List<NewTransfer> transferDetails;
+	private Deputation deputationDetails;
+	private List<Crime> crimeDetails;
+	private List<AccountInquiry> accountInquaryDetails;
+	private List<ExtraOrdinaryLeaves> extraOrdinaryLeaveDetails;
+	private AdditionalService additionalServiceDetails;
+	private NewTraining newTrainingDetails;
+	private List<PrizePrides> PrizePrideDetails;
+	private List<PurchasePermission> purchasePermissionDetails;
+	private List<AssetLiability> assetLiabilityDetails;
+	private List<Confidential> confidentialDetails;
+	private List<AccidentalInsurance> accidentalInsuranceDetails;
+	private ServiceSegment serviceSegmentDetails;
+	private List<CourtCase> courtCaseDetails;
+	private List<UnathorizedAbsencePeriod> unathorizedAbsencePeriodDetails;
+	private List<Suspention> suspentionDetails;
+	private Retierment retiermentDetails;
+	private RejectedPromotion rejectedPromotionDetails;
 
-    public List<EmployeeEducationDTO> getEducationDetails() {
-        return educationDetails;
-    }
+	public void setEducationDetails(List<EmployeeEducationDTO> educationDetails) {
+		this.educationDetails = educationDetails;
+	}
 
-    public void setEducationDetails(List<EmployeeEducationDTO> educationDetails) {
-        this.educationDetails = educationDetails;
-    }
+	public void setSthaetvPramanpatraDetails(List<StayitvaPramanpatra> stayitvaPramanpatraDetails) {
+		this.sthaetvPramanpatraDetails = stayitvaPramanpatraDetails;
+	}
 }

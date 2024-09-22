@@ -13,5 +13,7 @@ public interface AdditionalServiceRepo extends JpaRepository<AdditionalService, 
 			+ "where (:zpId is null or w.zpId = :zpId) and (:devisionId is null or w.divisionId = :devisionId) and (:departmentId is null or w.departmentId = :departmentId) "
 			+ "and (:talukaId is null or w.taluka = :talukaId)")
 	Page<AdditionalService> findAllByPermission(Long devisionId, Long zpId, Long departmentId, Long talukaId, Pageable paging);
+	
+	AdditionalService findByEmployeeId(Long employeeId);
 
 }

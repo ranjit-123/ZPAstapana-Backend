@@ -1,5 +1,7 @@
 package com.zpasthapana.repo;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +18,6 @@ public interface NewTransferRepo extends JpaRepository<NewTransfer, Long> {
 			+ "and (:talukaId is null or w.taluka = :talukaId)")
 	Page<NewTransfer> findAllByInterDistrictTransferFlag(Long devisionId, Long zpId, Long departmentId, Long talukaId, Integer interDistrictTransferFlag,
 			Pageable paging);
+	List<NewTransfer> findByEmployeeId(Long employeeId);
 
 }
