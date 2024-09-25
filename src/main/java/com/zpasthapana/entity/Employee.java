@@ -64,6 +64,7 @@ public class Employee extends BaseEntity {
 	
 	private Long retiermentId;
 	private String pranNumber;
+	private String zpId;
 	
 	
 	@OneToOne
