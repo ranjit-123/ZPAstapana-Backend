@@ -276,6 +276,7 @@ public class EmployeeResponse extends BaseRequest {
 	private String promotionsQualificationPDF;
 	private Long addNewPromotionCastecategory;
 	private String certificateNumber;
+	private String pranNumber;
 
 	private List<EmployeeEducationDTO> educationDetails;
 	private List<StayitvaPramanpatra> sthaetvPramanpatraDetails;
