@@ -12,10 +12,15 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,15 +45,29 @@ public class ZPUtility {
 
 	private static String homeDirectory = "/home/";
 
-	public static void uploadFile(MultipartFile file, Long destination) {
+	public static void uploadFile(MultipartFile file, Long employeeId) {
 		try {
-			String directory = homeDirectory + destination + File.pathSeparator;
-			String fileName = file.getOriginalFilename();
+			String directory = homeDirectory + employeeId + File.separator;
 			Files.createDirectories(Paths.get(directory));
+
+			String fileName = file.getOriginalFilename();
 			Path path = Paths.get(directory + fileName);
+
+			if (Files.exists(path)) {
+				String fileExtension = "";
+				int extensionIndex = fileName.lastIndexOf('.');
+				if (extensionIndex > 0) {
+					fileExtension = fileName.substring(extensionIndex);
+					fileName = fileName.substring(0, extensionIndex);
+				}
+				fileName = fileName + "_" + System.currentTimeMillis() + fileExtension;
+				path = Paths.get(directory + fileName);
+			}
+
 			Files.write(path, file.getBytes());
+			log.info("File saved to " + path.toString());
 		} catch (IOException e) {
-			log.error("Error ", e);
+			log.error("Error while uploading file ", e);
 		}
 	}
 
@@ -230,4 +249,23 @@ public class ZPUtility {
 			ReflectionUtils.setField(fieldSet, e, MasterDataUtil.getKeyDate("subdepartment_", em.getSubDepartment()));
 		}
 	}
+
+	public static ResponseEntity<Resource> getFile(Long destination, String fileName) {
+		try {
+			Path filePath = Paths.get(homeDirectory + destination + "/" + fileName);
+			Resource resource = new UrlResource(filePath.toUri());
+
+			if (resource.exists() && resource.isReadable()) {
+				return ResponseEntity.ok()
+						.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+						.header(HttpHeaders.CONTENT_TYPE, "application/pdf").body(resource);
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			}
+		} catch (Exception e) {
+			log.error("Error generating file URL for " + fileName, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
 }
