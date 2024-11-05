@@ -45,26 +45,26 @@ public class ZPUtility {
 
 	private static String homeDirectory = "/home/";
 
+
 	public static void uploadFile(MultipartFile file, Long employeeId) {
 		try {
-			String directory = homeDirectory + employeeId + File.separator;
-			Files.createDirectories(Paths.get(directory));
+			String os = System.getProperty("os.name").toLowerCase();
+			String baseDirectory;
 
-			String fileName = file.getOriginalFilename();
-			Path path = Paths.get(directory + fileName);
-
-			if (Files.exists(path)) {
-				String fileExtension = "";
-				int extensionIndex = fileName.lastIndexOf('.');
-				if (extensionIndex > 0) {
-					fileExtension = fileName.substring(extensionIndex);
-					fileName = fileName.substring(0, extensionIndex);
-				}
-				fileName = fileName + "_" + System.currentTimeMillis() + fileExtension;
-				path = Paths.get(directory + fileName);
+			if (os.contains("win")) {
+				baseDirectory = "C:\\home\\";
+			} else {
+				baseDirectory = "/home/";
 			}
 
+			String directory = baseDirectory + employeeId + File.separator;
+			String fileName = file.getOriginalFilename();
+
+			Files.createDirectories(Paths.get(directory));
+
+			Path path = Paths.get(directory + fileName);
 			Files.write(path, file.getBytes());
+
 			log.info("File saved to " + path.toString());
 		} catch (IOException e) {
 			log.error("Error while uploading file ", e);
@@ -73,17 +73,48 @@ public class ZPUtility {
 
 	public static void uploadFiles(BaseRequest request, BaseEntity entity, Long employeeId) {
 		List<Field> fields = List.of(request.getClass().getDeclaredFields()).stream()
-				.filter(f -> f.getType() == MultipartFile.class).collect(Collectors.toList());
+				.filter(f -> f.getType() == MultipartFile.class || List.class.isAssignableFrom(f.getType()))
+				.collect(Collectors.toList());
+
 		fields.forEach(field -> {
 			field.setAccessible(true);
-			Object fileData = ReflectionUtils.getField(field, request);
-			if (ObjectUtils.isNotEmpty(fileData)) {
-				MultipartFile file = (MultipartFile) fileData;
+			Object fieldData = ReflectionUtils.getField(field, request);
+
+			// If the field is a single MultipartFile
+			if (fieldData instanceof MultipartFile) {
+				MultipartFile file = (MultipartFile) fieldData;
 				uploadFile(file, employeeId);
+
 				if (ObjectUtils.isNotEmpty(entity)) {
 					Field setField = ReflectionUtils.findField(entity.getClass(), field.getName());
-					setField.setAccessible(true);
-					ReflectionUtils.setField(setField, entity, file.getOriginalFilename());
+					if (setField != null) {
+						setField.setAccessible(true);
+						ReflectionUtils.setField(setField, entity, file.getOriginalFilename());
+					}
+				}
+			}
+			// If the field is a List, we assume it may contain objects with a specific
+			// MultipartFile field (e.g., multiPurposeFile)
+			else if (fieldData instanceof List<?>) {
+				List<?> objectList = (List<?>) fieldData;
+
+				for (Object obj : objectList) {
+					// Find the 'multiPurposeFile' field in each object in the list
+					Field multiPurposeFileField = ReflectionUtils.findField(obj.getClass(), "multiPurposeFile");
+
+					if (multiPurposeFileField != null) {
+						multiPurposeFileField.setAccessible(true);
+						Object nestedFieldData = ReflectionUtils.getField(multiPurposeFileField, obj);
+
+						// If the 'multiPurposeFile' field is a MultipartFile, upload it
+						if (nestedFieldData instanceof MultipartFile) {
+							MultipartFile file = (MultipartFile) nestedFieldData;
+							uploadFile(file, employeeId);
+
+							// Optionally, update the list object with the file name
+							ReflectionUtils.setField(multiPurposeFileField, obj, file.getOriginalFilename());
+						}
+					}
 				}
 			}
 		});
