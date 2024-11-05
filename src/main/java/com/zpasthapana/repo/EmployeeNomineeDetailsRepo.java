@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.zpasthapana.entity.EmployeeNomineeDetails;
 
-public interface EmployeeNomineeDetailsRepo extends JpaRepository<EmployeeNomineeDetails, Long>{
+public interface EmployeeNomineeDetailsRepo extends JpaRepository<EmployeeNomineeDetails, Long> {
+
+	EmployeeNomineeDetails findByEmployeeId(Long employeeId);
 
 }
