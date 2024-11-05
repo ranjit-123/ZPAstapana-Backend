@@ -416,6 +416,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 				.findById(employee.getEmployeeDesiganationDetailsId());
 		employeeDesiganation.ifPresent(designation -> modelMapper.map(designation, response));
 
+		Optional<EmployeeNomineeDetails> employeeNomineeDetails = Optional
+				.ofNullable(employeeNomineeDetailsRepo.findByEmployeeId(employeeId));
+		employeeNomineeDetails.ifPresent(nomineeDetails -> modelMapper.map(nomineeDetails, response));
+
+		employeeNomineeDetails.ifPresent(response::setEmployeeNomineeDetails);
 		Optional<EmployeeDisability> employeeDisability = Optional
 				.ofNullable(employeeDisabilityRepo.findByEmployeeId(employeeId));
 		employeeDisability.ifPresent(disability -> modelMapper.map(disability, response));
