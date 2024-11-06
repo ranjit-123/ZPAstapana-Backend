@@ -2,9 +2,6 @@ package com.zpasthapana.pojo;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.web.multipart.MultipartFile;
 
 import com.zpasthapana.entity.AccidentalInsurance;
 import com.zpasthapana.entity.AccountInquiry;
@@ -14,8 +11,8 @@ import com.zpasthapana.entity.Confidential;
 import com.zpasthapana.entity.CourtCase;
 import com.zpasthapana.entity.Crime;
 import com.zpasthapana.entity.Deputation;
-import com.zpasthapana.entity.EmployeeEducation;
 import com.zpasthapana.entity.EmployeeEducationDTO;
+import com.zpasthapana.entity.EmployeeNomineeDetails;
 import com.zpasthapana.entity.ExtraOrdinaryLeaves;
 import com.zpasthapana.entity.NewTraining;
 import com.zpasthapana.entity.NewTransfer;
@@ -298,6 +295,7 @@ public class EmployeeResponse extends BaseRequest {
 	private List<Suspention> suspentionDetails;
 	private Retierment retiermentDetails;
 	private RejectedPromotion rejectedPromotionDetails;
+	private EmployeeNomineeDetails employeeNomineeDetails;
 
 	public void setEducationDetails(List<EmployeeEducationDTO> educationDetails) {
 		this.educationDetails = educationDetails;
