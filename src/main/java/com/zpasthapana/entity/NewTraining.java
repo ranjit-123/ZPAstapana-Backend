@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "new_training")
-public class NewTraining extends BaseEntity{
+public class NewTraining extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -31,8 +31,9 @@ public class NewTraining extends BaseEntity{
 	private Date newTrainingFromDate;
 	private Date newTrainingToDate;
 	private String newTrainingDetails;
-	
+	private String newTrainingePDF;
+
 	@OneToOne
-	@JoinColumn(table = "new_training", name ="employeeId", insertable = false, updatable = false)
+	@JoinColumn(table = "new_training", name = "employeeId", insertable = false, updatable = false)
 	private Employee employee;
 }
