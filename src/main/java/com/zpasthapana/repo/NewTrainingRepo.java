@@ -1,5 +1,7 @@
 package com.zpasthapana.repo;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +16,6 @@ public interface NewTrainingRepo extends JpaRepository<NewTraining, Long>{
 			+ "and (:talukaId is null or w.taluka = :talukaId)")
 	Page<NewTraining> findAllByPermissions(Long devisionId, Long zpId, Long departmentId, Long talukaId, Pageable paging);
 	
-	NewTraining findByEmployeeId(Long employeeId);
+	List<NewTraining> findAllByEmployeeId(Long employeeId);
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import com.zpasthapana.entity.AccidentalInsurance;
 import com.zpasthapana.entity.AccountInquiry;
 import com.zpasthapana.entity.AdditionalService;
+import com.zpasthapana.entity.ApprenticeNotice;
 import com.zpasthapana.entity.AssetLiability;
 import com.zpasthapana.entity.Confidential;
 import com.zpasthapana.entity.CourtCase;
@@ -230,12 +231,6 @@ public class EmployeeResponse extends BaseRequest {
 	private Integer concessionFreedomFighterIsLiveFlag;
 	private String concessionFreedomFighterPDF;
 
-	private Integer apprenticePeriodFlag;
-	private String apprenticePeriodOrderNumber;
-	private Date apprenticePeriodOrderDate;
-	private String apprenticePeriodOrderPDF;
-	private Date apprenticePeriodApplyDate;
-
 	private Integer addKalbadhaPromotionRegularPromotionsFlag;
 	private Integer addKalbadhaPromotioneEployeeSelectionCategoryIDFlag;
 	private String addKalbadhaPromotionGrade;
@@ -283,7 +278,6 @@ public class EmployeeResponse extends BaseRequest {
 	private List<AccountInquiry> accountInquaryDetails;
 	private List<ExtraOrdinaryLeaves> extraOrdinaryLeaveDetails;
 	private AdditionalService additionalServiceDetails;
-	private NewTraining newTrainingDetails;
 	private List<PrizePrides> PrizePrideDetails;
 	private List<PurchasePermission> purchasePermissionDetails;
 	private List<AssetLiability> assetLiabilityDetails;
@@ -296,6 +290,8 @@ public class EmployeeResponse extends BaseRequest {
 	private Retierment retiermentDetails;
 	private RejectedPromotion rejectedPromotionDetails;
 	private EmployeeNomineeDetails employeeNomineeDetails;
+	private List<ApprenticeNotice> apprenticeNoticeDetails;
+	public List<NewTraining> trainingDetails;
 
 	public void setEducationDetails(List<EmployeeEducationDTO> educationDetails) {
 		this.educationDetails = educationDetails;
@@ -304,4 +300,17 @@ public class EmployeeResponse extends BaseRequest {
 	public void setSthaetvPramanpatraDetails(List<StayitvaPramanpatra> stayitvaPramanpatraDetails) {
 		this.sthaetvPramanpatraDetails = stayitvaPramanpatraDetails;
 	}
+
+	public void setApprenticeNoticeDetails(List<ApprenticeNotice> apprenticeNoticeDetails) {
+		this.apprenticeNoticeDetails = apprenticeNoticeDetails;
+	}
+
+	public void setTrainingDetails(List<NewTraining> trainingDetails) {
+		this.trainingDetails = trainingDetails;
+	}
+
+	public void setTransferDetails(List<NewTransfer> transferDetails) {
+		this.transferDetails = transferDetails;
+	}
+
 }

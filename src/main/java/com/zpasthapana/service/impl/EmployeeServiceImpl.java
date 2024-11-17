@@ -458,9 +458,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 				.ofNullable(concessionDetailsRepo.findById(employeeId));
 		concessionDetails.ifPresent(employeeConcessionDetails -> modelMapper.map(employeeConcessionDetails, response));
 
-		Optional<ApprenticeNotice> apprenticeNoticeDetails = Optional
-				.ofNullable(apprenticeNoticeRepo.findByEmployeeId(employeeId));
-		apprenticeNoticeDetails.ifPresent(apprenticeNotice -> modelMapper.map(apprenticeNotice, response));
+		Optional<List<ApprenticeNotice>> apprenticeNoticeDetails = Optional
+				.ofNullable(apprenticeNoticeRepo.findAllByEmployeeId(employeeId));
+		if (apprenticeNoticeDetails.isPresent() && !apprenticeNoticeDetails.get().isEmpty()) {
+			List<ApprenticeNotice> stayitvaPramanpatraDetail = apprenticeNoticeDetails.get().stream()
+					.map(pramanpatra -> modelMapper.map(pramanpatra, ApprenticeNotice.class))
+					.collect(Collectors.toList());
+			response.setApprenticeNoticeDetails(stayitvaPramanpatraDetail);
+		}
 
 		Optional<List<StayitvaPramanpatra>> stayitvaPramanpatraDetails = Optional
 				.ofNullable(stayitvaPramanpatraRepo.findAllByEmployeeId(employeeId));
@@ -531,9 +536,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 			response.setAdditionalServiceDetails(additionalService.get());
 		}
 
-		Optional<NewTraining> newTrainingDetails = Optional.ofNullable(newTrainingRepo.findByEmployeeId(employeeId));
-		if (newTrainingDetails.isPresent()) {
-			response.setNewTrainingDetails(newTrainingDetails.get());
+		Optional<List<NewTraining>> newTrainingDetails = Optional
+				.ofNullable(newTrainingRepo.findAllByEmployeeId(employeeId));
+		if (newTrainingDetails.isPresent() && !newTrainingDetails.get().isEmpty()) {
+			List<NewTraining> newTrainingDetailsList = (List<NewTraining>) newTrainingDetails.get().stream()
+					.map(price -> modelMapper.map(price, NewTraining.class)).collect(Collectors.toList());
+			response.setTrainingDetails(newTrainingDetailsList);
 		}
 
 		Optional<List<PrizePrides>> prizePridesDetails = Optional

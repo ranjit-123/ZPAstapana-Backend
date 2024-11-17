@@ -1,5 +1,7 @@
 package com.zpasthapana.pojo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +18,5 @@ public class NewTrainingRequest extends BaseRequest {
 	private String newTrainingFromDate;
 	private String newTrainingToDate;
 	private String newTrainingDetails;
+	private MultipartFile newTrainingePDF;
 }
