@@ -31,4 +31,7 @@ public class NewTransferRequest extends BaseRequest {
 	private Long talukaID;
 	private Long subDivisionID;
 	private Long subDepartmentId;
+	private Integer comingFlag;
+	private Long zpId;
+	private Long divisionId;
 }

@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "new_transfer")
-public class NewTransfer extends BaseEntity{
+public class NewTransfer extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -43,9 +43,12 @@ public class NewTransfer extends BaseEntity{
 	private Long talukaID;
 	private Long subDivisionID;
 	private Long subDepartmentId;
-	
+	private Integer comingFlag;
+	private Long zpId;
+	private Long divisionId;
+
 	@OneToOne
-	@JoinColumn(table = "new_transfer", name ="employeeId", insertable = false, updatable = false)
+	@JoinColumn(table = "new_transfer", name = "employeeId", insertable = false, updatable = false)
 	private Employee employee;
-	
+
 }
