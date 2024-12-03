@@ -18,10 +18,10 @@ import com.zpasthapana.util.JwtTokenUtil;
 
 @ControllerAdvice
 public class CustomRequestBodyAdvice implements RequestBodyAdvice {
-	
+
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
-	
+
 	@Autowired
 	private UserRepo userRepo;
 
@@ -41,14 +41,19 @@ public class CustomRequestBodyAdvice implements RequestBodyAdvice {
 	public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType,
 			Class<? extends HttpMessageConverter<?>> converterType) {
 		if (body instanceof UIPageRequest) {
-			String userEmail = jwtTokenUtil.getUsernameFromToken(inputMessage.getHeaders().get("authorization").get(0).substring(7));
+			String userEmail = jwtTokenUtil
+					.getUsernameFromToken(inputMessage.getHeaders().get("authorization").get(0).substring(7));
 			Optional<User> user = userRepo.findByUserName(userEmail);
 			UIPageRequest question = (UIPageRequest) body;
-			if(user.isPresent()) {
+			if (user.isPresent()) {
 				User us = user.get();
 				question.setTalukaId(us.getTalukaID() > 0 ? us.getTalukaID() : null);
-				question.setDevisionId(us.getDivisionID() > 0 ? us.getDivisionID(): null);
-				question.setDepartmentId(us.getDepartmentID() > 0 ? us.getDepartmentID(): null);
+				if (question.getDevisionId() == null || question.getDevisionId() <= 0) {
+					question.setDevisionId(us.getDivisionID() > 0 ? us.getDivisionID() : null);
+				}
+				if (question.getDepartmentId() == null || question.getDepartmentId() <= 0) {
+					question.setDepartmentId(us.getDepartmentID() > 0 ? us.getDepartmentID() : null);
+				}
 				question.setZpId(us.getZillaParishadID() > 0 ? us.getZillaParishadID() : null);
 				question.setProperOfficeID(us.getProperOfficeID() > 0 ? us.getProperOfficeID() : null);
 			}
