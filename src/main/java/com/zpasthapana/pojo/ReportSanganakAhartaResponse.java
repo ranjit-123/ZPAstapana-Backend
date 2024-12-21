@@ -19,4 +19,5 @@ public class ReportSanganakAhartaResponse {
 	public Integer total;
 	public Integer notQualified;
 	private Integer notQualifiedNotApplicable;
+	private String department;
 }
