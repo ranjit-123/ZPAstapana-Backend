@@ -72,8 +72,8 @@ public class ReportServiceImpl implements ReportService {
 			ZPMajurPadereport rep = ZPMajurPadereport.builder().pad(zpMajurPade.getValue().getDepartmentID())
 					.padName(MasterDataUtil.getKeyDate("department_", zpMajurPade.getValue().getDepartmentID()))
 					.build();
-			rep.setItem(
-					setItems(rep.getItem(), zpMajurPade.getValue(), zpMajurPade.getKey(), bharaleliPad, itemTotal, false));
+			rep.setItem(setItems(rep.getItem(), zpMajurPade.getValue(), zpMajurPade.getKey(), bharaleliPad, itemTotal,
+					false));
 			report.add(rep);
 		}
 		ZPMajurPadereport rep = ZPMajurPadereport.builder().pad(900).padName("एकुण").build();
@@ -83,20 +83,19 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	public Map<ZPDesAndCategoryBean, DataThreeInteger> loadFilledPade(User user, boolean b) {
-		
+
 		String query = "SELECT ee.employeeDesiganationId as val1, ee.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "inner join employee_designation_details ee on e.employeeDesiganationDetailsId = ee.employeeDesiganationDetailsId\r\n"
 				+ "where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
-		
-		if(b) {
+
+		if (b) {
 			query = query + " and ee.parallelReservationType = 7";
 		}
-		
+
 		query = query + " group by ee.employeeselectioncategory, ee.employeeDesiganationId";
-		
-		List<DataThreeInteger> data = jdbcTemplate.query(
-				query,
+
+		List<DataThreeInteger> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(DataThreeInteger.class));
 
 		Map<ZPDesAndCategoryBean, DataThreeInteger> result = new HashMap<>();
@@ -106,22 +105,22 @@ public class ReportServiceImpl implements ReportService {
 		}
 		return result;
 	}
-	
+
 	public Map<ZPDesAndCategoryBean, DataThreeInteger> loadFilledPade(User user, Long departmentId, boolean b) {
-		
+
 		String query = "SELECT ee.employeeDesiganationId as val1, ee.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "inner join employee_designation_details ee on e.employeeDesiganationDetailsId = ee.employeeDesiganationDetailsId\r\n"
-				+ "where e.active = 1 and ew.zpId = " + user.getZillaParishadID() + " and ew.departmentId = " + departmentId;
-		
-		if(b) {
+				+ "where e.active = 1 and ew.zpId = " + user.getZillaParishadID() + " and ew.departmentId = "
+				+ departmentId;
+
+		if (b) {
 			query = query + " and ee.parallelReservationType = 7";
 		}
-		
+
 		query = query + " group by ee.employeeselectioncategory, ee.employeeDesiganationId";
-		
-		List<DataThreeInteger> data = jdbcTemplate.query(
-				query,
+
+		List<DataThreeInteger> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(DataThreeInteger.class));
 
 		Map<ZPDesAndCategoryBean, DataThreeInteger> result = new HashMap<>();
@@ -131,20 +130,19 @@ public class ReportServiceImpl implements ReportService {
 		}
 		return result;
 	}
-	
+
 	public Map<ZPDesAndCategoryBean, DataThreeInteger> loadFilledPadeDepartment(User user, boolean b) {
 		String query = "SELECT ew.departmentId as val1, ee.employeeselectioncategory as val2, count(e.employee_id) as val3 FROM employee e\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "inner join employee_designation_details ee on ee.employeeDesiganationDetailsId = e.employeeDesiganationDetailsId\r\n"
 				+ "where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
-		
-		if(b) {
+
+		if (b) {
 			query = query + " and ee.parallelReservationType = 7";
 		}
-		
+
 		query = query + " group by ee.employeeselectioncategory, ew.departmentId";
-		List<DataThreeInteger> data = jdbcTemplate.query(
-				query,
+		List<DataThreeInteger> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(DataThreeInteger.class));
 
 		Map<ZPDesAndCategoryBean, DataThreeInteger> result = new HashMap<>();
@@ -196,8 +194,8 @@ public class ReportServiceImpl implements ReportService {
 			ZPMajurPadereport rep = ZPMajurPadereport.builder().pad(zpMajurPade.getValue().getDepartmentID())
 					.padName(MasterDataUtil.getKeyDate("department_", zpMajurPade.getValue().getDepartmentID()))
 					.build();
-			rep.setItem(
-					setItems(rep.getItem(), zpMajurPade.getValue(), zpMajurPade.getKey(), bharaleliPad, itemTotal, true));
+			rep.setItem(setItems(rep.getItem(), zpMajurPade.getValue(), zpMajurPade.getKey(), bharaleliPad, itemTotal,
+					true));
 			report.add(rep);
 		}
 		ZPMajurPadereport rep = ZPMajurPadereport.builder().pad(900).padName("एकुण").build();
@@ -205,7 +203,7 @@ public class ReportServiceImpl implements ReportService {
 		report.add(rep);
 		return report;
 	}
-	
+
 	private ZPMajurPadereportWrapper getManjurBharaleliPadReport(List<ZPMajurPadereport> report,
 			List<ZPMajurPadereport> report4, Map<ZPBean, ZPManjurPade> manjurPade,
 			Map<ZPDesAndCategoryBean, DataThreeInteger> bharaleliPad, boolean isHandicap) {
@@ -217,15 +215,15 @@ public class ReportServiceImpl implements ReportService {
 				ZPMajurPadereport rep = ZPMajurPadereport.builder().pad(zpMajurPade.getValue().getDesignationID())
 						.padName(MasterDataUtil.getKeyDate("designation_", zpMajurPade.getValue().getDesignationID()))
 						.build();
-				rep.setItem(setItemsDesigNation(rep.getItem(), zpMajurPade.getValue(), zpMajurPade.getKey(), bharaleliPad,
-						itemTotal3, isHandicap));
+				rep.setItem(setItemsDesigNation(rep.getItem(), zpMajurPade.getValue(), zpMajurPade.getKey(),
+						bharaleliPad, itemTotal3, isHandicap));
 				report.add(rep);
 			} else {
 				ZPMajurPadereport rep = ZPMajurPadereport.builder().pad(zpMajurPade.getValue().getDesignationID())
 						.padName(MasterDataUtil.getKeyDate("designation_", zpMajurPade.getValue().getDesignationID()))
 						.build();
-				rep.setItem(setItemsDesigNation(rep.getItem(), zpMajurPade.getValue(), zpMajurPade.getKey(), bharaleliPad,
-						itemTotal4, isHandicap));
+				rep.setItem(setItemsDesigNation(rep.getItem(), zpMajurPade.getValue(), zpMajurPade.getKey(),
+						bharaleliPad, itemTotal4, isHandicap));
 				report4.add(rep);
 			}
 		}
@@ -250,7 +248,8 @@ public class ReportServiceImpl implements ReportService {
 	private Integer[] setItems(Integer[] item, ZPManjurPade value, ZPBean zpBean,
 			Map<ZPDesAndCategoryBean, DataThreeInteger> bharaleliPad, Integer[] itemTotal, boolean isHandicap) {
 
-		item[0] = isHandicap ? value.getStraightforwardServiceApprovedDisability() : value.getStraightforwardServiceApproved();
+		item[0] = isHandicap ? value.getStraightforwardServiceApprovedDisability()
+				: value.getStraightforwardServiceApproved();
 		item[1] = bharaleliPad.getOrDefault(
 				ZPDesAndCategoryBean.builder().categoryId(1).designationId(value.getDepartmentID()).build(),
 				DataThreeInteger.builder().val3(0).build()).getVal3();
@@ -278,11 +277,12 @@ public class ReportServiceImpl implements ReportService {
 
 		return item;
 	}
-	
+
 	private Integer[] setItemsDesigNation(Integer[] item, ZPManjurPade value, ZPBean zpBean,
 			Map<ZPDesAndCategoryBean, DataThreeInteger> bharaleliPad, Integer[] itemTotal, boolean isHandicap) {
 
-		item[0] = isHandicap ? value.getStraightforwardServiceApprovedDisability() : value.getStraightforwardServiceApproved();
+		item[0] = isHandicap ? value.getStraightforwardServiceApprovedDisability()
+				: value.getStraightforwardServiceApproved();
 		item[1] = bharaleliPad.getOrDefault(
 				ZPDesAndCategoryBean.builder().categoryId(1).designationId(zpBean.getDesignationId()).build(),
 				DataThreeInteger.builder().val3(0).build()).getVal3();
@@ -332,71 +332,72 @@ public class ReportServiceImpl implements ReportService {
 				+ "on e.employee_id = edm.employeeId\r\n"
 				+ "inner join employee_cast_details ec on e.employeeCastDetailsId = ec.employeeCastDetailsId\r\n"
 				+ "inner join employee_worklocation ew on e.employee_id = ew.employeeId\r\n"
-				+ "left join retierment empr on e.employee_id = empr.employeeId "
-				+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
-		
-		if(user.getDepartmentID() > 0) {
+				+ "left join retierment empr on e.employee_id = empr.employeeId " + " where e.active = 1 and ew.zpId = "
+				+ user.getZillaParishadID();
+
+		if (user.getDepartmentID() > 0) {
 			query = query + " and ew.departmentId = " + user.getDepartmentID();
 		}
-		
-		if(StringUtils.equalsIgnoreCase(type, "karayarat")) {
+
+		if (StringUtils.equalsIgnoreCase(type, "karayarat")) {
 			query = query + " and (ifnull(empr.retirementDate, ifnull(e.retirementDate, CURDATE())) >= CURDATE())";
-		} else if(StringUtils.equalsIgnoreCase(type, "nivrut")) {
+		} else if (StringUtils.equalsIgnoreCase(type, "nivrut")) {
 			query = query + " and ifnull(empr.retirementDate, e.retirementDate) < CURDATE() ";
 		}
-		
-		if(ObjectUtils.isNotEmpty(designationId) && designationId > 0) {
+
+		if (ObjectUtils.isNotEmpty(designationId) && designationId > 0) {
 			query = query + " and employeeDesiganationId = " + designationId;
 		}
-		
-		List<BinduNamavaliReport> data = jdbcTemplate.query(
-				query,
+
+		List<BinduNamavaliReport> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(BinduNamavaliReport.class));
 
 		return data;
 	}
-	
+
 	@Override
 	public List<JestatechaReport> getJestatechaReport(Long userId, String type, Integer designationId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT distinct '' as jeshtataNumber, \r\n"
-				+ " concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as name, \r\n"
-				+ "    ec.caste as caste, ec.castecategory as mulJatPravarg, ec.appointmentCasteCategoryID as niyuktiPravarg, \r\n"
-				+ "    '' as pravargChangeDate, dateOfBirth as birthDate, ed.dateOfAppointed as hallichaNiyuktDinank, employeeselectioncategory as niyuktichaMarg, ed.dateOfHumanitySeniority as jeshtataManivDate, \r\n"
-				+ "    e.sevaDate as sevaPaveshottarPassDate\r\n"
-				+ ", ifnull(ifnull(empr.retirementDate, e.retirementDate),'') as retirementDate"
-				+ "    ,'' as prathamPadonnatiNiyuktiDate, '' as dvitiyaPadonnatiNiyuktiDate, '' as trutiyaPadonnatiNiyuktiDate, ifnull(eed.degreeName,'') as degreeName "
-				+ " , edm.dateOfAppointed as prathamPadavarilDate, '' as remark FROM employee e inner join employee_designation_details ed \r\n"
-				+ "on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId \r\n"
-				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
-				+ "on e.employee_id = edm.employeeId\r\n"
-				+ "inner join employee_cast_details ec on e.employeeCastDetailsId = ec.employeeCastDetailsId\r\n"
-				+ "inner join employee_worklocation ew on e.employee_id = ew.employeeId\r\n"
-				+ "left join retierment empr on e.employee_id = empr.employeeId "
-				+ "left join employee_education_details eed on eed.employeeId = e.employee_id "
-				+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
-		
-		if(user.getDepartmentID() > 0) {
-			query = query + " and ew.departmentId = " + user.getDepartmentID();
+
+		String query = "SELECT DISTINCT '' AS jeshtataNumber, "
+				+ "CONCAT(e.firstName, ' ', e.middleName, ' ', e.lastName) AS name, "
+				+ "ec.caste AS caste, ec.castecategory AS mulJatPravarg, ec.appointmentCasteCategoryID AS niyuktiPravarg, "
+				+ "'' AS pravargChangeDate, DATE(e.dateOfBirth) AS birthDate, DATE(ed.dateOfAppointed) AS hallichaNiyuktDinank, "
+				+ "employeeselectioncategory AS niyuktichaMarg, DATE(ed.dateOfHumanitySeniority) AS jeshtataManivDate, "
+				+ "DATE(e.sevaDate) AS sevaPaveshottarPassDate, "
+				+ "IFNULL(IFNULL(DATE(empr.retirementDate), DATE(e.retirementDate)), NULL) AS retirementDate, "
+				+ "'' AS prathamPadonnatiNiyuktiDate, '' AS dvitiyaPadonnatiNiyuktiDate, '' AS trutiyaPadonnatiNiyuktiDate, "
+				+ "IFNULL(eed.degreeName, '') AS degreeName, "
+				+ "DATE(edm.dateOfAppointed) AS prathamPadavarilDate, '' AS remark " + "FROM employee e "
+				+ "INNER JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
+				+ "INNER JOIN (SELECT employeeId, MIN(dateOfAppointed) AS dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
+				+ "ON e.employee_id = edm.employeeId "
+				+ "INNER JOIN employee_cast_details ec ON e.employeeCastDetailsId = ec.employeeCastDetailsId "
+				+ "INNER JOIN employee_worklocation ew ON e.employee_id = ew.employeeId "
+				+ "LEFT JOIN retierment empr ON e.employee_id = empr.employeeId "
+				+ "LEFT JOIN employee_education_details eed ON eed.employeeId = e.employee_id "
+				+ "WHERE e.active = 1 AND ew.zpId = " + user.getZillaParishadID();
+
+		if (user.getDepartmentID() > 0) {
+			query += " AND ew.departmentId = " + user.getDepartmentID();
 		}
-		
-		if(StringUtils.equalsIgnoreCase(type, "karayarat")) {
-			query = query + " and (ifnull(empr.retirementDate, ifnull(e.retirementDate, CURDATE())) >= CURDATE())";
-		} else if(StringUtils.equalsIgnoreCase(type, "nivrut")) {
-			query = query + " and ifnull(empr.retirementDate, e.retirementDate) < CURDATE() ";
-		} 
-		
-		if(ObjectUtils.isNotEmpty(designationId) && designationId > 0) {
-			query = query + " and ed.employeeDesiganationId = " + designationId;
+
+		if (StringUtils.equalsIgnoreCase(type, "karayarat")) {
+			query += " AND (IFNULL(DATE(empr.retirementDate), IFNULL(DATE(e.retirementDate), CURDATE())) >= CURDATE())";
+		} else if (StringUtils.equalsIgnoreCase(type, "nivrut")) {
+			query += " AND IFNULL(DATE(empr.retirementDate), DATE(e.retirementDate)) < CURDATE()";
 		}
-		
-		List<JestatechaReport> data = jdbcTemplate.query(
-				query,
+
+		if (ObjectUtils.isNotEmpty(designationId) && designationId > 0) {
+			query += " AND ed.employeeDesiganationId = " + designationId;
+		}
+
+		List<JestatechaReport> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(JestatechaReport.class));
 
 		return data;
 	}
-	
+
 	@Override
 	public List<AbsenceReport> getUnAuthorisedAbsenceReport(Long userId, Integer departmentId) {
 		User user = userService.findUserById(userId);
@@ -412,17 +413,14 @@ public class ReportServiceImpl implements ReportService {
 				+ "                inner join unathorized_absence_period a on e.employee_id = a.employeeId\r\n"
 				+ "				left join retierment empr on e.employee_id = empr.employeeId"
 				+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
-		
-		if(user.getDepartmentID() > 0) {
+
+		if (user.getDepartmentID() > 0) {
 			query = query + " and ew.departmentId = " + user.getDepartmentID();
-		} else if(ObjectUtils.isNotEmpty(departmentId) && departmentId > 0) {
+		} else if (ObjectUtils.isNotEmpty(departmentId) && departmentId > 0) {
 			query = query + " and ew.departmentId = " + departmentId;
 		}
-		
-		
-		List<AbsenceReport> data = jdbcTemplate.query(
-				query,
-				BeanPropertyRowMapper.newInstance(AbsenceReport.class));
+
+		List<AbsenceReport> data = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(AbsenceReport.class));
 
 		return data;
 	}
@@ -442,17 +440,14 @@ public class ReportServiceImpl implements ReportService {
 				+ "                inner join unathorized_absence_period a on e.employee_id = a.employeeId\r\n"
 				+ "				left join retierment empr on e.employee_id = empr.employeeId"
 				+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
-		
-		if(user.getDepartmentID() > 0) {
+
+		if (user.getDepartmentID() > 0) {
 			query = query + " and ew.departmentId = " + user.getDepartmentID();
-		} else if(ObjectUtils.isNotEmpty(departmentId) && departmentId > 0) {
+		} else if (ObjectUtils.isNotEmpty(departmentId) && departmentId > 0) {
 			query = query + " and ew.departmentId = " + departmentId;
 		}
-		
-		
-		List<ReportData> data = jdbcTemplate.query(
-				query,
-				BeanPropertyRowMapper.newInstance(ReportData.class));
+
+		List<ReportData> data = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(ReportData.class));
 
 		return data;
 	}
@@ -477,7 +472,8 @@ public class ReportServiceImpl implements ReportService {
 				+ "on r.employeeId = c.employeeId left join (select employeeId from account_inquiry where implementationDone = 0 group by employeeId) a \r\n"
 				+ "on r.employeeId = a.employeeId "
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId" + ""
-			    + " where pensionDate is null or pensionDate >= '2023-04-01' and e.active = 1 and ew.zpId = " + user.getZillaParishadID();
+				+ " where pensionDate is null or pensionDate >= '2023-04-01' and e.active = 1 and ew.zpId = "
+				+ user.getZillaParishadID();
 
 		if (user.getDepartmentID() > 0) {
 			query = query + " and ew.departmentId = " + user.getDepartmentID();
@@ -486,7 +482,8 @@ public class ReportServiceImpl implements ReportService {
 		}
 		query = query + " group by ew.departmentId ) tmp;";
 
-		List<ReportSevaNivrutResponse> data = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(ReportSevaNivrutResponse.class));
+		List<ReportSevaNivrutResponse> data = jdbcTemplate.query(query,
+				BeanPropertyRowMapper.newInstance(ReportSevaNivrutResponse.class));
 		return data;
 	}
 
@@ -499,22 +496,21 @@ public class ReportServiceImpl implements ReportService {
 				+ ")  >= 6 then 1 else 0 end) as isCaseOldThan6Months, declarationDate from retierment r inner join employee e on r.employeeId = e.employee_id \r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
-		+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
-		
-		if(user.getDepartmentID() > 0) {
+				+ " where e.active = 1 and ew.zpId = " + user.getZillaParishadID();
+
+		if (user.getDepartmentID() > 0) {
 			query = query + " and ew.departmentId = " + user.getDepartmentID();
 		}
-		
-		if(StringUtils.endsWithIgnoreCase(type, "pending")) {
+
+		if (StringUtils.endsWithIgnoreCase(type, "pending")) {
 			query = query + " and pensionDate is null ";
 		} else {
 			query = query + " and pensionDate is not null ";
 		}
-		
+
 		query = query + " order by ew.departmentId";
-		
-		List<ReportSevaNivrutDepartmentLevelResponse> data = jdbcTemplate.query(
-				query,
+
+		List<ReportSevaNivrutDepartmentLevelResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportSevaNivrutDepartmentLevelResponse.class));
 
 		return data;
@@ -523,8 +519,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<ReportMattaDayitvaResponse> getMattadayitvaAll(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT\r\n"
-				+ "d.designationID as designation, \r\n"
+		String query = "SELECT\r\n" + "d.designationID as designation, \r\n"
 				+ "sum(case when (d.designationClassID = 3 and ifnull(a.isAssetLiabilitySubmitted, 0) = 0) then 1 else 0 end) as workingEmployeeA,\r\n"
 				+ "sum(case when (d.designationClassID = 4 and ifnull(a.isAssetLiabilitySubmitted, 0) = 0) then 1 else 0 end) as workingEmployeeB,\r\n"
 				+ "sum(case when (d.designationClassID = 1 and ifnull(a.isAssetLiabilitySubmitted, 0) = 0) then 1 else 0 end) as workingEmployeeC,\r\n"
@@ -535,14 +530,13 @@ public class ReportServiceImpl implements ReportService {
 				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
 				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
-				+ "left join assetLiability a on e.employee_id = a.employeeId and a.financialYear = '"+ year + "'";
-				
-		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = "+ user.getZillaParishadID();
-				
+				+ "left join assetLiability a on e.employee_id = a.employeeId and a.financialYear = '" + year + "'";
+
+		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
+
 		query = query + " group by d.designationID;";
-		
-		List<ReportMattaDayitvaResponse> data = jdbcTemplate.query(
-				query,
+
+		List<ReportMattaDayitvaResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportMattaDayitvaResponse.class));
 
 		return data;
@@ -552,39 +546,40 @@ public class ReportServiceImpl implements ReportService {
 	public List<ReportGopaniyAhvalResponse> getGopaniyAhvalAll(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
 		String lastYear = year.substring(year.indexOf("-") + 1);
-		
-		String query = "SELECT\r\n"
-				+ "d.designationID as designation, \r\n"
+
+		String query = "SELECT\r\n" + "d.designationID as designation, \r\n"
 				+ "sum(case when (d.designationClassID = 3) then 1 else 0 end) as allEmployeeA,\r\n"
 				+ "sum(case when (d.designationClassID = 4) then 1 else 0 end) as allEmployeeB,\r\n"
 				+ "sum(case when (d.designationClassID = 1) then 1 else 0 end) as allEmployeeC,\r\n"
-				+ "sum(case when (d.designationClassID = 3 and tmp1.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialDataSubmittedA,\r\n"
-				+ "sum(case when (d.designationClassID = 4 and tmp1.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialDataSubmittedB,\r\n"
-				+ "sum(case when (d.designationClassID = 1 and tmp1.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialDataSubmittedC,\r\n"
-				+ "sum(case when (d.designationClassID = 3 and tmp2.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialUpdatedA,\r\n"
-				+ "sum(case when (d.designationClassID = 4 and tmp2.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialUpdatedB,\r\n"
-				+ "sum(case when (d.designationClassID = 1 and tmp2.toDate >= '"+lastYear+"-03-31') then 1 else 0 end) as confidentialUpdatedC    \r\n"
-				+ "FROM employee e\r\n"
+				+ "sum(case when (d.designationClassID = 3 and tmp1.toDate >= '" + lastYear
+				+ "-03-31') then 1 else 0 end) as confidentialDataSubmittedA,\r\n"
+				+ "sum(case when (d.designationClassID = 4 and tmp1.toDate >= '" + lastYear
+				+ "-03-31') then 1 else 0 end) as confidentialDataSubmittedB,\r\n"
+				+ "sum(case when (d.designationClassID = 1 and tmp1.toDate >= '" + lastYear
+				+ "-03-31') then 1 else 0 end) as confidentialDataSubmittedC,\r\n"
+				+ "sum(case when (d.designationClassID = 3 and tmp2.toDate >= '" + lastYear
+				+ "-03-31') then 1 else 0 end) as confidentialUpdatedA,\r\n"
+				+ "sum(case when (d.designationClassID = 4 and tmp2.toDate >= '" + lastYear
+				+ "-03-31') then 1 else 0 end) as confidentialUpdatedB,\r\n"
+				+ "sum(case when (d.designationClassID = 1 and tmp2.toDate >= '" + lastYear
+				+ "-03-31') then 1 else 0 end) as confidentialUpdatedC    \r\n" + "FROM employee e\r\n"
 				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
 				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
-				+ "left join (\r\n"
-				+ "SELECT employeeId, financialYear, \r\n"
+				+ "left join (\r\n" + "SELECT employeeId, financialYear, \r\n"
 				+ "min(fromDate) as fromDate, max(toDate) as toDate\r\n"
 				+ " FROM confidential where reportingOfficerMarks is not null group by financialYear, employeeId\r\n"
-				+ ") tmp1 on e.employee_id = tmp1.employeeId and tmp1.financialYear = '"+ year + "'\r\n"
-				+ "left join (\r\n"
-				+ "SELECT employeeId, financialYear, \r\n"
+				+ ") tmp1 on e.employee_id = tmp1.employeeId and tmp1.financialYear = '" + year + "'\r\n"
+				+ "left join (\r\n" + "SELECT employeeId, financialYear, \r\n"
 				+ "min(fromDate) as fromDate, max(toDate) as toDate\r\n"
 				+ " FROM confidential where reviewOfficerMarks is not null group by financialYear, employeeId\r\n"
-				+ ") tmp2 on e.employee_id = tmp2.employeeId and tmp2.financialYear = '"+ year + "'";
-				
-		query = query + " where ew.departmentId = " + departmentId+ " and ew.zpId = "+ user.getZillaParishadID();
-				
+				+ ") tmp2 on e.employee_id = tmp2.employeeId and tmp2.financialYear = '" + year + "'";
+
+		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
+
 		query = query + " group by d.designationID;";
-		
-		List<ReportGopaniyAhvalResponse> data = jdbcTemplate.query(
-				query,
+
+		List<ReportGopaniyAhvalResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportGopaniyAhvalResponse.class));
 
 		return data;
@@ -593,8 +588,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<ReportStayitvaReponse> getStayitvaReportAll(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT\r\n"
-				+ "d.designationID , d.designationID as designation, \r\n"
+		String query = "SELECT\r\n" + "d.designationID , d.designationID as designation, \r\n"
 				+ "sum(case when (d.designationClassID = 1) then 1 else 0 end) as totalWorkingEmpC,\r\n"
 				+ "sum(case when (d.designationClassID = 2) then 1 else 0 end) as totalWorkingEmpD,\r\n"
 				+ "sum(case when (d.designationClassID = 1 and TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3) then 1 else 0 end) as stayitvaEligibleEmpC,\r\n"
@@ -607,18 +601,17 @@ public class ReportServiceImpl implements ReportService {
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
 				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm on e.employee_id = edm.employeeId\r\n"
 				+ "left join stayitva_pramanpatra tmp1 on e.employee_id = tmp1.employeeId\r\n";
-				
+
 		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
-				
+
 		query = query + " group by d.designationID;";
-		
-		List<ReportStayitvaReponse> data = jdbcTemplate.query(
-				query,
+
+		List<ReportStayitvaReponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportStayitvaReponse.class));
 
 		return data;
 	}
-	
+
 	@Override
 	public List<ReportStayitvaEmpListResponse> getStayitvaReportWithDesignation(Long userId, Long departmentId) {
 		User user = userService.findUserById(userId);
@@ -634,13 +627,12 @@ public class ReportServiceImpl implements ReportService {
 				+ "				left join retierment empr on e.employee_id = empr.employeeId \r\n"
 				+ "				left join employee_education_details eed on eed.employeeId = e.employee_id \r\n"
 				+ "				 where e.active = 1 ";
-				
+
 		query = query + " and ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
-				
+
 		query = query + " group by ew.designationID;";
-		
-		List<ReportStayitvaEmpListResponse> data = jdbcTemplate.query(
-				query,
+
+		List<ReportStayitvaEmpListResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportStayitvaEmpListResponse.class));
 
 		return data;
@@ -650,8 +642,7 @@ public class ReportServiceImpl implements ReportService {
 	public List<ReportSanganakAhartaResponse> getComputerQualificationReportAll(Long userId, String year,
 			Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT\r\n"
-				+ "d.designationID as designation, \r\n"
+		String query = "SELECT\r\n" + "d.designationID as designation, \r\n" + "dep.departmentName as department,\r\n"
 				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as totalEmployee,\r\n"
 				+ "sum(case when tmp1.computerFlag = 0 then 1 else 0 end) as pass,\r\n"
 				+ "sum(case when tmp1.computerFlag = 1 then 1 else 0 end) as notApplicable,\r\n"
@@ -662,14 +653,14 @@ public class ReportServiceImpl implements ReportService {
 				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
 				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
+				+ "inner join tblDepartment dep on ew.departmentId = dep.departmentID\r\n"
 				+ "left join employee_computer_details tmp1 on e.employee_id = tmp1.employeeId";
-				
+
 		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
-				
-		query = query + " group by d.designationID;";
-		
-		List<ReportSanganakAhartaResponse> data = jdbcTemplate.query(
-				query,
+
+		query = query + " group by d.designationID , dep.departmentName;";
+
+		List<ReportSanganakAhartaResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportSanganakAhartaResponse.class));
 
 		return data;
@@ -678,8 +669,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<ReportLanguageResponse> getHindiMarathiReportAll(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT\r\n"
-				+ "d.designationID as designation, \r\n"
+		String query = "SELECT\r\n" + "d.designationID as designation, \r\n"
 				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as totalEmployee,\r\n"
 				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as marathiPass,\r\n"
 				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as hindiPass,\r\n"
@@ -688,19 +678,18 @@ public class ReportServiceImpl implements ReportService {
 				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 2) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 2) or tmp1.marathiHindiFlag is null then 1 else 0 end) as marathiNotPass,\r\n"
 				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 2) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 2) or tmp1.marathiHindiFlag is null then 1 else 0 end) as hindiNotPass,\r\n"
 				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as marathiTotal,\r\n"
-				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as hindiTotal \r\n"
-				+ "FROM employee e\r\n"
+				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as hindiTotal,\r\n"
+				+ "COUNT(e.employee_id) as totalWorkingEmployee \r\n" + "FROM employee e\r\n"
 				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
 				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
 				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
 				+ "left join employee_language_exam tmp1 on e.employee_id = tmp1.employeeId\r\n";
-				
+
 		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
-				
+
 		query = query + " group by d.designationID";
-		
-		List<ReportLanguageResponse> data = jdbcTemplate.query(
-				query,
+
+		List<ReportLanguageResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportLanguageResponse.class));
 
 		return data;
@@ -709,15 +698,12 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<Report3055Response> getEmployee3055Report(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT\r\n"
-				+ "d.designationID as designation, \r\n"
+		String query = "SELECT\r\n" + "d.designationID as designation, \r\n"
 				+ "sum(case when (TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55))\r\n"
 				+ "and TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > 0 then 1 else 0 end)\r\n"
 				+ " as age30Completed,\r\n"
 				+ "sum(case when (TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55) >= TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30)) and TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55) > 0 then 1 else 0 end) \r\n"
-				+ "as age55Completed,\r\n"
-				+ "0 as reviewedEmployees,\r\n"
-				+ "0 as notReviewedEmployees\r\n"
+				+ "as age55Completed,\r\n" + "0 as reviewedEmployees,\r\n" + "0 as notReviewedEmployees\r\n"
 				+ "FROM employee e\r\n"
 				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
 				+ "				inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
@@ -725,16 +711,15 @@ public class ReportServiceImpl implements ReportService {
 				+ "on e.employee_id = edm.employeeId\r\n"
 				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
 				+ "left join employee_language_exam tmp1 on e.employee_id = tmp1.employeeId";
-				
+
 		query = query + " where ew.departmentID = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
-				
+
 		query = query + " group by d.designationID;";
-		
-		List<Report3055Response> data = jdbcTemplate.query(
-				query,
+
+		List<Report3055Response> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(Report3055Response.class));
 
 		return data;
 	}
-	
+
 }
