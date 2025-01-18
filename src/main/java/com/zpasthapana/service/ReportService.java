@@ -57,5 +57,7 @@ public interface ReportService {
 	List<Report3055Response> getEmployee3055Report(Long userId, String year, Long departmentId);
 
 	List<ReportStayitvaEmpListResponse> getStayitvaReportWithDesignation(Long userId, Long departmentId);
+
+	List<ReportStayitvaEmpListResponse> getMarathiHindiReportWithDesignation(Long userId, Long departmentId);
 	
 }

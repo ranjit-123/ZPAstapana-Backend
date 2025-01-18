@@ -18,4 +18,5 @@ public class Report3055Response {
 	public Integer total30Plus55;
 	public Integer reviewedEmployees;
 	public Integer notReviewedEmployees;
+	private Long designationId;
 }
