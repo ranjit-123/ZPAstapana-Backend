@@ -330,4 +330,18 @@ public class ReportController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	@GetMapping("/marathi-hindi/designation-level/{userId}")
+	public ResponseEntity<List<ReportStayitvaEmpListResponse>> getMarathiHindiReportWithDesignation(
+			@PathVariable Long userId, @RequestParam(name = "departmentId", required = false) Long departmentId) {
+		List<ReportStayitvaEmpListResponse> result = reportService.getMarathiHindiReportWithDesignation(userId,
+				departmentId);
+		result = result.stream().map(s -> {
+			s.setFirstAppointDesignation(MasterDataUtil.getKeyDate("designation_", s.getFirstAppointDesignation()));
+			s.setSelectionType(MasterDataUtil.getKeyDate("castecategory_", s.getSelectionType()));
+			s.setFirstAppointType(MasterDataUtil.getKeyDate("niyuktitype_", s.getFirstAppointType()));
+			return s;
+		}).collect(Collectors.toList());
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
 }

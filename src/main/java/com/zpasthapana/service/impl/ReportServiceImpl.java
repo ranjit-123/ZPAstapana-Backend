@@ -669,7 +669,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<ReportLanguageResponse> getHindiMarathiReportAll(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT\r\n" + "d.designationID as designation, \r\n"
+		String query = "SELECT\r\n" + "d.designationID as designation, \r\n" + "d.designationID as designationId, \r\n"
 				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as totalEmployee,\r\n"
 				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as marathiPass,\r\n"
 				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as hindiPass,\r\n"
@@ -718,6 +718,37 @@ public class ReportServiceImpl implements ReportService {
 
 		List<Report3055Response> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(Report3055Response.class));
+
+		return data;
+	}
+
+	@Override
+	public List<ReportStayitvaEmpListResponse> getMarathiHindiReportWithDesignation(Long userId, Long designationId) {
+		User user = userService.findUserById(userId);
+
+		String query = "SELECT distinct '111' as jeshtataNumber, "
+				+ "CONCAT(firstName, middleName, lastName) AS employeeNameAndOffice, "
+				+ "appointmentOrderDate as appointmentOrderDate, "
+				+ "employeeDesiganationId as firstAppointDesignation, "
+				+ "employeeselectioncategory as firstAppointType, " + "caste as socialClass, "
+				+ "castecategory as selectionType, " + "casteValidityFlag as isCasteCertifiacteSubmitted, "
+				+ "'20' as absencePeriod, " + "'1' as moreThanThreeMonthAbsence, "
+				+ "'' as probationaryPeriodApprovedDate, "
+				+ "date_add(ed.dateOfAppointed, INTERVAL 3 YEAR) as threeYearsCompletedDate, "
+				+ "1 as isDepartmentEnquiryGoingOn, " + "e.dateOfBirth as dateOfBirth " + "FROM employee e "
+				+ "INNER JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
+				+ "INNER JOIN (SELECT employeeId, MIN(dateOfAppointed) as dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
+				+ "ON e.employee_id = edm.employeeId "
+				+ "INNER JOIN employee_cast_details ec ON e.employeeCastDetailsId = ec.employeeCastDetailsId "
+				+ "INNER JOIN employee_worklocation ew ON e.employee_id = ew.employeeId "
+				+ "LEFT JOIN retierment empr ON e.employee_id = empr.employeeId "
+				+ "LEFT JOIN employee_education_details eed ON eed.employeeId = e.employee_id " + "WHERE e.active = 1 ";
+
+		query = query + " AND ew.designationID = " + designationId;
+		query = query + " AND ew.zpId = " + user.getZillaParishadID();
+		query = query + " GROUP BY ew.designationID;";
+		List<ReportStayitvaEmpListResponse> data = jdbcTemplate.query(query,
+				BeanPropertyRowMapper.newInstance(ReportStayitvaEmpListResponse.class));
 
 		return data;
 	}

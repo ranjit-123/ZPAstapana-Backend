@@ -22,4 +22,5 @@ public class ReportLanguageResponse {
     public Integer hindiSut;
     public Integer hindiNotPass;
     public Integer hindiTotal;
+    private Long designationId;
 }
