@@ -22,6 +22,7 @@ import com.zpasthapana.pojo.Report3055Response;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
 import com.zpasthapana.pojo.ReportLanguageResponse;
+import com.zpasthapana.pojo.ReportMarathiEmpListResponse;
 import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
 import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
@@ -331,17 +332,20 @@ public class ReportController {
 	}
 
 	@GetMapping("/marathi-hindi/designation-level/{userId}")
-	public ResponseEntity<List<ReportStayitvaEmpListResponse>> getMarathiHindiReportWithDesignation(
-			@PathVariable Long userId, @RequestParam(name = "departmentId", required = false) Long departmentId) {
-		List<ReportStayitvaEmpListResponse> result = reportService.getMarathiHindiReportWithDesignation(userId,
-				departmentId);
-		result = result.stream().map(s -> {
+	public ResponseEntity<List<ReportMarathiEmpListResponse>> getMarathiHindiReportWithDesignation(
+			@PathVariable Long userId, @RequestParam(name = "departmentId", required = false) Long departmentId,
+			@RequestParam(name = "language", required = false) String language) {
+
+		// Fetch data from service
+		List<ReportMarathiEmpListResponse> result = reportService.getMarathiHindiReportWithDesignation(userId,
+				departmentId, language);
+
+		// Transform results using MasterDataUtil
+		result.forEach(s -> {
 			s.setFirstAppointDesignation(MasterDataUtil.getKeyDate("designation_", s.getFirstAppointDesignation()));
-			s.setSelectionType(MasterDataUtil.getKeyDate("castecategory_", s.getSelectionType()));
-			s.setFirstAppointType(MasterDataUtil.getKeyDate("niyuktitype_", s.getFirstAppointType()));
-			return s;
-		}).collect(Collectors.toList());
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		});
+
+		return ResponseEntity.ok(result);
 	}
 
 }
