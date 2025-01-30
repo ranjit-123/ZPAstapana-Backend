@@ -9,6 +9,7 @@ import com.zpasthapana.pojo.Report3055Response;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
 import com.zpasthapana.pojo.ReportLanguageResponse;
+import com.zpasthapana.pojo.ReportMarathiEmpListResponse;
 import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
 import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
@@ -58,6 +59,7 @@ public interface ReportService {
 
 	List<ReportStayitvaEmpListResponse> getStayitvaReportWithDesignation(Long userId, Long departmentId);
 
-	List<ReportStayitvaEmpListResponse> getMarathiHindiReportWithDesignation(Long userId, Long departmentId);
-	
+	List<ReportMarathiEmpListResponse> getMarathiHindiReportWithDesignation(Long userId, Long departmentId,
+			String language);
+
 }

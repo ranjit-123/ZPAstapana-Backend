@@ -23,6 +23,7 @@ import com.zpasthapana.pojo.Report3055Response;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
 import com.zpasthapana.pojo.ReportLanguageResponse;
+import com.zpasthapana.pojo.ReportMarathiEmpListResponse;
 import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
 import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
@@ -722,33 +723,36 @@ public class ReportServiceImpl implements ReportService {
 		return data;
 	}
 
-	@Override
-	public List<ReportStayitvaEmpListResponse> getMarathiHindiReportWithDesignation(Long userId, Long designationId) {
+	public List<ReportMarathiEmpListResponse> getMarathiHindiReportWithDesignation(Long userId, Long designationId,
+			String language) {
 		User user = userService.findUserById(userId);
 
-		String query = "SELECT distinct '111' as jeshtataNumber, "
-				+ "CONCAT(firstName, middleName, lastName) AS employeeNameAndOffice, "
-				+ "appointmentOrderDate as appointmentOrderDate, "
-				+ "employeeDesiganationId as firstAppointDesignation, "
-				+ "employeeselectioncategory as firstAppointType, " + "caste as socialClass, "
-				+ "castecategory as selectionType, " + "casteValidityFlag as isCasteCertifiacteSubmitted, "
-				+ "'20' as absencePeriod, " + "'1' as moreThanThreeMonthAbsence, "
-				+ "'' as probationaryPeriodApprovedDate, "
-				+ "date_add(ed.dateOfAppointed, INTERVAL 3 YEAR) as threeYearsCompletedDate, "
-				+ "1 as isDepartmentEnquiryGoingOn, " + "e.dateOfBirth as dateOfBirth " + "FROM employee e "
-				+ "INNER JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
-				+ "INNER JOIN (SELECT employeeId, MIN(dateOfAppointed) as dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
-				+ "ON e.employee_id = edm.employeeId "
-				+ "INNER JOIN employee_cast_details ec ON e.employeeCastDetailsId = ec.employeeCastDetailsId "
-				+ "INNER JOIN employee_worklocation ew ON e.employee_id = ew.employeeId "
-				+ "LEFT JOIN retierment empr ON e.employee_id = empr.employeeId "
-				+ "LEFT JOIN employee_education_details eed ON eed.employeeId = e.employee_id " + "WHERE e.active = 1 ";
+		String query = "SELECT DISTINCT " + "elg.employeeId AS employeeId, "
+				+ "CONCAT(e.firstName, ' ', e.middleName, ' ', e.lastName) AS employeeNameAndOffice, "
+				+ "edd.appointmentOrderDate AS appointmentOrderDate, "
+				+ "edd.employeeDesiganationId AS firstAppointDesignation, "
+				+ "d.designationName AS firstAppointDesignationName, " + // Fetching designation name
+				"e.dateOfBirth AS dateOfBirth " + "FROM zpastapana_live.employee_language_exam elg "
+				+ "INNER JOIN employee e ON elg.employeeId = e.employee_id "
+				+ "LEFT JOIN employee_designation_details edd ON e.employee_id = edd.employeeId "
+				+ "LEFT JOIN employee_worklocation ew ON e.employee_id = ew.employeeId "
+				+ "LEFT JOIN tblDesignation d ON edd.employeeDesiganationId = d.designationId " +
+				"WHERE e.active = 1 " + "AND (ew.designationId = COALESCE(?, ew.designationId)) "
+				+ "AND (ew.zpId = COALESCE(?, ew.zpId)) ";
 
-		query = query + " AND ew.designationID = " + designationId;
-		query = query + " AND ew.zpId = " + user.getZillaParishadID();
-		query = query + " GROUP BY ew.designationID;";
-		List<ReportStayitvaEmpListResponse> data = jdbcTemplate.query(query,
-				BeanPropertyRowMapper.newInstance(ReportStayitvaEmpListResponse.class));
+		if (language != null) {
+			if (language.equalsIgnoreCase("marathi")) {
+				query += "AND elg.marathiFlag = 2 ";
+			} else if (language.equalsIgnoreCase("hindi")) {
+				query += "AND elg.hindiFlag = 2 ";
+			}
+		}
+
+		Long zpId = user.getZillaParishadID();
+		System.out.println("ZP ID: " + zpId);
+
+		List<ReportMarathiEmpListResponse> data = jdbcTemplate.query(query, new Object[] { designationId, zpId },
+				BeanPropertyRowMapper.newInstance(ReportMarathiEmpListResponse.class));
 
 		return data;
 	}
