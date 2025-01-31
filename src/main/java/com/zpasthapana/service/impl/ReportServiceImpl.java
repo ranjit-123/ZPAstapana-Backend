@@ -748,9 +748,6 @@ public class ReportServiceImpl implements ReportService {
 			}
 		}
 
-		Long zpId = user.getZillaParishadID();
-		System.out.println("ZP ID: " + zpId);
-
 		List<ReportMarathiEmpListResponse> data = jdbcTemplate.query(query, new Object[] { designationId, zpId },
 				BeanPropertyRowMapper.newInstance(ReportMarathiEmpListResponse.class));
 
