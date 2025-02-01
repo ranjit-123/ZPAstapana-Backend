@@ -748,7 +748,7 @@ public class ReportServiceImpl implements ReportService {
 			}
 		}
 
-		List<ReportMarathiEmpListResponse> data = jdbcTemplate.query(query, new Object[] { designationId, zpId },
+		List<ReportMarathiEmpListResponse> data = jdbcTemplate.query(query, new Object[] { designationId, user.getZillaParishadID() },
 				BeanPropertyRowMapper.newInstance(ReportMarathiEmpListResponse.class));
 
 		return data;
