@@ -291,7 +291,7 @@ public class ReportController {
 		ReportLanguageResponse total = ReportLanguageResponse.builder().designation("एकूण").hindiNotPass(0).hindiPass(0)
 				.hindiSut(0).hindiTotal(0).marathiNotPass(0).marathiPass(0).marathiSut(0).marathiTotal(0)
 				.totalWorkingEmployee(0).build();
-		result = result.stream().map(s -> {
+		for (ReportLanguageResponse s : result) {
 			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
 			total.setHindiNotPass(total.getHindiNotPass() + s.getHindiNotPass());
 			total.setHindiPass(total.getHindiPass() + s.getHindiPass());
@@ -299,11 +299,10 @@ public class ReportController {
 			total.setHindiTotal(total.getHindiTotal() + s.getHindiTotal());
 			total.setMarathiNotPass(total.getMarathiNotPass() + s.getMarathiNotPass());
 			total.setMarathiPass(total.getMarathiPass() + s.getMarathiPass());
-			total.setMarathiSut(s.getMarathiSut() + total.getMarathiSut());
-			total.setMarathiTotal(s.getMarathiTotal() + total.getMarathiTotal());
-			total.setTotalWorkingEmployee(s.getTotalWorkingEmployee());
-			return s;
-		}).collect(Collectors.toList());
+			total.setMarathiSut(total.getMarathiSut() + s.getMarathiSut());
+			total.setMarathiTotal(total.getMarathiTotal() + s.getMarathiTotal());
+			total.setTotalWorkingEmployee(total.getTotalWorkingEmployee() + s.getTotalWorkingEmployee());
+		}
 		result.add(total);
 		return new ResponseEntity<List<ReportLanguageResponse>>(result, HttpStatus.OK);
 	}
@@ -335,12 +334,8 @@ public class ReportController {
 	public ResponseEntity<List<ReportMarathiEmpListResponse>> getMarathiHindiReportWithDesignation(
 			@PathVariable Long userId, @RequestParam(name = "departmentId", required = false) Long departmentId,
 			@RequestParam(name = "language", required = false) String language) {
-
-		// Fetch data from service
 		List<ReportMarathiEmpListResponse> result = reportService.getMarathiHindiReportWithDesignation(userId,
 				departmentId, language);
-
-		// Transform results using MasterDataUtil
 		result.forEach(s -> {
 			s.setFirstAppointDesignation(MasterDataUtil.getKeyDate("designation_", s.getFirstAppointDesignation()));
 		});

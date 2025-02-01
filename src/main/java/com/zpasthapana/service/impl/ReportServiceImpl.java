@@ -690,7 +690,7 @@ public class ReportServiceImpl implements ReportService {
 
 		query = query + " group by d.designationID";
 
-		List<ReportLanguageResponse> data = jdbcTemplate.query(query,
+				List<ReportLanguageResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportLanguageResponse.class));
 
 		return data;
@@ -723,32 +723,37 @@ public class ReportServiceImpl implements ReportService {
 		return data;
 	}
 
+	@Override
 	public List<ReportMarathiEmpListResponse> getMarathiHindiReportWithDesignation(Long userId, Long designationId,
 			String language) {
 		User user = userService.findUserById(userId);
 
-		String query = "SELECT DISTINCT " + "elg.employeeId AS employeeId, "
+		String query = "SELECT DISTINCT " + "e.employee_id AS employeeId, "
 				+ "CONCAT(e.firstName, ' ', e.middleName, ' ', e.lastName) AS employeeNameAndOffice, "
 				+ "edd.appointmentOrderDate AS appointmentOrderDate, "
 				+ "edd.employeeDesiganationId AS firstAppointDesignation, "
-				+ "d.designationName AS firstAppointDesignationName, " + // Fetching designation name
-				"e.dateOfBirth AS dateOfBirth " + "FROM zpastapana_live.employee_language_exam elg "
-				+ "INNER JOIN employee e ON elg.employeeId = e.employee_id "
+				+ "d.designationName AS firstAppointDesignationName, " + "e.dateOfBirth AS dateOfBirth "
+				+ "FROM employee e " + "LEFT JOIN employee_language_exam elg ON e.employee_id = elg.employeeId "
 				+ "LEFT JOIN employee_designation_details edd ON e.employee_id = edd.employeeId "
 				+ "LEFT JOIN employee_worklocation ew ON e.employee_id = ew.employeeId "
-				+ "LEFT JOIN tblDesignation d ON edd.employeeDesiganationId = d.designationId " +
-				"WHERE e.active = 1 " + "AND (ew.designationId = COALESCE(?, ew.designationId)) "
+				+ "LEFT JOIN tblDesignation d ON edd.employeeDesiganationId = d.designationID " + "WHERE e.active = 1 "
+				+ "AND (edd.employeeDesiganationId = COALESCE(?, edd.employeeDesiganationId)) "
 				+ "AND (ew.zpId = COALESCE(?, ew.zpId)) ";
 
 		if (language != null) {
 			if (language.equalsIgnoreCase("marathi")) {
-				query += "AND elg.marathiFlag = 2 ";
+				query += "AND ((elg.marathiHindiFlag = 1 AND elg.marathiFlag = 2) "
+						+ "OR (elg.marathiHindiFlag = 0 AND elg.marathiHinidCombineFlag = 2) "
+						+ "OR elg.marathiHindiFlag IS NULL) ";
 			} else if (language.equalsIgnoreCase("hindi")) {
-				query += "AND elg.hindiFlag = 2 ";
+				query += "AND ((elg.marathiHindiFlag = 1 AND elg.hindiFlag = 2) "
+						+ "OR (elg.marathiHindiFlag = 0 AND elg.marathiHinidCombineFlag = 2) "
+						+ "OR elg.marathiHindiFlag IS NULL) ";
 			}
 		}
 
-		List<ReportMarathiEmpListResponse> data = jdbcTemplate.query(query, new Object[] { designationId, user.getZillaParishadID() },
+		List<ReportMarathiEmpListResponse> data = jdbcTemplate.query(query,
+				new Object[] { designationId, user.getZillaParishadID() },
 				BeanPropertyRowMapper.newInstance(ReportMarathiEmpListResponse.class));
 
 		return data;
