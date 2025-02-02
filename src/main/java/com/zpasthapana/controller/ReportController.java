@@ -1,5 +1,7 @@
 package com.zpasthapana.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.JestatechaReport;
+import com.zpasthapana.pojo.NotReviewedEmployeesResponse;
 import com.zpasthapana.pojo.Report3055Response;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
@@ -336,6 +339,18 @@ public class ReportController {
 			@RequestParam(name = "language", required = false) String language) {
 		List<ReportMarathiEmpListResponse> result = reportService.getMarathiHindiReportWithDesignation(userId,
 				departmentId, language);
+		result.forEach(s -> {
+			s.setFirstAppointDesignation(MasterDataUtil.getKeyDate("designation_", s.getFirstAppointDesignation()));
+		});
+
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/employee-age-30-55/designation-level/{userId}")
+	public ResponseEntity<List<NotReviewedEmployeesResponse>> get3055NotReviewedEmployeesReportWithDesignation(
+			@PathVariable Long userId, @RequestParam(name = "designationId", required = false) String designationId) {
+		List<NotReviewedEmployeesResponse> result = reportService.getNotReviewedEmployee3055Report(userId,
+				designationId);
 		result.forEach(s -> {
 			s.setFirstAppointDesignation(MasterDataUtil.getKeyDate("designation_", s.getFirstAppointDesignation()));
 		});
