@@ -1,5 +1,7 @@
 package com.zpasthapana.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.JestatechaReport;
+import com.zpasthapana.pojo.NotReviewedEmployeesResponse;
 import com.zpasthapana.pojo.Report3055Response;
 import com.zpasthapana.pojo.ReportData;
 import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
 import com.zpasthapana.pojo.ReportLanguageResponse;
+import com.zpasthapana.pojo.ReportMarathiEmpListResponse;
 import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
 import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
@@ -290,7 +294,7 @@ public class ReportController {
 		ReportLanguageResponse total = ReportLanguageResponse.builder().designation("एकूण").hindiNotPass(0).hindiPass(0)
 				.hindiSut(0).hindiTotal(0).marathiNotPass(0).marathiPass(0).marathiSut(0).marathiTotal(0)
 				.totalWorkingEmployee(0).build();
-		result = result.stream().map(s -> {
+		for (ReportLanguageResponse s : result) {
 			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
 			total.setHindiNotPass(total.getHindiNotPass() + s.getHindiNotPass());
 			total.setHindiPass(total.getHindiPass() + s.getHindiPass());
@@ -298,11 +302,10 @@ public class ReportController {
 			total.setHindiTotal(total.getHindiTotal() + s.getHindiTotal());
 			total.setMarathiNotPass(total.getMarathiNotPass() + s.getMarathiNotPass());
 			total.setMarathiPass(total.getMarathiPass() + s.getMarathiPass());
-			total.setMarathiSut(s.getMarathiSut() + total.getMarathiSut());
-			total.setMarathiTotal(s.getMarathiTotal() + total.getMarathiTotal());
-			total.setTotalWorkingEmployee(s.getTotalWorkingEmployee());
-			return s;
-		}).collect(Collectors.toList());
+			total.setMarathiSut(total.getMarathiSut() + s.getMarathiSut());
+			total.setMarathiTotal(total.getMarathiTotal() + s.getMarathiTotal());
+			total.setTotalWorkingEmployee(total.getTotalWorkingEmployee() + s.getTotalWorkingEmployee());
+		}
 		result.add(total);
 		return new ResponseEntity<List<ReportLanguageResponse>>(result, HttpStatus.OK);
 	}
@@ -331,17 +334,28 @@ public class ReportController {
 	}
 
 	@GetMapping("/marathi-hindi/designation-level/{userId}")
-	public ResponseEntity<List<ReportStayitvaEmpListResponse>> getMarathiHindiReportWithDesignation(
-			@PathVariable Long userId, @RequestParam(name = "departmentId", required = false) Long departmentId) {
-		List<ReportStayitvaEmpListResponse> result = reportService.getMarathiHindiReportWithDesignation(userId,
-				departmentId);
-		result = result.stream().map(s -> {
+	public ResponseEntity<List<ReportMarathiEmpListResponse>> getMarathiHindiReportWithDesignation(
+			@PathVariable Long userId, @RequestParam(name = "departmentId", required = false) Long departmentId,
+			@RequestParam(name = "language", required = false) String language) {
+		List<ReportMarathiEmpListResponse> result = reportService.getMarathiHindiReportWithDesignation(userId,
+				departmentId, language);
+		result.forEach(s -> {
 			s.setFirstAppointDesignation(MasterDataUtil.getKeyDate("designation_", s.getFirstAppointDesignation()));
-			s.setSelectionType(MasterDataUtil.getKeyDate("castecategory_", s.getSelectionType()));
-			s.setFirstAppointType(MasterDataUtil.getKeyDate("niyuktitype_", s.getFirstAppointType()));
-			return s;
-		}).collect(Collectors.toList());
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		});
+
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/employee-age-30-55/designation-level/{userId}")
+	public ResponseEntity<List<NotReviewedEmployeesResponse>> get3055NotReviewedEmployeesReportWithDesignation(
+			@PathVariable Long userId, @RequestParam(name = "designationId", required = false) String designationId) {
+		List<NotReviewedEmployeesResponse> result = reportService.getNotReviewedEmployee3055Report(userId,
+				designationId);
+		result.forEach(s -> {
+			s.setFirstAppointDesignation(MasterDataUtil.getKeyDate("designation_", s.getFirstAppointDesignation()));
+		});
+
+		return ResponseEntity.ok(result);
 	}
 
 }
