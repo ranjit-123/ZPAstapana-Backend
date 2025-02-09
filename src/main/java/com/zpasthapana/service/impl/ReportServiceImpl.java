@@ -590,23 +590,27 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<ReportStayitvaReponse> getStayitvaReportAll(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT\r\n" + "d.designationID , d.designationID as designation, \r\n"
-				+ "sum(case when (d.designationClassID = 1) then 1 else 0 end) as totalWorkingEmpC,\r\n"
-				+ "sum(case when (d.designationClassID = 2) then 1 else 0 end) as totalWorkingEmpD,\r\n"
-				+ "sum(case when (d.designationClassID = 1 and TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3) then 1 else 0 end) as stayitvaEligibleEmpC,\r\n"
-				+ "sum(case when (d.designationClassID = 2 and TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3) then 1 else 0 end) as stayitvaEligibleEmpD, \r\n"
-				+ "sum(case when (d.designationClassID = 1 and ifnull(tmp1.isAppealed, 0) > 0) then 1 else 0 end) as stayitvaReceivedEmpC,\r\n"
-				+ "sum(case when (d.designationClassID = 2 and ifnull(tmp1.isAppealed, 0) > 0) then 1 else 0 end) as stayitvaReceivedEmpD  \r\n"
-				+ "FROM employee e\r\n"
-				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
-				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
-				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId "
-				+ "inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm on e.employee_id = edm.employeeId\r\n"
-				+ "left join stayitva_pramanpatra tmp1 on e.employee_id = tmp1.employeeId\r\n";
 
-		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
-
-		query = query + " group by d.designationID;";
+		String query = "SELECT d.designationID, d.designationID AS designation, "
+				+ "COUNT(DISTINCT CASE WHEN d.designationClassID = 1 THEN e.employee_id END) AS totalWorkingEmpC, "
+				+ "COUNT(DISTINCT CASE WHEN d.designationClassID = 2 THEN e.employee_id END) AS totalWorkingEmpD, "
+				+ "COUNT(DISTINCT CASE WHEN d.designationClassID = 1 AND TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3 THEN e.employee_id END) AS stayitvaEligibleEmpC, "
+				+ "COUNT(DISTINCT CASE WHEN d.designationClassID = 2 AND TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3 THEN e.employee_id END) AS stayitvaEligibleEmpD, "
+				+ "COUNT(DISTINCT CASE WHEN d.designationClassID = 1 AND IFNULL(tmp1.isAppealed, 0) > 0 THEN e.employee_id END) AS stayitvaReceivedEmpC, "
+				+ "COUNT(DISTINCT CASE WHEN d.designationClassID = 2 AND IFNULL(tmp1.isAppealed, 0) > 0 THEN e.employee_id END) AS stayitvaReceivedEmpD, "
+				+ "COUNT(DISTINCT CASE WHEN d.designationClassID = 1 AND TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3 "
+				+ "AND (tmp1.isAppealed IS NULL OR tmp1.isAppealed = 0) THEN e.employee_id END) AS stayitvaNotReceivedEmpC, "
+				+ "COUNT(DISTINCT CASE WHEN d.designationClassID = 2 AND TIMESTAMPDIFF(YEAR, edm.dateOfAppointed, CURDATE()) >= 3 "
+				+ "AND (tmp1.isAppealed IS NULL OR tmp1.isAppealed = 0) THEN e.employee_id END) AS stayitvaNotReceivedEmpD "
+				+ "FROM tblDesignation d "
+				+ "LEFT JOIN employee_designation_details ed ON d.designationID = ed.employeeDesiganationId "
+				+ "LEFT JOIN employee e ON ed.employeeDesiganationDetailsId = e.employeeDesiganationDetailsId "
+				+ "LEFT JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId "
+				+ "LEFT JOIN (SELECT employeeId, MIN(dateOfAppointed) AS dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
+				+ "ON e.employee_id = edm.employeeId "
+				+ "LEFT JOIN stayitva_pramanpatra tmp1 ON e.employee_id = tmp1.employeeId "
+				+ "WHERE d.departmentId = " + departmentId + " " + "AND (ew.zpId = " + user.getZillaParishadID()
+				+ " OR ew.zpId IS NULL) " + "GROUP BY d.designationID, d.designationName";
 
 		List<ReportStayitvaReponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportStayitvaReponse.class));
@@ -617,22 +621,36 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<ReportStayitvaEmpListResponse> getStayitvaReportWithDesignation(Long userId, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT distinct '111' as jeshtataNumber, CONCAT(firstName,middleName ,lastName) AS employeeNameAndOffice,appointmentOrderDate as firstAppointDate\r\n"
-				+ "  ,employeeDesiganationId as firstAppointDesignation,employeeselectioncategory as firstAppointType,caste as socialClass,castecategory as selectionType,\r\n"
-				+ "  casteValidityFlag as isCasteCertifiacteSubmitted,'20' as absencePeriod,'1' as moreThanThreeMonthAbsence,''  as probationaryPeriodApprovedDate,\r\n"
-				+ " date_add(ed.dateOfAppointed,INTERVAL 3 YEAR) as threeYearsCompletedDate,1 as isDepartmentEnquiryGoingOn FROM employee e inner join employee_designation_details ed \r\n"
-				+ "				 on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId \r\n"
-				+ "				 inner join (select employeeId, min(dateOfAppointed) as dateOfAppointed from employee_designation_details group by employeeId) edm\r\n"
-				+ "				on e.employee_id = edm.employeeId\r\n"
-				+ "				inner join employee_cast_details ec on e.employeeCastDetailsId = ec.employeeCastDetailsId\r\n"
-				+ "				inner join employee_worklocation ew on e.employee_id = ew.employeeId\r\n"
-				+ "				left join retierment empr on e.employee_id = empr.employeeId \r\n"
-				+ "				left join employee_education_details eed on eed.employeeId = e.employee_id \r\n"
-				+ "				 where e.active = 1 ";
-
-		query = query + " and ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
-
-		query = query + " group by ew.designationID;";
+		String query = "SELECT DISTINCT '111' AS jeshtataNumber, "
+				+ "CONCAT(firstName, ' ', middleName, ' ', lastName) AS employeeNameAndOffice, "
+				+ "appointmentOrderDate AS firstAppointDate, " + "employeeDesiganationId AS firstAppointDesignation, "
+				+ "employeeselectioncategory AS firstAppointType, " + "caste AS socialClass, "
+				+ "castecategory AS selectionType, " + "casteValidityFlag AS isCasteCertifiacteSubmitted, "
+				+ "'20' AS absencePeriod, " + "'1' AS moreThanThreeMonthAbsence, "
+				+ "'' AS probationaryPeriodApprovedDate, "
+				+ "DATE_ADD(ed.dateOfAppointed, INTERVAL 3 YEAR) AS threeYearsCompletedDate, "
+				+ "1 AS isDepartmentEnquiryGoingOn, " + "ef.medicalCertificateFlag AS isMedicalCertificatePresented, "
+				+ "ef.characterVerifiedFlag AS characterVerifiedFlag, "
+				+ "etd.rbtnEnglishTypingFlag AS rbtnEnglishTypingFlag, "
+				+ "CASE WHEN empr.active = TRUE THEN 1 ELSE 0 END AS retierment, "
+				+ "COALESCE(ecd.computerPassoutDate, ecd.computerDiscountDate) AS computerExamPassOrDiscountDate, "
+				+ "al.isAssetLiabilitySubmitted AS isAssetLiabilitySubmitted, "
+				+ "CASE WHEN cc2.resultDate IS NULL THEN 1 ELSE 0 END AS isCourtCasePending " + "FROM employee e "
+				+ "INNER JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
+				+ "INNER JOIN (SELECT employeeId, MIN(dateOfAppointed) AS dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
+				+ "ON e.employee_id = edm.employeeId "
+				+ "INNER JOIN employee_cast_details ec ON e.employeeCastDetailsId = ec.employeeCastDetailsId "
+				+ "ec."
+				+ "INNER JOIN employee_worklocation ew ON e.employee_id = ew.employeeId "
+				+ "LEFT JOIN retierment empr ON e.employee_id = empr.employeeId "
+				+ "LEFT JOIN employee_education_details eed ON eed.employeeId = e.employee_id "
+				+ "LEFT JOIN employee_flag ef ON e.employee_id = ef.employeeId "
+				+ "LEFT JOIN employee_typing_details etd ON e.employee_id = etd.employeeId "
+				+ "LEFT JOIN employee_computer_details ecd ON e.employee_id = ecd.employeeId "
+				+ "LEFT JOIN assetLiability al ON e.employee_id = al.employeeId "
+				+ "LEFT JOIN court_case cc2 ON e.employee_id = cc2.employeeId " + "WHERE e.active = 1 "
+				+ "AND ew.designationId = " + departmentId + " " + "AND ew.zpId = " + user.getZillaParishadID() + " "
+				+ "GROUP BY ew.designationID;";
 
 		List<ReportStayitvaEmpListResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportStayitvaEmpListResponse.class));
@@ -671,56 +689,65 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public List<ReportLanguageResponse> getHindiMarathiReportAll(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT\r\n" + "d.designationID as designation, \r\n" + "d.designationID as designationId, \r\n"
-				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as totalEmployee,\r\n"
-				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as marathiPass,\r\n"
-				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 0) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 0) then 1 else 0 end) as hindiPass,\r\n"
-				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 1) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 1) then 1 else 0 end) as marathiSut,\r\n"
-				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 1) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 1) then 1 else 0 end) as hindiSut,\r\n"
-				+ "sum(case when (tmp1.marathiHindiFlag = 1 and marathiFlag = 2) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 2) or tmp1.marathiHindiFlag is null then 1 else 0 end) as marathiNotPass,\r\n"
-				+ "sum(case when (tmp1.marathiHindiFlag = 1 and hindiFlag = 2) or (tmp1.marathiHindiFlag = 0 and marathiHinidCombineFlag = 2) or tmp1.marathiHindiFlag is null then 1 else 0 end) as hindiNotPass,\r\n"
-				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as marathiTotal,\r\n"
-				+ "sum(case when (e.employee_id > 0) then 1 else 0 end) as hindiTotal,\r\n"
-				+ "COUNT(e.employee_id) as totalWorkingEmployee \r\n" + "FROM employee e\r\n"
-				+ "inner join employee_designation_details ed on e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId\r\n"
-				+ "inner join tblDesignation d on ed.employeeDesiganationId = d.designationID\r\n"
-				+ "inner join employee_worklocation ew on e.employeeWorklocationId = ew.employeeWorklocationId\r\n"
-				+ "left join employee_language_exam tmp1 on e.employee_id = tmp1.employeeId\r\n";
-
-		query = query + " where ew.departmentId = " + departmentId + " and ew.zpId = " + user.getZillaParishadID();
-
-		query = query + " group by d.designationID";
+		String query = "SELECT\r\n" + "d.designationID , d.designationID as designation, \r\n"
+				+ "COALESCE(SUM(CASE WHEN e.employee_id IS NOT NULL THEN 1 ELSE 0 END), 0) AS totalEmployee, "
+				+ "COALESCE(SUM(CASE " + "    WHEN (tmp1.marathiHindiFlag = 1 AND marathiFlag = 0) "
+				+ "      OR (tmp1.marathiHindiFlag = 0 AND marathiHinidCombineFlag = 0) "
+				+ "    THEN 1 ELSE 0 END), 0) AS marathiPass, " + "COALESCE(SUM(CASE "
+				+ "    WHEN (tmp1.marathiHindiFlag = 1 AND hindiFlag = 0) "
+				+ "      OR (tmp1.marathiHindiFlag = 0 AND marathiHinidCombineFlag = 0) "
+				+ "    THEN 1 ELSE 0 END), 0) AS hindiPass, " + "COALESCE(SUM(CASE "
+				+ "    WHEN (tmp1.marathiHindiFlag = 1 AND marathiFlag = 1) "
+				+ "      OR (tmp1.marathiHindiFlag = 0 AND marathiHinidCombineFlag = 1) "
+				+ "    THEN 1 ELSE 0 END), 0) AS marathiSut, " + "COALESCE(SUM(CASE "
+				+ "    WHEN (tmp1.marathiHindiFlag = 1 AND hindiFlag = 1) "
+				+ "      OR (tmp1.marathiHindiFlag = 0 AND marathiHinidCombineFlag = 1) "
+				+ "    THEN 1 ELSE 0 END), 0) AS hindiSut, " + "COALESCE(SUM(CASE "
+				+ "    WHEN (tmp1.marathiHindiFlag = 1 AND marathiFlag = 2) "
+				+ "      OR (tmp1.marathiHindiFlag = 0 AND marathiHinidCombineFlag = 2) "
+				+ "      OR tmp1.marathiHindiFlag IS NULL " + "    THEN 1 ELSE 0 END), 0) AS marathiNotPass, "
+				+ "COALESCE(SUM(CASE " + "    WHEN (tmp1.marathiHindiFlag = 1 AND hindiFlag = 2) "
+				+ "      OR (tmp1.marathiHindiFlag = 0 AND marathiHinidCombineFlag = 2) "
+				+ "      OR tmp1.marathiHindiFlag IS NULL " + "    THEN 1 ELSE 0 END), 0) AS hindiNotPass, "
+				+ "COALESCE(SUM(CASE WHEN e.employee_id IS NOT NULL THEN 1 ELSE 0 END), 0) AS marathiTotal, "
+				+ "COALESCE(SUM(CASE WHEN e.employee_id IS NOT NULL THEN 1 ELSE 0 END), 0) AS hindiTotal, "
+				+ "COALESCE(COUNT(e.employee_id), 0) AS totalWorkingEmployee " + "FROM tblDesignation d "
+				+ "LEFT JOIN employee_designation_details ed ON d.designationID = ed.employeeDesiganationId "
+				+ "LEFT JOIN employee e ON ed.employeeDesiganationDetailsId = e.employeeDesiganationDetailsId "
+				+ "LEFT JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId "
+				+ "LEFT JOIN employee_language_exam tmp1 ON e.employee_id = tmp1.employeeId "
+				+ "WHERE d.departmentId = " + departmentId + " " + "AND (ew.zpId = " + user.getZillaParishadID()
+				+ " OR ew.zpId IS NULL) " + "GROUP BY d.designationID, d.designationName";
 
 		List<ReportLanguageResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportLanguageResponse.class));
 
 		return data;
+
 	}
 
 	@Override
 	public List<Report3055Response> getEmployee3055Report(Long userId, String year, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT d.designationID as designation, " + "d.designationID as designationId, "
-				+ "SUM(CASE WHEN (TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > "
+		String query = "SELECT d.designationID AS designation, " + "d.designationID AS designationId, "
+				+ "COALESCE(SUM(CASE WHEN (TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > "
 				+ "TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55)) "
-				+ "AND TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > 0 THEN 1 ELSE 0 END) "
-				+ "AS age30Completed, " + "SUM(CASE WHEN (TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55) >= "
+				+ "AND TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30) > 0 THEN 1 ELSE 0 END), 0) AS age30Completed, "
+				+ "COALESCE(SUM(CASE WHEN (TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55) >= "
 				+ "TIMESTAMPDIFF(DAY, edm.dateOfAppointed, CURDATE()) - (365 * 30)) "
-				+ "AND TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55) > 0 THEN 1 ELSE 0 END) "
-				+ "AS age55Completed, " + "0 AS reviewedEmployees, " + "0 AS notReviewedEmployees " + "FROM employee e "
-				+ "INNER JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
-				+ "INNER JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId "
-				+ "INNER JOIN (SELECT employeeId, MIN(dateOfAppointed) AS dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
+				+ "AND TIMESTAMPDIFF(DAY, dateOfBirth, CURDATE()) - (365 * 55) > 0 THEN 1 ELSE 0 END), 0) AS age55Completed, "
+				+ "0 AS reviewedEmployees, " + "0 AS notReviewedEmployees " + "FROM tblDesignation d "
+				+ "LEFT JOIN employee_designation_details ed ON d.designationID = ed.employeeDesiganationId "
+				+ "LEFT JOIN employee e ON ed.employeeDesiganationDetailsId = e.employeeDesiganationDetailsId "
+				+ "LEFT JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId "
+				+ "LEFT JOIN (SELECT employeeId, MIN(dateOfAppointed) AS dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
 				+ "ON e.employee_id = edm.employeeId "
-				+ "INNER JOIN tblDesignation d ON ed.employeeDesiganationId = d.designationID "
-				+ "LEFT JOIN employee_language_exam tmp1 ON e.employee_id = tmp1.employeeId " + "WHERE e.active = 1 "
-				+ "AND ew.departmentID = " + departmentId + " " + "AND ew.zpId = " + user.getZillaParishadID() + " "
-				+ "GROUP BY d.designationID;";
+				+ "LEFT JOIN employee_language_exam tmp1 ON e.employee_id = tmp1.employeeId "
+				+ "WHERE (e.active = 1 OR e.employee_id IS NULL) " + "AND (d.departmentID = " + departmentId
+				+ " OR d.departmentID IS NULL) " + "AND (ew.zpId = " + user.getZillaParishadID()
+				+ " OR ew.zpId IS NULL) " + "GROUP BY d.designationID;";
 
-		List<Report3055Response> data = jdbcTemplate.query(query,
-				BeanPropertyRowMapper.newInstance(Report3055Response.class));
-
-		return data;
+		return jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(Report3055Response.class));
 	}
 
 	@Override
@@ -732,13 +759,15 @@ public class ReportServiceImpl implements ReportService {
 				+ "CONCAT(e.firstName, ' ', e.middleName, ' ', e.lastName) AS employeeNameAndOffice, "
 				+ "edd.appointmentOrderDate AS appointmentOrderDate, "
 				+ "edd.employeeDesiganationId AS firstAppointDesignation, "
-				+ "d.designationName AS firstAppointDesignationName, " + "e.dateOfBirth AS dateOfBirth "
-				+ "FROM employee e " + "LEFT JOIN employee_language_exam elg ON e.employee_id = elg.employeeId "
+				+ "d.designationName AS firstAppointDesignationName, " + "e.dateOfBirth AS dateOfBirth, "
+				+ "dept.departmentName AS departmentName " + "FROM employee e "
+				+ "LEFT JOIN employee_language_exam elg ON e.employee_id = elg.employeeId "
 				+ "LEFT JOIN employee_designation_details edd ON e.employee_id = edd.employeeId "
 				+ "LEFT JOIN employee_worklocation ew ON e.employee_id = ew.employeeId "
-				+ "LEFT JOIN tblDesignation d ON edd.employeeDesiganationId = d.designationID " + "WHERE e.active = 1 "
-				+ "AND (edd.employeeDesiganationId = COALESCE(?, edd.employeeDesiganationId)) "
-				+ "AND (ew.zpId = COALESCE(?, ew.zpId)) ";
+				+ "LEFT JOIN tblDesignation d ON edd.employeeDesiganationId = d.designationID "
+				+ "LEFT JOIN tblDepartment dept ON ew.departmentId = dept.departmentId " + "WHERE e.active = 1 "
+				+ "AND ( ? IS NULL OR edd.employeeDesiganationId = ? ) " + // Allow null designationId
+				"AND ( ew.zpId = COALESCE(?, ew.zpId) ) ";
 
 		if (language != null) {
 			if (language.equalsIgnoreCase("marathi")) {
@@ -753,7 +782,7 @@ public class ReportServiceImpl implements ReportService {
 		}
 
 		List<ReportMarathiEmpListResponse> data = jdbcTemplate.query(query,
-				new Object[] { designationId, user.getZillaParishadID() },
+				new Object[] { designationId, designationId, user.getZillaParishadID() },
 				BeanPropertyRowMapper.newInstance(ReportMarathiEmpListResponse.class));
 
 		return data;
@@ -778,8 +807,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "CASE WHEN empr.active = TRUE THEN 1 ELSE 0 END AS retierment, "
 				+ "COALESCE(ecd.computerPassoutDate, ecd.computerDiscountDate) AS computerExamPassOrDiscountDate, "
 				+ "al.isAssetLiabilitySubmitted AS isAssetLiabilitySubmitted, "
-				+ "CASE WHEN cc2.resultDate IS NULL THEN 1 ELSE 0 END AS isCourtCasePending "
-				+ "FROM employee e "
+				+ "CASE WHEN cc2.resultDate IS NULL THEN 1 ELSE 0 END AS isCourtCasePending " + "FROM employee e "
 				+ "INNER JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
 				+ "INNER JOIN (SELECT employeeId, MIN(dateOfAppointed) AS dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
 				+ "ON e.employee_id = edm.employeeId "
@@ -795,8 +823,8 @@ public class ReportServiceImpl implements ReportService {
 				+ "LEFT JOIN employee_typing_details etd ON e.employee_id = etd.employeeId "
 				+ "LEFT JOIN employee_computer_details ecd ON e.employee_id = ecd.employeeId "
 				+ "LEFT JOIN assetLiability al ON e.employee_id = al.employeeId "
-				+ "LEFT JOIN court_case cc2 ON e.employee_id = cc2.employeeId "
-				+ "WHERE e.active = 1 " + "AND ed.employeeDesiganationId = " + designationId + " " + "AND ew.zpId = "
+				+ "LEFT JOIN court_case cc2 ON e.employee_id = cc2.employeeId " + "WHERE e.active = 1 "
+				+ "AND ed.employeeDesiganationId = " + designationId + " " + "AND ew.zpId = "
 				+ user.getZillaParishadID() + " " + "GROUP BY ed.employeeDesiganationId, e.employee_id;";
 
 		List<NotReviewedEmployeesResponse> data = jdbcTemplate.query(query,

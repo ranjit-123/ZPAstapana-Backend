@@ -234,18 +234,20 @@ public class ReportController {
 	public ResponseEntity<List<ReportStayitvaReponse>> getStayitvaReportAll(@PathVariable Long userId,
 			@RequestParam(name = "year", required = false) String year,
 			@RequestParam(name = "departmentId", required = false) Long departmentId) {
+
 		List<ReportStayitvaReponse> result = reportService.getStayitvaReportAll(userId, year, departmentId);
-		result = result.stream().map(s -> {
+
+		for (ReportStayitvaReponse s : result) {
 			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
 			s.setTotalWorkingEmpTotal(s.getTotalWorkingEmpC() + s.getTotalWorkingEmpD());
-			s.setStayitvaNotReceivedEmpC(s.getStayitvaEligibleEmpC() - s.getStayitvaReceivedEmpC());
-			s.setStayitvaNotReceivedEmpD(s.getStayitvaEligibleEmpD() - s.getStayitvaReceivedEmpD());
+			s.setStayitvaNotReceivedEmpC(Math.max(0, s.getStayitvaEligibleEmpC() - s.getStayitvaReceivedEmpC()));
+			s.setStayitvaNotReceivedEmpD(Math.max(0, s.getStayitvaEligibleEmpD() - s.getStayitvaReceivedEmpD()));
 			s.setStayitvaNotReceivedEmpTotal(s.getStayitvaNotReceivedEmpC() + s.getStayitvaNotReceivedEmpD());
 			s.setStayitvaEligibleEmpTotal(s.getStayitvaEligibleEmpC() + s.getStayitvaEligibleEmpD());
 			s.setStayitvaReceivedEmpTotal(s.getStayitvaReceivedEmpC() + s.getStayitvaReceivedEmpD());
-			return s;
-		}).collect(Collectors.toList());
-		return new ResponseEntity<List<ReportStayitvaReponse>>(result, HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/stayitva-certification/designation-level/{userId}")

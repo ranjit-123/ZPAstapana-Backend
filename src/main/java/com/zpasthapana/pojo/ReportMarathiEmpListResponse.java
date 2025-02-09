@@ -17,4 +17,5 @@ public class ReportMarathiEmpListResponse {
 	private Date appointmentOrderDate;
 	private String firstAppointDesignation;
 	private Date dateOfBirth;
+	private String departmentName;
 }
