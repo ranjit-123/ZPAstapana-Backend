@@ -18,6 +18,7 @@ import com.zpasthapana.entity.User;
 import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
 import com.zpasthapana.pojo.DataThreeInteger;
+import com.zpasthapana.pojo.DepartmentalVibhagiyaChowkashiResponse;
 import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.NotReviewedEmployeesResponse;
 import com.zpasthapana.pojo.Report3055Response;
@@ -31,6 +32,7 @@ import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutResponse;
 import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
+import com.zpasthapana.pojo.ReportVibhagiyaChowkashiResponse;
 import com.zpasthapana.pojo.ZPBean;
 import com.zpasthapana.pojo.ZPDesAndCategoryBean;
 import com.zpasthapana.pojo.ZPMajurPadereport;
@@ -608,9 +610,9 @@ public class ReportServiceImpl implements ReportService {
 				+ "LEFT JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId "
 				+ "LEFT JOIN (SELECT employeeId, MIN(dateOfAppointed) AS dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
 				+ "ON e.employee_id = edm.employeeId "
-				+ "LEFT JOIN stayitva_pramanpatra tmp1 ON e.employee_id = tmp1.employeeId "
-				+ "WHERE d.departmentId = " + departmentId + " " + "AND (ew.zpId = " + user.getZillaParishadID()
-				+ " OR ew.zpId IS NULL) " + "GROUP BY d.designationID, d.designationName";
+				+ "LEFT JOIN stayitva_pramanpatra tmp1 ON e.employee_id = tmp1.employeeId " + "WHERE d.departmentId = "
+				+ departmentId + " " + "AND (ew.zpId = " + user.getZillaParishadID() + " OR ew.zpId IS NULL) "
+				+ "GROUP BY d.designationID, d.designationName";
 
 		List<ReportStayitvaReponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportStayitvaReponse.class));
@@ -639,8 +641,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "INNER JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
 				+ "INNER JOIN (SELECT employeeId, MIN(dateOfAppointed) AS dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
 				+ "ON e.employee_id = edm.employeeId "
-				+ "INNER JOIN employee_cast_details ec ON e.employeeCastDetailsId = ec.employeeCastDetailsId "
-				+ "ec."
+				+ "INNER JOIN employee_cast_details ec ON e.employeeCastDetailsId = ec.employeeCastDetailsId " + "ec."
 				+ "INNER JOIN employee_worklocation ew ON e.employee_id = ew.employeeId "
 				+ "LEFT JOIN retierment empr ON e.employee_id = empr.employeeId "
 				+ "LEFT JOIN employee_education_details eed ON eed.employeeId = e.employee_id "
@@ -831,6 +832,106 @@ public class ReportServiceImpl implements ReportService {
 				BeanPropertyRowMapper.newInstance(NotReviewedEmployeesResponse.class));
 
 		return data;
+	}
+
+	public List<ReportVibhagiyaChowkashiResponse> getVibhagiyaChowkashiReport(Long userId, String year,
+			Long departmentId) {
+		String query = "SELECT tblDepartment.departmentName, "
+				+ "COUNT(DISTINCT tblAccountInquiry.accountInquiryID) AS pendingCases, "
+				+ "COUNT(DISTINCT CASE WHEN tblAccountInquiry.actualReceivedDate IS NOT NULL THEN tblAccountInquiry.accountInquiryID END) AS casesTillReportMonthEnd, "
+				+ "COUNT(DISTINCT tblAccountInquiry.accountInquiryID) AS totalCases, "
+				+ "COUNT(DISTINCT CASE WHEN tblAccountInquiry.actualReceivedDate IS NOT NULL THEN tblAccountInquiry.accountInquiryID END) AS receivedInquiryReports, "
+				+ "COUNT(DISTINCT CASE WHEN tblAccountInquiry.implementationFlag = 1 THEN tblAccountInquiry.accountInquiryID END) AS implementationFlag, "
+				+ "COUNT(DISTINCT CASE WHEN tblAccountInquiry.implementationFlag = 0 THEN tblAccountInquiry.accountInquiryID END) AS pendingFinalActionCases, "
+				+ "COUNT(DISTINCT CASE WHEN tblEmployee.retirementDate IS NOT NULL THEN tblAccountInquiry.accountInquiryID END) AS retiredEmployeeCases, "
+				+ "COUNT(DISTINCT CASE WHEN tblAccountInquiry.justiceFlag = 1 THEN tblAccountInquiry.accountInquiryID END) AS judicialCases, "
+				+ "COUNT(DISTINCT CASE WHEN tblAccountInquiry.actualReceivedDate IS NOT NULL AND DATEDIFF(CURDATE(), tblAccountInquiry.actualReceivedDate) > 180 AND tblAccountInquiry.implementationFlag = 0 THEN tblAccountInquiry.accountInquiryID END) AS pendingActionOverSixMonths, "
+				+ "COUNT(DISTINCT CASE WHEN tblAccountInquiry.actualReceivedDate IS NOT NULL AND DATEDIFF(CURDATE(), tblAccountInquiry.actualReceivedDate) > 180 AND tblAccountInquiry.implementationFlag = 0 AND tblEmployee.retirementDate IS NOT NULL THEN tblAccountInquiry.accountInquiryID END) AS retiredEmployeePendingActionCases "
+				+ "FROM tblAccountInquiry "
+				+ "JOIN tblEmployee ON tblAccountInquiry.employeeID = tblEmployee.employeeID "
+				+ "LEFT JOIN tblDepartment ON tblEmployee.departmentID = tblDepartment.departmentID ";
+
+		// Append WHERE condition only if departmentId is provided
+		if (departmentId != null) {
+			query += "WHERE tblEmployee.departmentID = ? ";
+		}
+
+		query += "GROUP BY tblDepartment.departmentName";
+
+		List<ReportVibhagiyaChowkashiResponse> data;
+
+		if (departmentId != null) {
+			// If departmentId is provided, pass it as a parameter
+			data = jdbcTemplate.query(query, new Object[] { departmentId },
+					BeanPropertyRowMapper.newInstance(ReportVibhagiyaChowkashiResponse.class));
+		} else {
+			// If departmentId is null, fetch all departments
+			data = jdbcTemplate.query(query, BeanPropertyRowMapper.newInstance(ReportVibhagiyaChowkashiResponse.class));
+		}
+
+		return data;
+	}
+
+	public List<DepartmentalVibhagiyaChowkashiResponse> getDepartmentalVibhagiyaChowkashiReport() {
+		String query = "SELECT " + "tblAccountInquiry.accountInquiryID, " + "tblEmployee.employeeFirstName, "
+				+ "tblEmployee.employeeMiddelName, " + "tblEmployee.employeeLastName, "
+				+ "tblDepartment.departmentName, " + "tblDesignation.designationName, " + "tblTaluka.talukaName, "
+				+ "tblSubDivision.subDivisionName, " + "tblProperOffice.properOfficeName, "
+				+ "tblEmployee.retirementDate " + "FROM tblAccountInquiry "
+				+ "JOIN tblEmployee ON tblAccountInquiry.employeeID = tblEmployee.employeeID "
+				+ "LEFT JOIN tblDepartment ON tblEmployee.departmentID = tblDepartment.departmentID "
+				+ "LEFT JOIN tblDesignation ON tblAccountInquiry.designationID = tblDesignation.designationID "
+				+ "LEFT JOIN tblProperOffice ON tblAccountInquiry.properOfficeID = tblProperOffice.properOfficeID "
+				+ "LEFT JOIN tblSubDivision ON tblAccountInquiry.subDivisionID = tblSubDivision.subDivisionID "
+				+ "LEFT JOIN tblTaluka ON tblAccountInquiry.talukaID = tblTaluka.talukaID "
+				+ "WHERE tblAccountInquiry.punishmentOrderDate = '0000-00-00'";
+
+		return jdbcTemplate.query(query,
+				BeanPropertyRowMapper.newInstance(DepartmentalVibhagiyaChowkashiResponse.class));
+	}
+
+	public List<DepartmentalVibhagiyaChowkashiResponse> pendingVibhagiyaChowkashiCases() {
+		String query = "SELECT " + "tblAccountInquiry.accountInquiryID, " + "tblDepartment.departmentName, "
+				+ "tblEmployee.employeeFirstName, " + "tblEmployee.employeeMiddelName, "
+				+ "tblEmployee.employeeLastName, " + "tblDesignation.designationName, " + "tblEmployee.retirementDate, "
+				+ "tblProperOffice.properOfficeName, " + "tblTaluka.talukaName, " + "tblAccountInquiry.allegations, "
+				+ "tblAccountInquiry.currentStatus, " + "tblAccountInquiry.presentFlag, "
+				+ "tblAccountInquiry.inquiryReportDate, "
+				+ "CASE WHEN DATEDIFF(NOW(), tblAccountInquiry.inquiryReportDate) > 180 THEN 'होय' ELSE 'नाही' END AS moreThanSixMonths, "
+				+ "CASE WHEN tblAccountInquiry.justiceFlag = 1 THEN 'होय' ELSE 'नाही' END AS justiceFlag "
+				+ "FROM tblAccountInquiry "
+				+ "JOIN tblEmployee ON tblAccountInquiry.employeeID = tblEmployee.employeeID "
+				+ "LEFT JOIN tblDepartment ON tblEmployee.departmentID = tblDepartment.departmentID "
+				+ "LEFT JOIN tblDesignation ON tblAccountInquiry.designationID = tblDesignation.designationID "
+				+ "LEFT JOIN tblProperOffice ON tblAccountInquiry.properOfficeID = tblProperOffice.properOfficeID "
+				+ "LEFT JOIN tblSubDivision ON tblAccountInquiry.subDivisionID = tblSubDivision.subDivisionID "
+				+ "LEFT JOIN tblTaluka ON tblAccountInquiry.talukaID = tblTaluka.talukaID "
+				+ "WHERE tblAccountInquiry.punishmentOrderDate = '0000-00-00'";
+
+		return jdbcTemplate.query(query,
+				BeanPropertyRowMapper.newInstance(DepartmentalVibhagiyaChowkashiResponse.class));
+	}
+
+	public List<DepartmentalVibhagiyaChowkashiResponse> finalVibhagiyaChowkashiCases() {
+		String query = "SELECT " + "tblAccountInquiry.accountInquiryID, " + "tblDepartment.departmentName, "
+				+ "tblEmployee.employeeFirstName, " + "tblEmployee.employeeMiddelName, "
+				+ "tblEmployee.employeeLastName, " + "tblDesignation.designationName, " + "tblEmployee.retirementDate, "
+				+ "tblProperOffice.properOfficeName, " + "tblTaluka.talukaName, " + "tblAccountInquiry.allegations, "
+				+ "tblAccountInquiry.currentStatus, " + "tblAccountInquiry.presentFlag, "
+				+ "tblAccountInquiry.inquiryReportDate, "
+				+ "CASE WHEN DATEDIFF(NOW(), tblAccountInquiry.inquiryReportDate) > 180 THEN 'होय' ELSE 'नाही' END AS moreThanSixMonths, "
+				+ "CASE WHEN tblAccountInquiry.justiceFlag = 1 THEN 'होय' ELSE 'नाही' END AS justiceFlag "
+				+ "FROM tblAccountInquiry "
+				+ "JOIN tblEmployee ON tblAccountInquiry.employeeID = tblEmployee.employeeID "
+				+ "LEFT JOIN tblDepartment ON tblEmployee.departmentID = tblDepartment.departmentID "
+				+ "LEFT JOIN tblDesignation ON tblAccountInquiry.designationID = tblDesignation.designationID "
+				+ "LEFT JOIN tblProperOffice ON tblAccountInquiry.properOfficeID = tblProperOffice.properOfficeID "
+				+ "LEFT JOIN tblSubDivision ON tblAccountInquiry.subDivisionID = tblSubDivision.subDivisionID "
+				+ "LEFT JOIN tblTaluka ON tblAccountInquiry.talukaID = tblTaluka.talukaID "
+				+ "WHERE tblAccountInquiry.punishmentOrderDate != '0000-00-00'";
+
+		return jdbcTemplate.query(query,
+				BeanPropertyRowMapper.newInstance(DepartmentalVibhagiyaChowkashiResponse.class));
 	}
 
 }
