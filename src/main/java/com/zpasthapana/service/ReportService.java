@@ -19,6 +19,7 @@ import com.zpasthapana.pojo.ReportSevaNivrutResponse;
 import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
 import com.zpasthapana.pojo.ReportVibhagiyaChowkashiResponse;
+import com.zpasthapana.pojo.UnauthorizedAbsenceReport;
 import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 
@@ -70,9 +71,11 @@ public interface ReportService {
 	List<ReportVibhagiyaChowkashiResponse> getVibhagiyaChowkashiReport(Long userId, String year, Long departmentId);
 
 	List<DepartmentalVibhagiyaChowkashiResponse> getDepartmentalVibhagiyaChowkashiReport();
-	
+
 	List<DepartmentalVibhagiyaChowkashiResponse> pendingVibhagiyaChowkashiCases();
-	
+
 	List<DepartmentalVibhagiyaChowkashiResponse> finalVibhagiyaChowkashiCases();
+
+	public List<UnauthorizedAbsenceReport> getUnAuthorisedAbsenceReportByUserId(Long userId);
 
 }

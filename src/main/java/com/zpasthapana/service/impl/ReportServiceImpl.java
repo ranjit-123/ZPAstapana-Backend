@@ -33,6 +33,7 @@ import com.zpasthapana.pojo.ReportSevaNivrutResponse;
 import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
 import com.zpasthapana.pojo.ReportVibhagiyaChowkashiResponse;
+import com.zpasthapana.pojo.UnauthorizedAbsenceReport;
 import com.zpasthapana.pojo.ZPBean;
 import com.zpasthapana.pojo.ZPDesAndCategoryBean;
 import com.zpasthapana.pojo.ZPMajurPadereport;
@@ -430,6 +431,35 @@ public class ReportServiceImpl implements ReportService {
 	}
 
 	@Override
+	public List<UnauthorizedAbsenceReport> getUnAuthorisedAbsenceReportByUserId(Long userId) {
+		User user = userService.findUserById(userId);
+		String query = "SELECT e.departmentID as departmentId, "
+				+ "COUNT(CASE WHEN uap.startDate <= '2024-03-31' AND uap.caseSettledFlag = '0' THEN 1 END) as tillLastYearPendingCases, "
+				+ "COUNT(CASE WHEN uap.startDate > '2024-03-31' AND uap.caseSettledFlag = '0' THEN 1 END) as currentFinancialYearPendingCases, "
+				+ "(COUNT(CASE WHEN uap.startDate <= '2024-03-31' AND uap.caseSettledFlag = '0' THEN 1 END) + "
+				+ "COUNT(CASE WHEN uap.startDate > '2024-03-31' AND uap.caseSettledFlag = '0' THEN 1 END)) as totalCases, "
+				+ "COUNT(CASE WHEN ai.punishmentOrderDate != '0000-00-00' AND uap.accountInquiryFlag = '1' THEN 1 END) as disciplinaryEndCases, "
+				+ "COUNT(CASE WHEN ai.punishmentOrderDate = '0000-00-00' AND uap.accountInquiryFlag = '1' THEN 1 END) as disciplinaryStartedCases, "
+				+ "(COUNT(CASE WHEN uap.startDate <= '2024-03-31' AND uap.caseSettledFlag = '0' THEN 1 END) + "
+				+ "COUNT(CASE WHEN uap.startDate > '2024-03-31' AND uap.caseSettledFlag = '0' THEN 1 END) - "
+				+ "COUNT(CASE WHEN ai.punishmentOrderDate != '0000-00-00' AND uap.accountInquiryFlag = '1' THEN 1 END) - "
+				+ "COUNT(CASE WHEN ai.punishmentOrderDate = '0000-00-00' AND uap.accountInquiryFlag = '1' THEN 1 END)) as disciplinaryNotStartedCases, "
+				+ "COUNT(CASE WHEN uap.startDate <= '2024-03-31' AND uap.caseSettledFlag = '0' AND uap.accountInquiryFlag = '1' THEN 1 END) as sixMonthsPendingCases "
+				+ "FROM tblUnauthorizedAbsencePeriod uap " + "JOIN tblEmployee e ON uap.employeeID = e.employeeID "
+				+ "LEFT JOIN tblAccountInquiry ai ON uap.accountInquiryID = ai.accountInquiryID "
+				+ "JOIN employee_worklocation ew ON e.employeeID = ew.employeeID " + "WHERE ew.zpId = ? "
+				+ "GROUP BY e.departmentID";
+
+		List<UnauthorizedAbsenceReport> data = jdbcTemplate.query(query, new Object[] { user.getZillaParishadID() }, // Fix
+																														// the
+																														// parameter
+																														// list
+				BeanPropertyRowMapper.newInstance(UnauthorizedAbsenceReport.class));
+
+		return data;
+	}
+
+	@Override
 	public List<ReportData> getUnAuthorisedAbsenceReport1(Long userId, Integer departmentId) {
 		User user = userService.findUserById(userId);
 		String query = "SELECT distinct ew.departmentId as departmentName, concat(e.firstName , ' ' , e.middleName , ' ' , e.lastName) as employeName,\r\n"
@@ -641,7 +671,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "INNER JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId "
 				+ "INNER JOIN (SELECT employeeId, MIN(dateOfAppointed) AS dateOfAppointed FROM employee_designation_details GROUP BY employeeId) edm "
 				+ "ON e.employee_id = edm.employeeId "
-				+ "INNER JOIN employee_cast_details ec ON e.employeeCastDetailsId = ec.employeeCastDetailsId " + "ec."
+				+ "INNER JOIN employee_cast_details ec ON e.employeeCastDetailsId = ec.employeeCastDetailsId "
 				+ "INNER JOIN employee_worklocation ew ON e.employee_id = ew.employeeId "
 				+ "LEFT JOIN retierment empr ON e.employee_id = empr.employeeId "
 				+ "LEFT JOIN employee_education_details eed ON eed.employeeId = e.employee_id "

@@ -32,6 +32,7 @@ import com.zpasthapana.pojo.ReportSevaNivrutResponse;
 import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
 import com.zpasthapana.pojo.ReportVibhagiyaChowkashiResponse;
+import com.zpasthapana.pojo.UnauthorizedAbsenceReport;
 import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 import com.zpasthapana.service.ReportService;
@@ -133,6 +134,13 @@ public class ReportController {
 			return s;
 		}).collect(Collectors.toList());
 		return new ResponseEntity<List<AbsenceReport>>(result, HttpStatus.OK);
+	}
+
+	@GetMapping("/unauthorized-absence-cases/department-level/{userId}")
+	public ResponseEntity<List<UnauthorizedAbsenceReport>> getUnAuthorisedAbsenceReportDepartmentLevel(
+			@PathVariable Long userId) {
+		List<UnauthorizedAbsenceReport> result = reportService.getUnAuthorisedAbsenceReportByUserId(userId);
+		return new ResponseEntity<List<UnauthorizedAbsenceReport>>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/report/{userId}")
@@ -382,7 +390,7 @@ public class ReportController {
 		List<DepartmentalVibhagiyaChowkashiResponse> result = reportService.pendingVibhagiyaChowkashiCases();
 		return ResponseEntity.ok(result);
 	}
-	
+
 	@GetMapping("/final-vibhagiya-chowkashi")
 	public ResponseEntity<List<DepartmentalVibhagiyaChowkashiResponse>> finalVibhagiyaChowkashiCases() {
 		List<DepartmentalVibhagiyaChowkashiResponse> result = reportService.finalVibhagiyaChowkashiCases();
