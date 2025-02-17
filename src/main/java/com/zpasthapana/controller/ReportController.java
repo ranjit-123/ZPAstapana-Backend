@@ -1,7 +1,5 @@
 package com.zpasthapana.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
+import com.zpasthapana.pojo.DepartmentalVibhagiyaChowkashiResponse;
 import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.NotReviewedEmployeesResponse;
 import com.zpasthapana.pojo.Report3055Response;
@@ -32,6 +31,8 @@ import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutResponse;
 import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
+import com.zpasthapana.pojo.ReportVibhagiyaChowkashiResponse;
+import com.zpasthapana.pojo.UnauthorizedAbsenceReport;
 import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 import com.zpasthapana.service.ReportService;
@@ -135,6 +136,13 @@ public class ReportController {
 		return new ResponseEntity<List<AbsenceReport>>(result, HttpStatus.OK);
 	}
 
+	@GetMapping("/unauthorized-absence-cases/department-level/{userId}")
+	public ResponseEntity<List<UnauthorizedAbsenceReport>> getUnAuthorisedAbsenceReportDepartmentLevel(
+			@PathVariable Long userId) {
+		List<UnauthorizedAbsenceReport> result = reportService.getUnAuthorisedAbsenceReportByUserId(userId);
+		return new ResponseEntity<List<UnauthorizedAbsenceReport>>(result, HttpStatus.OK);
+	}
+
 	@GetMapping("/report/{userId}")
 	public ResponseEntity<List<ReportData>> getUnAuthorisedAbsenceReport1(@PathVariable Long userId,
 			@RequestParam(name = "departmentId", required = false) Integer departmentId) {
@@ -234,18 +242,20 @@ public class ReportController {
 	public ResponseEntity<List<ReportStayitvaReponse>> getStayitvaReportAll(@PathVariable Long userId,
 			@RequestParam(name = "year", required = false) String year,
 			@RequestParam(name = "departmentId", required = false) Long departmentId) {
+
 		List<ReportStayitvaReponse> result = reportService.getStayitvaReportAll(userId, year, departmentId);
-		result = result.stream().map(s -> {
+
+		for (ReportStayitvaReponse s : result) {
 			s.setDesignation(MasterDataUtil.getKeyDate("designation_", s.getDesignation()));
 			s.setTotalWorkingEmpTotal(s.getTotalWorkingEmpC() + s.getTotalWorkingEmpD());
-			s.setStayitvaNotReceivedEmpC(s.getStayitvaEligibleEmpC() - s.getStayitvaReceivedEmpC());
-			s.setStayitvaNotReceivedEmpD(s.getStayitvaEligibleEmpD() - s.getStayitvaReceivedEmpD());
+			s.setStayitvaNotReceivedEmpC(Math.max(0, s.getStayitvaEligibleEmpC() - s.getStayitvaReceivedEmpC()));
+			s.setStayitvaNotReceivedEmpD(Math.max(0, s.getStayitvaEligibleEmpD() - s.getStayitvaReceivedEmpD()));
 			s.setStayitvaNotReceivedEmpTotal(s.getStayitvaNotReceivedEmpC() + s.getStayitvaNotReceivedEmpD());
 			s.setStayitvaEligibleEmpTotal(s.getStayitvaEligibleEmpC() + s.getStayitvaEligibleEmpD());
 			s.setStayitvaReceivedEmpTotal(s.getStayitvaReceivedEmpC() + s.getStayitvaReceivedEmpD());
-			return s;
-		}).collect(Collectors.toList());
-		return new ResponseEntity<List<ReportStayitvaReponse>>(result, HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/stayitva-certification/designation-level/{userId}")
@@ -355,6 +365,35 @@ public class ReportController {
 			s.setFirstAppointDesignation(MasterDataUtil.getKeyDate("designation_", s.getFirstAppointDesignation()));
 		});
 
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/vibhagiya-chowkashi/{userId}")
+	public ResponseEntity<List<ReportVibhagiyaChowkashiResponse>> getVibhagiyaChowkashiReport(@PathVariable Long userId,
+			@RequestParam(name = "year", required = false, defaultValue = "2024") String year,
+			@RequestParam(name = "departmentId", required = false) Long departmentId) {
+
+		List<ReportVibhagiyaChowkashiResponse> result = reportService.getVibhagiyaChowkashiReport(userId, year,
+				departmentId);
+
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/departmental-vibhagiya-chowkashi")
+	public ResponseEntity<List<DepartmentalVibhagiyaChowkashiResponse>> getDepartmentalVibhagiyaChowkashiReport() {
+		List<DepartmentalVibhagiyaChowkashiResponse> result = reportService.getDepartmentalVibhagiyaChowkashiReport();
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/pending-vibhagiya-chowkashi")
+	public ResponseEntity<List<DepartmentalVibhagiyaChowkashiResponse>> pendingVibhagiyaChowkashiCases() {
+		List<DepartmentalVibhagiyaChowkashiResponse> result = reportService.pendingVibhagiyaChowkashiCases();
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/final-vibhagiya-chowkashi")
+	public ResponseEntity<List<DepartmentalVibhagiyaChowkashiResponse>> finalVibhagiyaChowkashiCases() {
+		List<DepartmentalVibhagiyaChowkashiResponse> result = reportService.finalVibhagiyaChowkashiCases();
 		return ResponseEntity.ok(result);
 	}
 

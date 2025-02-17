@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.zpasthapana.pojo.AbsenceReport;
 import com.zpasthapana.pojo.BinduNamavaliReport;
+import com.zpasthapana.pojo.DepartmentalVibhagiyaChowkashiResponse;
 import com.zpasthapana.pojo.JestatechaReport;
 import com.zpasthapana.pojo.NotReviewedEmployeesResponse;
 import com.zpasthapana.pojo.Report3055Response;
@@ -17,6 +18,8 @@ import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
 import com.zpasthapana.pojo.ReportSevaNivrutResponse;
 import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
 import com.zpasthapana.pojo.ReportStayitvaReponse;
+import com.zpasthapana.pojo.ReportVibhagiyaChowkashiResponse;
+import com.zpasthapana.pojo.UnauthorizedAbsenceReport;
 import com.zpasthapana.pojo.ZPMajurPadereport;
 import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 
@@ -64,5 +67,15 @@ public interface ReportService {
 			String language);
 
 	List<NotReviewedEmployeesResponse> getNotReviewedEmployee3055Report(Long userId, String designationId);
+
+	List<ReportVibhagiyaChowkashiResponse> getVibhagiyaChowkashiReport(Long userId, String year, Long departmentId);
+
+	List<DepartmentalVibhagiyaChowkashiResponse> getDepartmentalVibhagiyaChowkashiReport();
+
+	List<DepartmentalVibhagiyaChowkashiResponse> pendingVibhagiyaChowkashiCases();
+
+	List<DepartmentalVibhagiyaChowkashiResponse> finalVibhagiyaChowkashiCases();
+
+	public List<UnauthorizedAbsenceReport> getUnAuthorisedAbsenceReportByUserId(Long userId);
 
 }
