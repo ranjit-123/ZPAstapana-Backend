@@ -35,5 +35,6 @@ public class NotReviewedEmployeesResponse {
 	public String computerExamPassOrDiscountDate;
 	public Integer isAssetLiabilitySubmitted;
 	public Integer isCourtCasePending;
+	public Long employeeId;
 
 }

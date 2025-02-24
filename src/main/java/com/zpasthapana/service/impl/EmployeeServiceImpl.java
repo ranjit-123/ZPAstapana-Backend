@@ -476,7 +476,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			response.setSthaetvPramanpatraDetails(stayitvaPramanpatraDetail);
 		}
 
-		Optional<KalbadhaPromotion> kalbadhPromotion = Optional
+		Optional<List<KalbadhaPromotion>> kalbadhPromotion = Optional
 				.ofNullable(kalbadhaPromotionRepo.findByEmployeeId(employeeId));
 		kalbadhPromotion.ifPresent(kalbadhPromotionDetails -> modelMapper.map(kalbadhPromotionDetails, response));
 
