@@ -650,10 +650,10 @@ public class ReportServiceImpl implements ReportService {
 		return data;
 	}
 
-	@Override
 	public List<ReportStayitvaEmpListResponse> getStayitvaReportWithDesignation(Long userId, Long departmentId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT DISTINCT '111' AS jeshtataNumber, "
+		String query = "SELECT DISTINCT e.employee_id AS employeeId, " // Added employeeId
+				+ "'111' AS jeshtataNumber, "
 				+ "CONCAT(firstName, ' ', middleName, ' ', lastName) AS employeeNameAndOffice, "
 				+ "appointmentOrderDate AS firstAppointDate, " + "employeeDesiganationId AS firstAppointDesignation, "
 				+ "employeeselectioncategory AS firstAppointType, " + "caste AS socialClass, "
@@ -681,7 +681,7 @@ public class ReportServiceImpl implements ReportService {
 				+ "LEFT JOIN assetLiability al ON e.employee_id = al.employeeId "
 				+ "LEFT JOIN court_case cc2 ON e.employee_id = cc2.employeeId " + "WHERE e.active = 1 "
 				+ "AND ew.designationId = " + departmentId + " " + "AND ew.zpId = " + user.getZillaParishadID() + " "
-				+ "GROUP BY ew.designationID;";
+				+ "GROUP BY e.employee_id, ew.designationID;";
 
 		List<ReportStayitvaEmpListResponse> data = jdbcTemplate.query(query,
 				BeanPropertyRowMapper.newInstance(ReportStayitvaEmpListResponse.class));
@@ -813,16 +813,15 @@ public class ReportServiceImpl implements ReportService {
 		}
 
 		List<ReportMarathiEmpListResponse> data = jdbcTemplate.query(query,
-				new Object[] { designationId, designationId, user.getZillaParishadID() },
+				new Object[] { designationId, designationId == null ? -1 : designationId, user.getZillaParishadID() },
 				BeanPropertyRowMapper.newInstance(ReportMarathiEmpListResponse.class));
-
 		return data;
 	}
 
 	@Override
 	public List<NotReviewedEmployeesResponse> getNotReviewedEmployee3055Report(Long userId, String designationId) {
 		User user = userService.findUserById(userId);
-		String query = "SELECT DISTINCT '111' AS jeshtataNumber, "
+		String query = "SELECT DISTINCT e.employee_id AS employeeId, " + "'111' AS jeshtataNumber, "
 				+ "CONCAT(firstName, ' ', middleName, ' ', lastName) AS employeeNameAndOffice, "
 				+ "appointmentOrderDate AS firstAppointDate, "
 				+ "ed.employeeDesiganationId AS firstAppointDesignation, "
@@ -855,10 +854,11 @@ public class ReportServiceImpl implements ReportService {
 				+ "LEFT JOIN employee_computer_details ecd ON e.employee_id = ecd.employeeId "
 				+ "LEFT JOIN assetLiability al ON e.employee_id = al.employeeId "
 				+ "LEFT JOIN court_case cc2 ON e.employee_id = cc2.employeeId " + "WHERE e.active = 1 "
-				+ "AND ed.employeeDesiganationId = " + designationId + " " + "AND ew.zpId = "
-				+ user.getZillaParishadID() + " " + "GROUP BY ed.employeeDesiganationId, e.employee_id;";
+				+ "AND ed.employeeDesiganationId = ? " + "AND ew.zpId = ? "
+				+ "GROUP BY ed.employeeDesiganationId, e.employee_id";
 
 		List<NotReviewedEmployeesResponse> data = jdbcTemplate.query(query,
+				new Object[] { designationId, user.getZillaParishadID() },
 				BeanPropertyRowMapper.newInstance(NotReviewedEmployeesResponse.class));
 
 		return data;

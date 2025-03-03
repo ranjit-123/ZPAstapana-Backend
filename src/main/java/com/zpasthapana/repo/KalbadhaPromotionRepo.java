@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.zpasthapana.entity.KalbadhaPromotion;
 
+import antlr.collections.List;
+
 public interface KalbadhaPromotionRepo extends JpaRepository<KalbadhaPromotion, Long> {
 
 	@Query(value = "select d from KalbadhaPromotion d inner join d.employee e inner join e.employeeWorkLocation w "
@@ -14,6 +16,6 @@ public interface KalbadhaPromotionRepo extends JpaRepository<KalbadhaPromotion, 
 			+ "and (:talukaId is null or w.taluka = :talukaId)")
 	Page<KalbadhaPromotion> findAllByPermission(Long devisionId, Long zpId, Long departmentId, Long talukaId, Pageable paging);
 	
-	KalbadhaPromotion findByEmployeeId(Long employeeId);
+	java.util.List<KalbadhaPromotion> findByEmployeeId(Long employeeId);
 
 }
