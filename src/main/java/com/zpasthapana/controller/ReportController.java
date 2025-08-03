@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.zpasthapana.pojo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,28 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zpasthapana.pojo.AbsenceReport;
-import com.zpasthapana.pojo.BinduNamavaliReport;
-import com.zpasthapana.pojo.DepartmentalVibhagiyaChowkashiResponse;
-import com.zpasthapana.pojo.JestatechaReport;
-import com.zpasthapana.pojo.NotReviewedEmployeesResponse;
-import com.zpasthapana.pojo.Report3055Response;
-import com.zpasthapana.pojo.ReportData;
-import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
-import com.zpasthapana.pojo.ReportLanguageResponse;
-import com.zpasthapana.pojo.ReportMarathiEmpListResponse;
-import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
-import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
-import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
-import com.zpasthapana.pojo.ReportSevaNivrutResponse;
-import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
-import com.zpasthapana.pojo.ReportStayitvaReponse;
-import com.zpasthapana.pojo.ReportVibhagiyaChowkashiResponse;
-import com.zpasthapana.pojo.UnauthorizedAbsenceReport;
-import com.zpasthapana.pojo.ZPMajurPadereport;
-import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
 import com.zpasthapana.service.ReportService;
 import com.zpasthapana.util.MasterDataUtil;
+
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("reports")
@@ -44,6 +27,17 @@ public class ReportController {
 
 	@Autowired
 	ReportService reportService;
+
+//    New Mapping for cast details
+
+    @GetMapping("/caste-report/{userId}")
+    public ResponseEntity<List<CasteReport>> getCasteReport(
+            @PathVariable @Positive Long userId,
+            @RequestParam(name = "departmentId", required = false) Long departmentId,
+            @RequestParam(name = "designationId", required = false) Integer designationId) {
+        List<CasteReport> result = reportService.getCasteReport(userId, departmentId, designationId);
+        return ResponseEntity.ok(result);
+    }
 
 	@GetMapping("/manjur-bharaleli-pade/{userId}")
 	public ResponseEntity<ZPMajurPadereportWrapper> getManjurBharaleliPadeForDepartment(@PathVariable Long userId) {

@@ -45,7 +45,6 @@ public class ZPUtility {
 
 	private static String homeDirectory = "/home/";
 
-
 	public static void uploadFile(MultipartFile file, Long employeeId) {
 		try {
 			String os = System.getProperty("os.name").toLowerCase();
@@ -58,7 +57,7 @@ public class ZPUtility {
 			}
 
 			String directory = baseDirectory + employeeId + File.separator;
-			String fileName = file.getOriginalFilename();
+			String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
 			Files.createDirectories(Paths.get(directory));
 

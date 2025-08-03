@@ -51,5 +51,4 @@ public class SuspensionController {
 		return new ResponseEntity<ResponsePageDto<Suspention>>(pageData,
 				HttpStatus.OK);
 	}
-	
 }

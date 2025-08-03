@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.zpasthapana.pojo.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,30 +16,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.zpasthapana.entity.User;
-import com.zpasthapana.pojo.AbsenceReport;
-import com.zpasthapana.pojo.BinduNamavaliReport;
-import com.zpasthapana.pojo.DataThreeInteger;
-import com.zpasthapana.pojo.DepartmentalVibhagiyaChowkashiResponse;
-import com.zpasthapana.pojo.JestatechaReport;
-import com.zpasthapana.pojo.NotReviewedEmployeesResponse;
-import com.zpasthapana.pojo.Report3055Response;
-import com.zpasthapana.pojo.ReportData;
-import com.zpasthapana.pojo.ReportGopaniyAhvalResponse;
-import com.zpasthapana.pojo.ReportLanguageResponse;
-import com.zpasthapana.pojo.ReportMarathiEmpListResponse;
-import com.zpasthapana.pojo.ReportMattaDayitvaResponse;
-import com.zpasthapana.pojo.ReportSanganakAhartaResponse;
-import com.zpasthapana.pojo.ReportSevaNivrutDepartmentLevelResponse;
-import com.zpasthapana.pojo.ReportSevaNivrutResponse;
-import com.zpasthapana.pojo.ReportStayitvaEmpListResponse;
-import com.zpasthapana.pojo.ReportStayitvaReponse;
-import com.zpasthapana.pojo.ReportVibhagiyaChowkashiResponse;
-import com.zpasthapana.pojo.UnauthorizedAbsenceReport;
-import com.zpasthapana.pojo.ZPBean;
-import com.zpasthapana.pojo.ZPDesAndCategoryBean;
-import com.zpasthapana.pojo.ZPMajurPadereport;
-import com.zpasthapana.pojo.ZPMajurPadereportWrapper;
-import com.zpasthapana.pojo.ZPManjurPade;
 import com.zpasthapana.service.ReportService;
 import com.zpasthapana.service.UserService;
 import com.zpasthapana.util.MasterDataUtil;
@@ -55,6 +32,85 @@ public class ReportServiceImpl implements ReportService {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+
+    @Override
+    public List<CasteReport> getCasteReport(Long userId, Long departmentId, Integer designationId) {
+        User user = userService.findUserById(userId);
+        String query = "SELECT " +
+                "d.designationID AS departmentId, " + // Adjusted to use designationID as the primary ID
+                "d.designationName AS departmentName, " +
+                "cc.casteCategoryName AS category, " +
+                "COALESCE(ap.totalApproved, 0) AS approvedPosts, " +
+                "COALESCE(wp.totalFilled, 0) AS workingPosts, " +
+                "(COALESCE(ap.totalApproved, 0) - COALESCE(wp.totalFilled, 0)) AS vacancies, " +
+                "CONCAT(ROUND((COALESCE(ap.totalApproved, 0) * 100.0) / NULLIF(tp.totalPosts, 0), 0), '%') AS reservationPercent, " +
+                "COALESCE(orp.approvedOrphan, 0) AS approvedOrphanPosts, " +
+                "COALESCE(orp.workingOrphan, 0) AS workingOrphanPosts, " +
+                "(COALESCE(orp.approvedOrphan, 0) - COALESCE(orp.workingOrphan, 0)) AS orphanVacancies, " +
+                "COALESCE(dp.disabledPosts, 0) AS disabledWorkingPosts " +
+                "FROM tblDesignation d " +
+                "CROSS JOIN tblCasteCategory cc " +
+                "LEFT JOIN ( " +
+                "    SELECT ed.employeeDesiganationId, ecd.castecategory, COUNT(*) AS totalApproved " +
+                "    FROM employee_cast_details ecd " +
+                "    JOIN employee e ON ecd.employeeCastDetailsId = e.employeeCastDetailsId " +
+                "    JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId " +
+                "    JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId " +
+                "    WHERE ew.zpId = ? " +
+                "    GROUP BY ed.employeeDesiganationId, ecd.castecategory " +
+                ") ap ON ap.employeeDesiganationId = d.designationID AND ap.castecategory = cc.casteCategoryID " +
+                "LEFT JOIN ( " +
+                "    SELECT ed.employeeDesiganationId, ecd.castecategory, COUNT(*) AS totalFilled " +
+                "    FROM employee e " +
+                "    JOIN employee_cast_details ecd ON e.employeeCastDetailsId = ecd.employeeCastDetailsId " +
+                "    JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId " +
+                "    JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId " +
+                "    WHERE e.active = 1 AND ew.zpId = ? " +
+                "    GROUP BY ed.employeeDesiganationId, ecd.castecategory " +
+                ") wp ON wp.employeeDesiganationId = d.designationID AND wp.castecategory = cc.casteCategoryID " +
+                "LEFT JOIN ( " +
+                "    SELECT ed.employeeDesiganationId, " +
+                "           SUM(CASE WHEN ed.parallelReservationType = 8 THEN 1 ELSE 0 END) AS approvedOrphan, " +
+                "           SUM(CASE WHEN ed.parallelReservationType = 8 AND e.active = 1 AND ew.zpId = ? THEN 1 ELSE 0 END) AS workingOrphan " +
+                "    FROM employee e " +
+                "    JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId " +
+                "    JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId " +
+                "    GROUP BY ed.employeeDesiganationId " +
+                ") orp ON orp.employeeDesiganationId = d.designationID " +
+                "LEFT JOIN ( " +
+                "    SELECT ed.employeeDesiganationId, COUNT(*) AS disabledPosts " +
+                "    FROM employee_disability_details edd " +
+                "    JOIN employee e ON e.employee_id = edd.employeeId " +
+                "    JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId " +
+                "    JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId " +
+                "    WHERE edd.disabilityFlag = 1 AND e.active = 1 AND ew.zpId = ? " +
+                "    GROUP BY ed.employeeDesiganationId " +
+                ") dp ON dp.employeeDesiganationId = d.designationID " +
+                "LEFT JOIN ( " +
+                "    SELECT ed.employeeDesiganationId, COUNT(*) AS totalPosts " +
+                "    FROM employee e " +
+                "    JOIN employee_designation_details ed ON e.employeeDesiganationDetailsId = ed.employeeDesiganationDetailsId " +
+                "    JOIN employee_worklocation ew ON e.employeeWorklocationId = ew.employeeWorklocationId " +
+                "    GROUP BY ed.employeeDesiganationId " +
+                ") tp ON tp.employeeDesiganationId = d.designationID " +
+                "WHERE d.isActive = 1 AND cc.isActive = 1";
+        List<Object> params = new ArrayList<>();
+        params.add(user.getZillaParishadID());
+        params.add(user.getZillaParishadID());
+        params.add(user.getZillaParishadID());
+        params.add(user.getZillaParishadID());
+        if (departmentId != null) {
+            query += " AND d.departmentID = ?";
+            params.add(departmentId);
+        }
+        if (designationId != null) {
+            query += " AND d.designationID = ?";
+            params.add(designationId);
+        }
+        query += " ORDER BY d.designationID, cc.casteCategoryName";
+        return jdbcTemplate.query(query, params.toArray(), BeanPropertyRowMapper.newInstance(CasteReport.class));
+    }
+
 
 	@Override
 	public ZPMajurPadereportWrapper getMajurPadeReport(Long userId) {

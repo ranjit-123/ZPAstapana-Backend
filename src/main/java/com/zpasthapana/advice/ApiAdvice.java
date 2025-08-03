@@ -21,8 +21,7 @@ public class ApiAdvice {
 		return new ResponseEntity<>(new ErrorMessage("INVALID CREDENTIALS", HttpStatus.UNAUTHORIZED.value()),
 				HttpStatus.UNAUTHORIZED);
 	}
-	
-	
+
 	@ExceptionHandler(value = { InternalServerError.class })
 	protected ResponseEntity<ErrorMessage> handleConflict(InternalServerError ex, WebRequest request) {
 		log.error("Internal server erro", ex);		

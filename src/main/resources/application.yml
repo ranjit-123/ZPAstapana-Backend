@@ -5,10 +5,10 @@ server:
 
 spring: 
   datasource:
-    url:  jdbc:mysql://103.10.234.99:3306/zpastapana_qa?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://195.250.31.8/zpastapana_live?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: zpastapana
-    password: zpastapana@Fixed2022
+    username: zpastapanalive
+    password: zpastapana@Fixed2023
   
   jpa:
     hibernate: 
@@ -26,7 +26,6 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
       
-        
         
 
 springdoc:

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 public class ObjectMapperConf {
 
-
 	@Bean
 	public ObjectMapper getObject() {
 		return new ObjectMapper();
