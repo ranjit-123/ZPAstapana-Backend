@@ -99,7 +99,7 @@
 				</executions>
 				<configuration>
 					<repository>tarzan21/zpaspn</repository>
-					<tag>1.0.0</tag>
+					<tag>latest</tag>
 					<skipDockerInfo>true</skipDockerInfo>
 				</configuration>
 			</plugin>
